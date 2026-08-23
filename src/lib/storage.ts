@@ -4,6 +4,7 @@ import { useCallback, useSyncExternalStore } from "react";
 
 const UNLOCKED_DAYS_KEY = "gymkana:unlocked-days";
 const TESTING_MODE_KEY = "gymkana:testing-mode";
+const INTRO_SEEN_KEY = "gymkana:intro-seen";
 
 // Pequeño store externo (patrón useSyncExternalStore) en vez de leer
 // localStorage dentro de un useEffect + setState: evita el render en
@@ -81,4 +82,29 @@ export function useTestingMode(defaultValue: boolean) {
   }, []);
 
   return { testingMode, setTestingMode };
+}
+
+function readIntroSeen(): boolean {
+  return window.localStorage.getItem(INTRO_SEEN_KEY) === "true";
+}
+
+/**
+ * La cinemática de intro se ve una sola vez por dispositivo: después de
+ * completarla se entra directo a la nebulosa en cada recarga.
+ * El snapshot de servidor devuelve `false` para que el primer render (y el
+ * HTML estático) sea siempre la intro y no haya salto al hidratar.
+ */
+export function useIntroSeen() {
+  const introSeen = useSyncExternalStore(
+    subscribe,
+    readIntroSeen,
+    () => false,
+  );
+
+  const setIntroSeen = useCallback((value: boolean) => {
+    window.localStorage.setItem(INTRO_SEEN_KEY, String(value));
+    emitChange();
+  }, []);
+
+  return { introSeen, setIntroSeen };
 }

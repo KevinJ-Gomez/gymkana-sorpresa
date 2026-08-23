@@ -123,6 +123,7 @@ src/
     dates.ts                   ← ¿ha llegado ya la fecha de desbloqueo?
     storage.ts                  ← progreso + modo testing + intro vista (localStorage)
     constellation.ts             ← posiciones 3D de las 11 esferas (zigzag vertical)
+    random.ts                     ← PRNG determinista que genera la nebulosa
   components/
     GymkanaApp.tsx              ← orquestador de las 3 fases: intro → nebulosa → día
     IntroSequence.tsx            ← cinemática narrativa de entrada
@@ -130,21 +131,21 @@ src/
     three/
       NebulaScene.tsx               ← Canvas R3F: partículas, constelación, cámara
     ui/
-      GlassCard.tsx                 ← panel glassmorphism reutilizable
-      GiftImageReveal.tsx            ← imagen con fallback si el fichero no existe
+      GiftImageReveal.tsx           ← imagen con fallback si el fichero no existe
     days/
       Day1.tsx … Day11.tsx            ← un componente por día (el "premio"/reto)
       index.ts                         ← registro id → componente
 ```
 
-> **Nota histórica**: `DayGrid.tsx` y `DayCard.tsx` (el grid 2D original) se **eliminaron** en el pivote a 3D. Si se busca ese código, está en el historial de git antes del commit del rediseño.
+> **Nota histórica**: `DayGrid.tsx`, `DayCard.tsx` y `GlassCard.tsx` (el grid 2D original y su panel de cristal) se **eliminaron** en el pivote a 3D. Si se busca ese código, está en el historial de git antes del commit del rediseño.
 
 **Flujo de un día:**
 
 1. `GymkanaApp` decide qué fase mostrar (intro / nebulosa / día enfocado).
 2. `DayContainer` (genérico) mira `requiresPassword` en la config del día:
    - Si `true`: pinta el riddle + input de contraseña, calcula el SHA-256 del texto introducido y lo compara con `passwordHash`. Si falla → shake + mensaje de error. Si acierta → llama a `onUnlock()`.
-   - Si `false`: delega directamente en el componente `Day{n}` correspondiente, que implementa su propio reto interno (quiz, puzzle, minijuego, mensaje al revés) y llama a `onUnlock()` cuando el usuario lo supera.
+   - Si `false`: el componente `Day{n}` implementa su propio reto interno (quiz, puzzle, minijuego, mensaje al revés) y llama a `onUnlock()` cuando el usuario lo supera.
+   - En ambos casos el componente `Day{n}` se renderiza **siempre**, también junto al gate de contraseña: hay días cuyo enunciado vive dentro del componente (el Día 3 muestra los emojis de la canción) y sin él la clave sería inadivinable. Los días que no tienen nada que enseñar antes de desbloquear devuelven `null`.
 3. Una vez `isUnlocked` es `true`, el componente `Day{n}` pinta el premio/revelación (imagen, galería, audio+carta, confeti, etc.).
 
 Añadir un día nuevo (o rehacer uno) = crear `Day{n}.tsx` con la firma `{ config, isUnlocked, onUnlock }`, registrarlo en `days/index.ts`, y rellenar su entrada en `gymkanaConfig.ts`. No hace falta tocar `DayContainer` ni el resto de la app.

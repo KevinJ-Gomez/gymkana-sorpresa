@@ -25,6 +25,11 @@ body {
      lo da Framer Motion (whileTap) en cada elemento interactivo. */
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
+  /* La experiencia es un canvas 3D a pantalla completa: la página en sí nunca
+     scrollea (el scroll vive dentro de la tarjeta del día). */
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
 }
 
 /* Texto seleccionable solo donde tiene sentido (acertijos, cartas); el resto
