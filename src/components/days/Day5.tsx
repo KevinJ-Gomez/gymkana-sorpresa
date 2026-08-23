@@ -51,36 +51,38 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
             {q.options.map((option, oIndex) => {
               const selected = answers[qIndex] === oIndex;
               return (
-                <button
+                <motion.button
                   key={option}
                   type="button"
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => {
                     setAnswers((prev) => ({ ...prev, [qIndex]: oIndex }));
                     setShowResult("none");
                   }}
-                  className={`flex items-center justify-between rounded-lg border px-3 py-2 text-left text-sm transition ${
+                  className={`flex items-center justify-between rounded-lg border px-3 py-2.5 text-left text-sm transition ${
                     selected
                       ? "border-rose-300/70 bg-rose-400/20 text-white"
-                      : "border-white/15 bg-white/5 text-white/75 hover:bg-white/10"
+                      : "border-white/15 bg-white/5 text-white/75 active:bg-white/10 sm:hover:bg-white/10"
                   }`}
                 >
                   {option}
                   {selected && <Check className="h-4 w-4 shrink-0" />}
-                </button>
+                </motion.button>
               );
             })}
           </div>
         </div>
       ))}
 
-      <button
+      <motion.button
         type="button"
+        whileTap={allAnswered ? { scale: 0.97 } : undefined}
         onClick={handleCheck}
         disabled={!allAnswered}
-        className="w-full rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-2.5 font-medium text-white shadow-lg transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+        className="w-full rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-3 font-medium text-white shadow-lg transition sm:hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
       >
         Comprobar respuestas
-      </button>
+      </motion.button>
 
       {showResult === "wrong" && (
         <motion.p

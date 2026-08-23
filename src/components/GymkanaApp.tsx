@@ -45,22 +45,27 @@ export function GymkanaApp() {
   const selectedDay = gymkanaConfig.find((day) => day.id === selectedDayId) ?? null;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_20%_20%,#4c1d95,transparent_55%),radial-gradient(circle_at_80%_0%,#9d174d,transparent_45%),radial-gradient(circle_at_50%_100%,#1e1b4b,transparent_60%)] bg-slate-950 px-4 py-10 sm:px-8">
+    <div
+      className="relative min-h-[100dvh] overflow-x-hidden bg-[radial-gradient(circle_at_20%_20%,#4c1d95,transparent_55%),radial-gradient(circle_at_80%_0%,#9d174d,transparent_45%),radial-gradient(circle_at_50%_100%,#1e1b4b,transparent_60%)] bg-slate-950
+      pt-[max(1.75rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]
+      pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))]
+      sm:pl-[max(2rem,env(safe-area-inset-left))] sm:pr-[max(2rem,env(safe-area-inset-right))]"
+    >
       <div className="mx-auto w-full max-w-4xl">
-        <header className="mb-8 text-center">
+        <header className="mb-6 text-center sm:mb-8">
           <button
             onClick={handleSecretTap}
-            className="select-none text-3xl font-bold text-white drop-shadow-sm sm:text-4xl"
+            className="rounded-lg px-2 py-1 text-[1.75rem] leading-tight font-bold text-white drop-shadow-sm active:scale-[0.98] sm:text-4xl"
           >
             {GYMKANA_TITLE}
           </button>
-          <p className="mt-2 text-white/70">{GYMKANA_SUBTITLE}</p>
+          <p className="mt-2 text-sm text-white/70 sm:text-base">{GYMKANA_SUBTITLE}</p>
 
           {testingMode && (
             <motion.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mx-auto mt-4 inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-1 text-xs font-medium text-amber-200"
+              className="mx-auto mt-4 flex max-w-[92%] flex-wrap items-center justify-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-1.5 text-center text-xs font-medium text-amber-200 sm:max-w-none sm:flex-nowrap"
             >
               <FlaskConical className="h-3.5 w-3.5" />
               Modo Testing activo — todos los días desbloqueados por fecha

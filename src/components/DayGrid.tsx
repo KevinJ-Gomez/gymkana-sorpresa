@@ -22,7 +22,7 @@ export function DayGrid({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-4 lg:grid-cols-4"
+      className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 sm:gap-4 md:grid-cols-4"
     >
       {days.map((day, index) => (
         <motion.div
@@ -30,11 +30,13 @@ export function DayGrid({
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.35, delay: index * 0.04 }}
+          className={day.id === days.length ? "col-span-2 sm:col-span-1" : undefined}
         >
           <DayCard
             config={day}
             isAvailable={testingMode || isDateReached(day.unlockDate)}
             isSolved={unlockedDays.includes(day.id)}
+            featured={day.id === days.length}
             onSelect={() => onSelectDay(day.id)}
           />
         </motion.div>

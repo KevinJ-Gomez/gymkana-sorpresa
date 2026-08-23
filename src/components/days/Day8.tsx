@@ -44,14 +44,15 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
       <p dir="rtl" className="rounded-xl bg-white/5 p-4 font-mono text-white/85">
         {config.cipherMessage}
       </p>
-      <button
+      <motion.button
         type="button"
+        whileTap={{ scale: 0.96 }}
         onClick={onUnlock}
-        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-2.5 font-medium text-white shadow-lg transition hover:brightness-110"
+        className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-3 font-medium text-white shadow-lg transition sm:hover:brightness-110"
       >
         <RotateCcw className="h-4 w-4" />
         Descifrar mensaje
-      </button>
+      </motion.button>
     </div>
   );
 }

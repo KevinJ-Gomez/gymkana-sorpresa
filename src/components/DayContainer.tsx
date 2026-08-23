@@ -58,21 +58,22 @@ export function DayContainer({
       transition={{ duration: 0.35, ease: "easeOut" }}
       className="mx-auto w-full max-w-2xl"
     >
-      <button
+      <motion.button
         onClick={onBack}
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-white/70 transition hover:text-white"
+        whileTap={{ scale: 0.96 }}
+        className="-ml-2 mb-3 inline-flex items-center gap-1.5 rounded-lg px-2 py-2.5 text-sm text-white/70 active:text-white sm:hover:text-white"
       >
         <ArrowLeft className="h-4 w-4" />
         Volver al calendario
-      </button>
+      </motion.button>
 
       <GlassCard>
         <header className="mb-5 flex items-start justify-between gap-3">
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-medium text-white/60">Día {config.id}</p>
-            <h2 className="text-2xl font-semibold text-white">{config.title}</h2>
+            <h2 className="text-xl font-semibold text-white sm:text-2xl">{config.title}</h2>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             {config.giftLabel && (
               <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90">
                 🎁 {config.giftLabel}
@@ -81,7 +82,7 @@ export function DayContainer({
             <motion.span
               animate={{ scale: isUnlocked ? [1, 1.3, 1] : 1 }}
               transition={{ duration: 0.4 }}
-              className={`flex h-9 w-9 items-center justify-center rounded-full ${
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
                 isUnlocked ? "bg-emerald-400/20 text-emerald-300" : "bg-white/10 text-white/60"
               }`}
             >
@@ -110,9 +111,10 @@ export function DayContainer({
               </audio>
             )}
 
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex flex-col gap-2.5 sm:flex-row">
               <input
                 type="text"
+                inputMode="text"
                 value={passwordInput}
                 onChange={(e) => {
                   setPasswordInput(e.target.value);
@@ -120,15 +122,19 @@ export function DayContainer({
                 }}
                 placeholder={config.passwordPlaceholder ?? "Escribe la clave..."}
                 autoComplete="off"
-                className="flex-1 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-white placeholder-white/40 outline-none transition focus:border-white/50 focus:bg-white/15"
+                autoCapitalize="off"
+                autoCorrect="off"
+                style={{ fontSize: 16 }}
+                className="flex-1 rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/40 outline-none transition focus:border-white/50 focus:bg-white/15"
               />
-              <button
+              <motion.button
                 type="submit"
+                whileTap={checking || passwordInput.length === 0 ? undefined : { scale: 0.96 }}
                 disabled={checking || passwordInput.length === 0}
-                className="rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-2.5 font-medium text-white shadow-lg transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl bg-gradient-to-r from-rose-400 to-fuchsia-500 px-5 py-3 font-medium text-white shadow-lg transition sm:hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {checking ? "Comprobando..." : "Desbloquear"}
-              </button>
+              </motion.button>
             </div>
 
             <AnimatePresence>

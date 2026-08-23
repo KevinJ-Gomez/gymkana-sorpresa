@@ -50,14 +50,15 @@ export function Day10({ config, isUnlocked, onUnlock }: DayComponentProps) {
       <p className="text-white/85">{config.riddle}</p>
       <div className="grid grid-cols-4 gap-2">
         {Array.from({ length: GRID_SIZE }).map((_, index) => (
-          <button
+          <motion.button
             key={index}
             type="button"
+            whileTap={{ scale: 0.9 }}
             onClick={() => handleClick(index)}
-            className="flex aspect-square items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl transition hover:bg-white/15"
+            className="flex aspect-square items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl transition active:bg-white/15 sm:hover:bg-white/15"
           >
             {index === heartIndex ? "💖" : "✨"}
-          </button>
+          </motion.button>
         ))}
       </div>
       {misses > 0 && (
