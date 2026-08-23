@@ -7,9 +7,11 @@ import type { DayConfig } from "@/types/gymkana";
  * fechas, acertijos, contraseñas y textos. Los componentes de src/components
  * solo leen estos datos, no contienen texto "hardcodeado".
  *
- * 🔐 Contraseñas: nunca se guardan en texto plano. Genera el hash con:
- *     node scripts/generate-hash.mjs "mi-clave-secreta"
- *   y pega el resultado en `passwordHash`. Ver README.md para más detalle.
+ * 🔐 Contraseñas: nunca se guardan en texto plano. Genera los hashes con:
+ *     node scripts/generate-hash.mjs "respuesta" "otra respuesta"
+ *   y pega el resultado en `passwordHashes`. Un día admite VARIAS respuestas
+ *   correctas: basta con acertar una. La entrada del usuario se normaliza
+ *   (minúsculas, sin tildes, sin espacios de sobra) antes de comparar.
  *
  * 📅 Fechas: `unlockDate` usa formato "YYYY-MM-DD". Un día es visible/jugable
  *   en el grid en cuanto la fecha local del dispositivo la alcanza (o siempre,
@@ -30,13 +32,21 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 1,
     unlockDate: "2026-10-02",
-    title: "Bienvenida",
-    icon: "💌",
-    requiresPassword: false,
-    riddle: "",
-    rewardTitle: "¡Bienvenida a tu gymkana!",
+    title: "El Aliado Perfecto",
+    icon: "📱",
+    lucideIcon: "camera",
+    requiresPassword: true,
+    // Respuestas válidas: "movil" e "iphone".
+    passwordHashes: [
+      "8dd3d0f12d706756295575bfc283da9e4ef2658cbb8531aa7261b8aed27518e5",
+      "241c1e30ed886aa4a8f4248024be2ca1a221fe9773b52e2dca7891ff5771f399",
+    ],
+    passwordPlaceholder: "¿Qué es?",
+    riddle:
+      "Para capturar la magia de este viaje y que no se nos olvide nunca, vas a necesitar un buen aliado. Tiene memoria pero no cerebro, y tiene lentes pero no gafas. ¿Qué es?",
+    rewardTitle: "Tu primera estrella",
     rewardDescription:
-      "Este año tus regalos se han quedado en casa esperándote... pero para conseguirlos vas a tener que ganártelos aquí, día a día. Once días, once retos, un cumpleaños increíble al final. ¿Preparada?",
+      "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",
   },
   {
     id: 2,
@@ -44,8 +54,9 @@ export const gymkanaConfig: DayConfig[] = [
     title: "Nuestro primer viaje",
     icon: "🗺️",
     requiresPassword: true,
-    passwordHash:
+    passwordHashes: [
       "626b208a365327e7ecd6ad5af2f39c8d08c2ad85a264bd0006450c4d034ba740",
+    ],
     passwordPlaceholder: "¿A dónde fuimos?",
     riddle:
       "La primera vez que hicimos las maletas juntos, sin saber muy bien qué nos esperaba. ¿Recuerdas el nombre de aquella ciudad?",
@@ -65,8 +76,9 @@ export const gymkanaConfig: DayConfig[] = [
     title: "Adivina la canción",
     icon: "🎵",
     requiresPassword: true,
-    passwordHash:
+    passwordHashes: [
       "fafe97f7def328bbd4f10779b9625a8aa0bfaa143d7ae64e6f5770e47b51cd1d",
+    ],
     passwordPlaceholder: "Título de la canción",
     riddle: "Adivina la canción con estos emojis:",
     emojiClue: "💍 ⏳ 😍 🎶",
@@ -84,8 +96,9 @@ export const gymkanaConfig: DayConfig[] = [
     icon: "💄",
     giftLabel: "Maquillaje",
     requiresPassword: true,
-    passwordHash:
+    passwordHashes: [
       "76220309bfa2825db730089f962529ad08e1ba7dc7b9d7b5304832474444eb3f",
+    ],
     passwordPlaceholder: "Clave secreta",
     riddle:
       "Hoy no hay acertijo que valga: la clave la tiene una amiga tuya, y solo te la dará si se la pides con mucho cariño.",
@@ -143,8 +156,9 @@ export const gymkanaConfig: DayConfig[] = [
     icon: "🌸",
     giftLabel: "Flores",
     requiresPassword: true,
-    passwordHash:
+    passwordHashes: [
       "cf98f59c0c00358277374644241def187c6ff10d7d6a61bf0eb75bd4476344a3",
+    ],
     passwordPlaceholder: "¿Cuál es tu plato favorito?",
     riddle: "¿Cuál es esa comida que pides sin dudar cada vez que te dejo elegir restaurante?",
     rewardTitle: "Para ti",
@@ -171,8 +185,9 @@ export const gymkanaConfig: DayConfig[] = [
     icon: "🎧",
     giftLabel: "Bolso",
     requiresPassword: true,
-    passwordHash:
+    passwordHashes: [
       "fb1d2d7b10245525cb347e3e38ebc07f27335972d20555a737847640c10c74a6",
+    ],
     passwordPlaceholder: "Clave secreta",
     riddle: "Escucha el audio si te atreves. Vas a necesitar ayuda para entenderlo.",
     hintExtra: "Pista: Dani tiene la clave. Mándale un audio pidiéndosela (spoiler: se reirá de ti).",

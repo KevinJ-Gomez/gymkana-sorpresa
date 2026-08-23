@@ -6,6 +6,7 @@ import { ChevronDown, Lock, LockOpen } from "lucide-react";
 import type { DayConfig } from "@/types/gymkana";
 import { verifyPassword } from "@/lib/hash";
 import { dayComponents } from "@/components/days";
+import { DAY_ICONS } from "@/components/ui/dayIcons";
 
 /**
  * Tarjeta del día: hoja de cristal esmerilado que sube sobre el canvas 3D
@@ -35,13 +36,14 @@ export function DayContainer({
   const [shakeKey, setShakeKey] = useState(0);
 
   const DaySpecificComponent = dayComponents[config.id];
+  const DayIcon = config.lucideIcon ? DAY_ICONS[config.lucideIcon] : null;
   const showPasswordGate = config.requiresPassword && !isUnlocked;
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (checking) return;
     setChecking(true);
-    const isValid = await verifyPassword(passwordInput, config.passwordHash);
+    const isValid = await verifyPassword(passwordInput, config.passwordHashes);
     setChecking(false);
 
     if (isValid) {
@@ -83,11 +85,21 @@ export function DayContainer({
 
       {/* Cabecera */}
       <header className="flex shrink-0 items-start justify-between gap-3 px-6 pt-2 pb-4">
-        <div className="min-w-0">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-fuchsia-200/70">
-            Día {config.id}
-          </p>
-          <h2 className="mt-1 text-2xl font-semibold leading-tight text-white">{config.title}</h2>
+        <div className="flex min-w-0 items-start gap-3">
+          {DayIcon && (
+            <span
+              className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
+                bg-fuchsia-400/15 text-fuchsia-200"
+            >
+              <DayIcon className="h-5 w-5" />
+            </span>
+          )}
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-fuchsia-200/70">
+              Día {config.id}
+            </p>
+            <h2 className="mt-1 text-2xl font-semibold leading-tight text-white">{config.title}</h2>
+          </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {config.giftLabel && (

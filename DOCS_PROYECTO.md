@@ -143,7 +143,7 @@ src/
 
 1. `GymkanaApp` decide qué fase mostrar (intro / nebulosa / día enfocado).
 2. `DayContainer` (genérico) mira `requiresPassword` en la config del día:
-   - Si `true`: pinta el riddle + input de contraseña, calcula el SHA-256 del texto introducido y lo compara con `passwordHash`. Si falla → shake + mensaje de error. Si acierta → llama a `onUnlock()`.
+   - Si `true`: pinta el riddle + input de contraseña, calcula el SHA-256 del texto introducido y lo compara con la lista de `passwordHashes` válidos del día. Si falla → shake + mensaje de error. Si acierta → llama a `onUnlock()`.
    - Si `false`: el componente `Day{n}` implementa su propio reto interno (quiz, puzzle, minijuego, mensaje al revés) y llama a `onUnlock()` cuando el usuario lo supera.
    - En ambos casos el componente `Day{n}` se renderiza **siempre**, también junto al gate de contraseña: hay días cuyo enunciado vive dentro del componente (el Día 3 muestra los emojis de la canción) y sin él la clave sería inadivinable. Los días que no tienen nada que enseñar antes de desbloquear devuelven `null`.
 3. Una vez `isUnlocked` es `true`, el componente `Day{n}` pinta el premio/revelación (imagen, galería, audio+carta, confeti, etc.).
@@ -178,36 +178,49 @@ Todos los textos visibles (`riddle`, `hintExtra`, `rewardTitle`, `rewardDescript
 
 ### 5.3. Generar una contraseña nueva (¡el paso importante!)
 
-Las contraseñas **nunca se escriben en texto plano** en el config — se guarda el hash SHA-256 de la contraseña normalizada (minúsculas + sin espacios al principio/final), y el navegador compara ese mismo hash contra lo que la persona escribe.
+Las contraseñas **nunca se escriben en texto plano** en el config — se guarda el hash SHA-256 de la respuesta **normalizada**, y el navegador aplica esa misma normalización a lo que escribe la persona antes de comparar.
+
+**Normalización (clave para la UX).** La entrada se pasa a minúsculas, se le quitan las tildes y se colapsan los espacios de sobra. `"  Móvil "`, `"MÓVIL"` y `"movil"` valen exactamente igual: acertar el acertijo basta, sin pelearse con el teclado del móvil. Nota: al quitar diacríticos la `ñ` se convierte en `n`, así que `"niña"` y `"nina"` también son equivalentes — es intencionado, en una gymkana interesa ser generoso.
+
+La función vive en `src/lib/hash.ts` (`normalizePassword`) y está **duplicada a propósito** en `scripts/generate-hash.mjs`, porque el script es Node plano y no puede importar TypeScript. Si cambias una, cambia la otra o los hashes dejarán de validar.
+
+**Varias respuestas por día.** El campo es `passwordHashes: string[]`, no un único hash: un mismo acertijo puede tener varias soluciones buenas y basta con acertar una. El Día 1, por ejemplo, acepta `"movil"` e `"iphone"`.
 
 **Paso a paso:**
 
-1. Piensa la contraseña en texto plano, por ejemplo `"Valencia"`.
+1. Piensa la respuesta (o varias), por ejemplo `"movil"` e `"iphone"`.
 2. Desde la raíz del proyecto, ejecuta:
    ```bash
-   node scripts/generate-hash.mjs "Valencia"
+   node scripts/generate-hash.mjs "movil" "iphone"
    ```
-3. El script imprime algo así:
+   Cada argumento es una respuesta válida para **el mismo día**.
+3. El script imprime el bloque ya formateado:
    ```
-   Contraseña normalizada: "valencia"
-   passwordHash: "626b208a365327e7ecd6ad5af2f39c8d08c2ad85a264bd0006450c4d034ba740"
+   passwordHashes: [
+     "8dd3d0f12d706756295575bfc283da9e4ef2658cbb8531aa7261b8aed27518e5",
+     "241c1e30ed886aa4a8f4248024be2ca1a221fe9773b52e2dca7891ff5771f399",
+   ],
    ```
-4. Copia el valor de `passwordHash` y pégalo en el día correspondiente de `gymkanaConfig.ts`:
+4. Pégalo en el día correspondiente de `gymkanaConfig.ts`:
    ```ts
    {
-     id: 2,
+     id: 1,
      requiresPassword: true,
-     passwordHash: "626b208a365327e7ecd6ad5af2f39c8d08c2ad85a264bd0006450c4d034ba740",
-     passwordPlaceholder: "¿A dónde fuimos?",
+     passwordHashes: [
+       "8dd3d0f12d706756295575bfc283da9e4ef2658cbb8531aa7261b8aed27518e5",
+       "241c1e30ed886aa4a8f4248024be2ca1a221fe9773b52e2dca7891ff5771f399",
+     ],
+     passwordPlaceholder: "¿Qué es?",
      ...
    }
    ```
-5. Guarda y prueba en local que la contraseña en texto plano (`"Valencia"`, `"valencia"`, `" VALENCIA "`... todo normaliza igual) desbloquea el día.
+5. Guarda y prueba en local que las variantes (`"movil"`, `"Móvil"`, `"  MÓVIL  "`, `"iPhone"`) desbloquean el día.
 
 **Contraseñas placeholder actuales** (a sustituir por las reales antes de lanzar):
 
 | Día | Contraseña placeholder |
 |---|---|
+| 1 | `movil` o `iphone` (definitivas, ya configuradas) |
 | 2 | `valencia` |
 | 3 | `perfect` |
 | 4 | `carmin` |
@@ -275,7 +288,7 @@ Esto resume qué está terminado y qué queda por hacer para que la gymkana est�
 - Repositorio en GitHub (`origin/main`) al día.
 
 **Pendiente antes de regalar la gymkana:**
-- Sustituir las 5 contraseñas placeholder (`valencia`, `perfect`, `carmin`, `sushi`, `gucci`) por las reales, generando cada hash con `scripts/generate-hash.mjs`.
+- Sustituir las contraseñas placeholder que quedan (`valencia`, `perfect`, `carmin`, `sushi`, `gucci`) por las reales, generando los hashes con `scripts/generate-hash.mjs`. El Día 1 ya tiene las suyas definitivas.
 - Coordinar con Marta y Dani las claves reales de los Días 4 y 9 (y avisarles de qué frase van a recibir por WhatsApp).
 - Producir/editar las fotos reales: `makeup-funny.jpg` (Día 4) y `bag-funny.jpg` (Día 9) — fotos humorísticas o generadas/retocadas con IA de la persona posando.
 - Grabar y subir los vídeos: el de ánimo del Día 8 y los vídeos de los amigos del muro del Día 11 (Marta, Dani, Lucía, padres...), actualizando `friendVideos` en el config con sus `videoSrc`.

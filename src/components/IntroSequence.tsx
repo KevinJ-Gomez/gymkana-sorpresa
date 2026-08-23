@@ -10,10 +10,14 @@ import { Rocket, Sparkles } from "lucide-react";
  */
 
 const NARRATIVE = [
-  "El 2 de octubre acaba de empezar nuestro viaje.",
-  "Pero tus regalos no cabían en la maleta.",
-  "Se han quedado en casa, esperándote.",
+  "El 2 de octubre empieza nuestro viaje.",
+  "Como no teníamos espacio en las maletas, la mayoría de tus regalos se han quedado en casa esperándote.",
+  "Pero hay una pequeña excepción... algo que vas a necesitar para esta aventura.",
 ];
+
+/** Cierre destacado, con más peso tipográfico que el resto de la narrativa. */
+const CLOSER = "Once días. Once estrellas.";
+const CLOSER_SUB = "Enciéndelas todas y descubre qué te depara el final.";
 
 const LINE_DELAY = 0.75;
 const FIRST_LINE_AT = 0.9;
@@ -62,9 +66,9 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
           transition={{ duration: 1.1, delay: CLOSER_AT, ease: "easeOut" }}
           className="text-balance text-center text-2xl font-semibold leading-snug text-white"
         >
-          Once días, once estrellas.
-          <span className="mt-1 block text-base font-normal text-fuchsia-200/80">
-            Enciéndelas todas y verás lo que forman.
+          {CLOSER}
+          <span className="mt-1.5 block text-base font-normal text-fuchsia-200/80">
+            {CLOSER_SUB}
           </span>
         </motion.p>
       </div>

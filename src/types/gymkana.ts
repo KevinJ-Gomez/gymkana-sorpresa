@@ -1,5 +1,25 @@
 import type { ComponentType } from "react";
 
+/**
+ * Iconos disponibles para la cabecera de un día. Es una lista cerrada a
+ * propósito: así el config no puede referirse a un icono que no existe y el
+ * bundle solo incluye los que se usan de verdad.
+ * El mapa nombre → componente vive en `src/components/ui/dayIcons.ts`.
+ */
+export type DayIconName =
+  | "camera"
+  | "gift"
+  | "map"
+  | "music"
+  | "sparkles"
+  | "heart"
+  | "puzzle"
+  | "flower"
+  | "lock"
+  | "headphones"
+  | "gamepad"
+  | "cake";
+
 export interface QuizQuestion {
   question: string;
   options: string[];
@@ -25,15 +45,26 @@ export interface DayConfig {
   unlockDate: string;
   /** Título corto mostrado en la tarjeta y en la cabecera del día. */
   title: string;
-  /** Emoji usado como icono de la tarjeta en el grid. */
+  /**
+   * Emoji del día. Se usaba en el grid 2D original; desde el rediseño 3D no se
+   * pinta en ningún sitio. Se conserva por si vuelve a hacer falta.
+   */
   icon: string;
+  /** Icono (lucide-react) mostrado en la cabecera de la tarjeta del día. */
+  lucideIcon?: DayIconName;
   /** Etiqueta del regalo físico asociado (ej. "Maquillaje"). Opcional. */
   giftLabel?: string;
 
   /** Si es true, el día muestra el formulario de contraseña genérico. */
   requiresPassword: boolean;
-  /** Hash SHA-256 (hex) de la contraseña normalizada (trim + minúsculas). */
-  passwordHash?: string;
+  /**
+   * Hashes SHA-256 (hex) de las respuestas válidas, ya normalizadas.
+   *
+   * Es una LISTA porque un mismo acertijo puede tener varias respuestas buenas
+   * ("movil", "iphone", "telefono"): basta acertar una. Genéralos con
+   * `node scripts/generate-hash.mjs "movil" "iphone"`.
+   */
+  passwordHashes?: string[];
   /** Placeholder del input de contraseña. */
   passwordPlaceholder?: string;
 

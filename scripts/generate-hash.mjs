@@ -1,23 +1,59 @@
 #!/usr/bin/env node
-// Genera el hash SHA-256 (hex) que hay que pegar en `passwordHash` dentro de
-// src/config/gymkanaConfig.ts. Usa el mismo algoritmo de normalización
-// (trim + minúsculas) que src/lib/hash.ts para que el resultado coincida
-// exactamente con lo que el navegador calculará al validar la contraseña.
+// Genera los hashes SHA-256 (hex) que se pegan en `passwordHashes` dentro de
+// src/config/gymkanaConfig.ts.
 //
 // Uso:
-//   node scripts/generate-hash.mjs "mi-clave-secreta"
+//   node scripts/generate-hash.mjs "movil"
+//   node scripts/generate-hash.mjs "movil" "iphone" "telefono"
+//
+// Cada argumento es una respuesta VÁLIDA para el mismo día: el día se
+// desbloquea si el usuario acierta cualquiera de ellas.
 
 import { createHash } from "node:crypto";
 
-const raw = process.argv.slice(2).join(" ");
+/**
+ * ⚠️ Gemela de `normalizePassword` en src/lib/hash.ts. Si cambia una, tiene que
+ * cambiar la otra, o los hashes generados aquí no validarán en el navegador.
+ * (Al final de este script hay una comprobación que avisa si se desincronizan.)
+ */
+function normalizePassword(raw) {
+  return raw
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
-if (!raw) {
-  console.error('Uso: node scripts/generate-hash.mjs "mi-clave-secreta"');
+const inputs = process.argv.slice(2);
+
+if (inputs.length === 0) {
+  console.error("Uso: node scripts/generate-hash.mjs \"respuesta\" [\"otra respuesta\" ...]");
+  console.error("");
+  console.error("Cada argumento es una respuesta válida para el mismo día.");
   process.exit(1);
 }
 
-const normalized = raw.trim().toLowerCase();
-const hash = createHash("sha256").update(normalized).digest("hex");
+console.log("");
+console.log("No hace falta que escribas en minúsculas ni sin tildes: la entrada");
+console.log("se normaliza sola (minúsculas, sin acentos y sin espacios de sobra),");
+console.log("y el navegador aplica exactamente la misma normalización al validar.");
+console.log("");
 
-console.log(`Contraseña normalizada: "${normalized}"`);
-console.log(`passwordHash: "${hash}"`);
+const hashes = [];
+for (const raw of inputs) {
+  const normalized = normalizePassword(raw);
+  const hash = createHash("sha256").update(normalized).digest("hex");
+  hashes.push(hash);
+  console.log(`  "${raw}"  →  normalizada: "${normalized}"`);
+}
+
+console.log("");
+console.log("Pega esto en el día correspondiente de src/config/gymkanaConfig.ts:");
+console.log("");
+console.log("    passwordHashes: [");
+for (const hash of hashes) {
+  console.log(`      "${hash}",`);
+}
+console.log("    ],");
+console.log("");
