@@ -30,6 +30,10 @@ body {
   overflow: hidden;
   position: fixed;
   inset: 0;
+  /* El pellizco de dos dedos lo gestiona la app (ver NebulaScene) para alejar
+     o acercar el corazón; si el navegador también lo toma como zoom nativo de
+     página, el canvas WebGL queda re-escalado por CSS y se ve pixelado. */
+  touch-action: none;
 }
 
 /* Texto seleccionable solo donde tiene sentido (acertijos, cartas); el resto
