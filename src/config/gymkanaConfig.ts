@@ -1,0 +1,219 @@
+import type { DayConfig } from "@/types/gymkana";
+
+/**
+ * ⚙️ CONFIGURACIÓN CENTRAL DE LA GYMKANA
+ * ---------------------------------------------------------------------------
+ * Este es el ÚNICO archivo que deberías tocar para personalizar el contenido:
+ * fechas, acertijos, contraseñas y textos. Los componentes de src/components
+ * solo leen estos datos, no contienen texto "hardcodeado".
+ *
+ * 🔐 Contraseñas: nunca se guardan en texto plano. Genera el hash con:
+ *     node scripts/generate-hash.mjs "mi-clave-secreta"
+ *   y pega el resultado en `passwordHash`. Ver README.md para más detalle.
+ *
+ * 📅 Fechas: `unlockDate` usa formato "YYYY-MM-DD". Un día es visible/jugable
+ *   en el grid en cuanto la fecha local del dispositivo la alcanza (o siempre,
+ *   si el Modo Testing está activo).
+ *
+ * 🖼️ Imágenes/vídeos: coloca los ficheros dentro de /public y referencia la
+ *   ruta empezando por "/", ej. "/makeup-funny.jpg".
+ */
+
+export const GYMKANA_TITLE = "11 Días de Sorpresas";
+export const GYMKANA_SUBTITLE = "Una gymkana solo para ti 💌";
+
+/** Bandera de entorno para forzar el Modo Testing por defecto (ver .env.local.example). */
+export const DEFAULT_TESTING_MODE =
+  process.env.NEXT_PUBLIC_TESTING_MODE === "true";
+
+export const gymkanaConfig: DayConfig[] = [
+  {
+    id: 1,
+    unlockDate: "2026-09-01",
+    title: "Bienvenida",
+    icon: "💌",
+    requiresPassword: false,
+    riddle: "",
+    rewardTitle: "¡Bienvenida a tu gymkana!",
+    rewardDescription:
+      "Este año tus regalos se han quedado en casa esperándote... pero para conseguirlos vas a tener que ganártelos aquí, día a día. Once días, once retos, un cumpleaños increíble al final. ¿Preparada?",
+  },
+  {
+    id: 2,
+    unlockDate: "2026-09-02",
+    title: "Nuestro primer viaje",
+    icon: "🗺️",
+    requiresPassword: true,
+    passwordHash:
+      "626b208a365327e7ecd6ad5af2f39c8d08c2ad85a264bd0006450c4d034ba740",
+    passwordPlaceholder: "¿A dónde fuimos?",
+    riddle:
+      "La primera vez que hicimos las maletas juntos, sin saber muy bien qué nos esperaba. ¿Recuerdas el nombre de aquella ciudad?",
+    hintExtra: "Pista: fue la primera sello en nuestro pasaporte de pareja.",
+    rewardTitle: "Nuestro primer viaje",
+    rewardDescription: "Una pequeña galería con los mejores momentos.",
+    galleryCaptions: [
+      "El primer paseo",
+      "Esa cena inolvidable",
+      "Perdidos por el centro",
+      "La foto que no sale en ningún álbum",
+    ],
+  },
+  {
+    id: 3,
+    unlockDate: "2026-09-03",
+    title: "Adivina la canción",
+    icon: "🎵",
+    requiresPassword: true,
+    passwordHash:
+      "fafe97f7def328bbd4f10779b9625a8aa0bfaa143d7ae64e6f5770e47b51cd1d",
+    passwordPlaceholder: "Título de la canción",
+    riddle: "Adivina la canción con estos emojis:",
+    emojiClue: "💍 ⏳ 😍 🎶",
+    hintExtra: "Es esa canción que sonaba en bucle aquel verano.",
+    rewardTitle: "Sonando solo para ti",
+    rewardDescription: "Dale al play y lee despacio.",
+    songFile: "/audio/day3-song.mp3",
+    letterText:
+      "Desde el primer día supe que contigo todo sería distinto. Cada canción que hemos hecho nuestra guarda un trocito de nosotros. Gracias por llenarme la vida de banda sonora. Te quiero.",
+  },
+  {
+    id: 4,
+    unlockDate: "2026-09-04",
+    title: "El secreto del maquillaje",
+    icon: "💄",
+    giftLabel: "Maquillaje",
+    requiresPassword: true,
+    passwordHash:
+      "76220309bfa2825db730089f962529ad08e1ba7dc7b9d7b5304832474444eb3f",
+    passwordPlaceholder: "Clave secreta",
+    riddle:
+      "Hoy no hay acertijo que valga: la clave la tiene una amiga tuya, y solo te la dará si se la pides con mucho cariño.",
+    hintExtra: "Pista: escríbele por WhatsApp a Marta y pregúntale por \"la clave del día 4\".",
+    rewardTitle: "Te espera en casa",
+    rewardDescription: "Este maquillaje ya tiene dueña.",
+    imageSrc: "/makeup-funny.jpg",
+    imageCaption: "Sí, este es tu regalo. Ya casi lo tienes en las manos.",
+  },
+  {
+    id: 5,
+    unlockDate: "2026-09-05",
+    title: "Quiz de pareja",
+    icon: "❤️",
+    requiresPassword: false,
+    riddle: "Demuestra cuánto nos conoces. Tres preguntas, cero fallos permitidos.",
+    rewardTitle: "¡Vale digital desbloqueado!",
+    rewardDescription: "Canjéalo cuando quieras durante el viaje.",
+    voucherText: "1 cena a elección tuya, sin mirar el precio 🍽️",
+    quizQuestions: [
+      {
+        question: "¿Cuál fue nuestra primera cita de verdad?",
+        options: ["Cine", "Cena en el italiano", "Paseo por la playa", "Concierto"],
+        correctIndex: 1,
+      },
+      {
+        question: "¿Qué serie hemos maratoneado más veces?",
+        options: ["La que tú sabes", "Otra cualquiera", "Ninguna, no vemos series", "Todas por igual"],
+        correctIndex: 0,
+      },
+      {
+        question: "¿Cuál es mi excusa favorita para pedir postre?",
+        options: ["\"Es para compartir\"", "\"Hoy toca\"", "\"Un día es un día\"", "Todas las anteriores"],
+        correctIndex: 3,
+      },
+    ],
+  },
+  {
+    id: 6,
+    unlockDate: "2026-09-06",
+    title: "Rompecabezas",
+    icon: "🧩",
+    requiresPassword: false,
+    riddle: "Ordena las piezas del 1 al 6 antes de que se te acabe la paciencia.",
+    rewardTitle: "Pista desbloqueada",
+    rewardDescription: "Guárdala, la necesitarás en el viaje.",
+    puzzlePieces: 6,
+    excursionHint:
+      "Busca en el pueblo el mirador con forma de corazón. Allí nos espera algo especial.",
+  },
+  {
+    id: 7,
+    unlockDate: "2026-09-07",
+    title: "Su comida favorita",
+    icon: "🌸",
+    giftLabel: "Flores",
+    requiresPassword: true,
+    passwordHash:
+      "cf98f59c0c00358277374644241def187c6ff10d7d6a61bf0eb75bd4476344a3",
+    passwordPlaceholder: "¿Cuál es tu plato favorito?",
+    riddle: "¿Cuál es esa comida que pides sin dudar cada vez que te dejo elegir restaurante?",
+    rewardTitle: "Para ti",
+    rewardDescription: "Las flores de verdad ya están de camino.",
+    flowerCount: 5,
+  },
+  {
+    id: 8,
+    unlockDate: "2026-09-08",
+    title: "Mensaje cifrado",
+    icon: "🔐",
+    requiresPassword: false,
+    riddle: "Este mensaje viene al revés. Léelo con calma... o dale al botón para descifrarlo.",
+    rewardTitle: "Un amigo quiere decirte algo",
+    rewardDescription: "Sube el volumen.",
+    cipherMessage:
+      "adaz se azilaner al ,adan se elisopmi al euq odacas etsE .zulf ed anell átse adiv ut euq y ,zecilef sáes euq oseed etnemlaeR",
+    videoSrc: "/videos/day8-animo.mp4",
+  },
+  {
+    id: 9,
+    unlockDate: "2026-09-09",
+    title: "Audio distorsionado",
+    icon: "🎧",
+    giftLabel: "Bolso",
+    requiresPassword: true,
+    passwordHash:
+      "fb1d2d7b10245525cb347e3e38ebc07f27335972d20555a737847640c10c74a6",
+    passwordPlaceholder: "Clave secreta",
+    riddle: "Escucha el audio si te atreves. Vas a necesitar ayuda para entenderlo.",
+    hintExtra: "Pista: Dani tiene la clave. Mándale un audio pidiéndosela (spoiler: se reirá de ti).",
+    audioHintSrc: "/audio/day9-distorted.mp3",
+    rewardTitle: "Alta costura, nivel experto",
+    rewardDescription: "Preparada para posar con tu bolso nuevo.",
+    imageSrc: "/bag-funny.jpg",
+    imageCaption: "La modelo ya tiene complemento.",
+  },
+  {
+    id: 10,
+    unlockDate: "2026-09-10",
+    title: "Encuentra el corazón",
+    icon: "🎮",
+    requiresPassword: false,
+    riddle: "Entre tantas estrellas se esconde un corazón. Encuéntralo antes de que se mueva.",
+    rewardTitle: "Pista física desbloqueada",
+    rewardDescription: "Hay algo escondido esperándote en el viaje.",
+    physicalHint:
+      "Revisa el bolsillo delantero de la maleta pequeña. No, el de verdad, no el de broma.",
+  },
+  {
+    id: 11,
+    unlockDate: "2026-09-11",
+    title: "¡Feliz cumpleaños!",
+    icon: "🎂",
+    requiresPassword: false,
+    riddle: "",
+    rewardTitle: "Hoy es tu día",
+    rewardDescription:
+      "Once días de retos y esto es solo el principio. Todos los que te quieren tienen algo que decirte.",
+    friendVideos: [
+      { name: "Marta" },
+      { name: "Dani" },
+      { name: "Lucía" },
+      { name: "Tus padres" },
+    ],
+  },
+];
+
+/** Acceso rápido a la config de un día por id. */
+export function getDayConfig(id: number): DayConfig | undefined {
+  return gymkanaConfig.find((day) => day.id === id);
+}
