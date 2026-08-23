@@ -134,6 +134,17 @@ export function getPathSegment(
   for (let i = 0; i <= steps; i++) {
     points.push(getPathPoint(from + ((to - from) * i) / steps, count));
   }
+  // Si el tramo da una vuelta completa (el contorno del corazón siempre; la
+  // línea dorada al resolver el Día 11), el último punto coincide EXACTO con
+  // el primero. Ese segmento de longitud cero rompe el cálculo de dirección
+  // de las fat-lines (`Line2`, usadas para el `lineWidth` > 1): en el
+  // escritorio (precisión `highp`) no se nota, pero en GPUs móviles
+  // (`mediump`) se ve como una línea recta que atraviesa toda la pantalla.
+  const [fx, fy, fz] = points[0];
+  const [lx, ly, lz] = points[points.length - 1];
+  if (points.length > 1 && fx === lx && fy === ly && fz === lz) {
+    points.pop();
+  }
   return points;
 }
 
