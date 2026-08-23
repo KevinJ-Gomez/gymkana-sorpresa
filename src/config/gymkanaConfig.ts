@@ -29,7 +29,7 @@ export const DEFAULT_TESTING_MODE =
 export const gymkanaConfig: DayConfig[] = [
   {
     id: 1,
-    unlockDate: "2026-09-01",
+    unlockDate: "2026-10-02",
     title: "Bienvenida",
     icon: "💌",
     requiresPassword: false,
@@ -40,7 +40,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 2,
-    unlockDate: "2026-09-02",
+    unlockDate: "2026-10-03",
     title: "Nuestro primer viaje",
     icon: "🗺️",
     requiresPassword: true,
@@ -61,7 +61,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 3,
-    unlockDate: "2026-09-03",
+    unlockDate: "2026-10-04",
     title: "Adivina la canción",
     icon: "🎵",
     requiresPassword: true,
@@ -79,7 +79,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 4,
-    unlockDate: "2026-09-04",
+    unlockDate: "2026-10-05",
     title: "El secreto del maquillaje",
     icon: "💄",
     giftLabel: "Maquillaje",
@@ -97,7 +97,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 5,
-    unlockDate: "2026-09-05",
+    unlockDate: "2026-10-06",
     title: "Quiz de pareja",
     icon: "❤️",
     requiresPassword: false,
@@ -125,7 +125,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 6,
-    unlockDate: "2026-09-06",
+    unlockDate: "2026-10-07",
     title: "Rompecabezas",
     icon: "🧩",
     requiresPassword: false,
@@ -138,7 +138,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 7,
-    unlockDate: "2026-09-07",
+    unlockDate: "2026-10-08",
     title: "Su comida favorita",
     icon: "🌸",
     giftLabel: "Flores",
@@ -153,7 +153,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 8,
-    unlockDate: "2026-09-08",
+    unlockDate: "2026-10-09",
     title: "Mensaje cifrado",
     icon: "🔐",
     requiresPassword: false,
@@ -166,7 +166,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 9,
-    unlockDate: "2026-09-09",
+    unlockDate: "2026-10-10",
     title: "Audio distorsionado",
     icon: "🎧",
     giftLabel: "Bolso",
@@ -184,7 +184,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 10,
-    unlockDate: "2026-09-10",
+    unlockDate: "2026-10-11",
     title: "Encuentra el corazón",
     icon: "🎮",
     requiresPassword: false,
@@ -196,7 +196,7 @@ export const gymkanaConfig: DayConfig[] = [
   },
   {
     id: 11,
-    unlockDate: "2026-09-11",
+    unlockDate: "2026-10-12",
     title: "¡Feliz cumpleaños!",
     icon: "🎂",
     requiresPassword: false,

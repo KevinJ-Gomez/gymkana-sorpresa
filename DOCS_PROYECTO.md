@@ -19,29 +19,33 @@ Esto convierte una limitación logística (no poder llevar los regalos de viaje)
 
 ### Tono
 
-Romántico + humorístico. La estética visual (glassmorphism, degradados suaves, dark mode por defecto) es "elegante y de pareja"; el copy y las imágenes/vídeos (fotos posando de forma graciosa, mensajes cifrados, amigos grabándose vídeos de ánimo) son deliberadamente informales y cómplices.
+Romántico + humorístico + **cinematográfico**. La estética visual es una **nebulosa espacial rosa/magenta** con una constelación de estrellas navegable en 3D (ver [Dirección Visual](#3-dirección-visual-experiencia-inmersiva-3d)); el copy y las imágenes/vídeos (fotos posando de forma graciosa, mensajes cifrados, amigos grabándose vídeos de ánimo) son deliberadamente informales y cómplices. El contraste entre "envoltorio épico" y "contenido de broma" es intencionado.
+
+### ⚠️ Restricción técnica principal: solo móvil (portrait)
+
+La aplicación se consume **100% en móvil, en modo vertical (portrait)**. **No hay versión de escritorio** y no es un objetivo tenerla. Todas las decisiones de UI, 3D, rendimiento e interacción (taps y swipes, nunca hover ni teclado) se toman optimizando para pantalla de móvil en vertical. Cualquier trabajo futuro debe respetar esta restricción: si algo se ve bien en escritorio pero cuesta batería o legibilidad en móvil, gana el móvil.
 
 ---
 
 ## 2. Timeline de los 11 días
 
-La gymkana tiene **11 días**, numerados internamente `Día 1` … `Día 11` en el código (`id` en `gymkanaConfig.ts`), pensados para coincidir con el rango del **2 al 12** del mes de las vacaciones (`Día 1` de la app = día 2 del calendario real → primer día completo de vacaciones; `Día 11` de la app = día 12 del calendario real → **el cumpleaños**, día del regreso o cierre del viaje).
+La gymkana dura **11 días**, del **2 al 12 de octubre**, coincidiendo con las vacaciones en pareja. `Día 1` de la app = **2 de octubre** (primer día del viaje); `Día 11` de la app = **12 de octubre** = **el cumpleaños** y cierre de la gymkana.
 
-> ⚠️ **Nota de estado**: a fecha de esta documentación, `gymkanaConfig.ts` todavía usa fechas placeholder (`2026-09-01` a `2026-09-11`, es decir 1–11, no 2–12). Antes de lanzar la gymkana real hay que actualizar las 11 `unlockDate` para que empiecen el día 2 y terminen el día 12 del mes real del viaje. Ver la sección [Guía de Configuración](#4-guía-de-configuración-paso-a-paso).
+Estas son las **fechas reales y definitivas** (ya reflejadas en `unlockDate` dentro de `gymkanaConfig.ts`):
 
-| Día | Dinámica / acertijo | Premio o revelación |
-|---|---|---|
-| **1** | Sin contraseña. Mensaje de bienvenida: los regalos físicos se han quedado en casa por el equipaje, y hay que ganárselos aquí, día a día. | Texto de bienvenida — arranca la gymkana. |
-| **2** | Acertijo sobre el primer viaje en pareja (adivinar el nombre de la ciudad). | Galería de fotos placeholder de aquel viaje (a sustituir por fotos reales). |
-| **3** | Adivinar una canción a partir de una pista con emojis. | La canción sonando (reproductor de audio) + una carta de amor escrita. |
-| **4** 🎁 *Maquillaje* | Sin acertijo "de lógica": hay que **pedir la clave a una amiga (Marta) por WhatsApp**, diciéndole la frase clave ("la clave del día 4"). | Se revela una **foto humorística/generada con IA** de la propia persona "maquillada", con el mensaje de que el maquillaje real ya la espera en casa. |
-| **5** | Quiz interactivo de pareja (preguntas sobre la relación, sin fallos permitidos). | Vale digital canjeable por una cena a elección durante el viaje. |
-| **6** | Puzzle/rompecabezas (ordenar piezas numeradas). | Pista sobre una excursión a hacer durante el viaje (mirador con forma de corazón). |
-| **7** 🎁 *Flores* | Acertijo sobre la comida favorita de la pareja. | Animación de flores creciendo (CSS/Framer Motion) — las flores reales van de camino. |
-| **8** | Mensaje cifrado al revés (hay que leerlo en espejo o pulsar "descifrar"). | Vídeo de un amigo dando ánimos de cumpleaños (placeholder de vídeo a sustituir). |
-| **9** 🎁 *Bolso* | Pista con **audio distorsionado**: hay que **pedir la clave a un amigo (Dani) por WhatsApp** para poder entenderlo. | Se revela una **foto de la propia persona posando "en plan alta costura"** con el bolso (foto graciosa/editada con IA), como si ya fuera modelo profesional. El bolso real espera en casa. |
-| **10** | Minijuego "encuentra el corazón" (entre estrellas, se mueve si fallas). | Pista física escondida de verdad en el equipaje/viaje (bolsillo delantero de la maleta pequeña). |
-| **11** 🎂 | El cumpleaños. Sin contraseña, se desbloquea solo al entrar. | Confeti (`canvas-confetti`) + muro interactivo con vídeos de amigos felicitando (Marta, Dani, Lucía, "Tus padres" — placeholders a sustituir por los vídeos reales). |
+| Día | Fecha | Dinámica / acertijo | Premio o revelación |
+|---|---|---|---|
+| **1** | 2 oct | Sin contraseña. Mensaje de bienvenida: los regalos físicos se han quedado en casa por el equipaje, y hay que ganárselos aquí, día a día. | Texto de bienvenida — arranca la gymkana. |
+| **2** | 3 oct | Acertijo sobre el primer viaje en pareja (adivinar el nombre de la ciudad). | Galería de fotos placeholder de aquel viaje (a sustituir por fotos reales). |
+| **3** | 4 oct | Adivinar una canción a partir de una pista con emojis. | La canción sonando (reproductor de audio) + una carta de amor escrita. |
+| **4** 🎁 *Maquillaje* | 5 oct | Sin acertijo "de lógica": hay que **pedir la clave a una amiga (Marta) por WhatsApp**, diciéndole la frase clave ("la clave del día 4"). | Se revela una **foto humorística/generada con IA** de la propia persona "maquillada", con el mensaje de que el maquillaje real ya la espera en casa. |
+| **5** | 6 oct | Quiz interactivo de pareja (preguntas sobre la relación, sin fallos permitidos). | Vale digital canjeable por una cena a elección durante el viaje. |
+| **6** | 7 oct | Puzzle/rompecabezas (ordenar piezas numeradas). | Pista sobre una excursión a hacer durante el viaje (mirador con forma de corazón). |
+| **7** 🎁 *Flores* | 8 oct | Acertijo sobre la comida favorita de la pareja. | Animación de flores creciendo (CSS/Framer Motion) — las flores reales van de camino. |
+| **8** | 9 oct | Mensaje cifrado al revés (hay que leerlo en espejo o pulsar "descifrar"). | Vídeo de un amigo dando ánimos de cumpleaños (placeholder de vídeo a sustituir). |
+| **9** 🎁 *Bolso* | 10 oct | Pista con **audio distorsionado**: hay que **pedir la clave a un amigo (Dani) por WhatsApp** para poder entenderlo. | Se revela una **foto de la propia persona posando "en plan alta costura"** con el bolso (foto graciosa/editada con IA), como si ya fuera modelo profesional. El bolso real espera en casa. |
+| **10** | 11 oct | Minijuego "encuentra el corazón" (entre estrellas, se mueve si fallas). | Pista física escondida de verdad en el equipaje/viaje (bolsillo delantero de la maleta pequeña). |
+| **11** 🎂 | **12 oct** | **El cumpleaños.** Sin contraseña, se desbloquea solo al entrar. | Confeti (`canvas-confetti`) + muro interactivo con vídeos de amigos felicitando (Marta, Dani, Lucía, "Tus padres" — placeholders a sustituir por los vídeos reales). |
 
 ### Hilo narrativo de las contraseñas por WhatsApp
 
@@ -49,14 +53,61 @@ Dos días (4 y 9) dependen deliberadamente de **interacción social real**, no d
 
 ---
 
-## 3. Arquitectura Técnica
+## 3. Dirección Visual: experiencia inmersiva 3D
+
+> **Pivote de diseño.** El proyecto arrancó con un grid 2D de 11 tarjetas tipo "calendario de adviento". Ese enfoque está **descartado**: se ha sustituido por una experiencia inmersiva 3D mobile-first. Este apartado documenta la dirección actual.
+
+### El concepto
+
+La gymkana ya no es una cuadrícula: es un **viaje por una nebulosa**. La persona navega por el espacio y cada día es una **estrella de una constelación** que tiene que alcanzar.
+
+### Las tres fases narrativas
+
+La app tiene tres estados visuales encadenados:
+
+1. **La Presentación (cinemática de intro)** — Al abrir la web, antes de ver nada más, aparece una secuencia narrativa animada con Framer Motion. El texto explica que el viaje del **2 de octubre** acaba de empezar, que los regalos no cabían en la maleta, y que tendrá que ir resolviendo acertijos en esta nebulosa para descubrir qué le espera a la vuelta. Cierra con un botón grande de **"Comenzar Viaje"**. Ver [Secuencia de Intro](#31-secuencia-de-intro).
+2. **La Nebulosa y la Constelación (menú principal)** — Un canvas de React Three Fiber a pantalla completa. De fondo, un sistema de partículas denso y lento en **rosa, magenta, violeta vivo y destellos dorados**. Encima, los **11 días son 11 esferas de luz** dispuestas en **zigzag vertical** (pensado para navegar con swipe vertical en móvil), conectadas por líneas sutiles. Estados de cada esfera:
+   - **Bloqueada**: gris oscuro/translúcida, latiendo despacio.
+   - **Completada**: brillo dorado.
+   - **Hoy**: resplandor rosa/blanco intenso — es la que llama a que la toques.
+3. **La Transición (zoom in) y la tarjeta** — Al tocar la esfera del día actual, la cámara hace un **zoom inmersivo y rápido** hacia esa esfera (lerp de cámara en `useFrame`). Cuando llega, se despliega **por encima del canvas** una tarjeta HTML glassmorphism (Framer Motion) con el acertijo del día: **grande**, textos muy legibles, cristal esmerilado con bordes brillantes. Un botón de **"Volver a la nebulosa"** hace el **zoom out inverso** de la cámara.
+
+### 3.1. Secuencia de Intro
+
+Existe una pantalla inicial de presentación narrativa (`IntroSequence.tsx`) que se muestra **una sola vez por dispositivo**: una vez completada, queda registrada en `localStorage` para no repetirse en cada recarga y que la persona entre directa a la nebulosa. Se puede volver a ver borrando el almacenamiento del navegador o desde el Modo Testing.
+
+### Paleta
+
+| Rol | Color aproximado |
+|---|---|
+| Fondo profundo | `#0b0620` (violeta casi negro) |
+| Nebulosa base | magenta / fucsia `#d946ef`, rosa `#fb7185` |
+| Nebulosa secundaria | violeta vivo `#a855f7`, índigo `#6366f1` |
+| Destellos | dorado `#fbbf24` |
+| Esfera "hoy" | rosa/blanco incandescente |
+| Esfera completada | dorado |
+| Esfera bloqueada | gris translúcido |
+
+### Reglas de rendimiento (móvil)
+
+Son requisitos, no sugerencias — la app corre en el móvil de otra persona y no puede quemarle la batería:
+
+- `dpr={[1, 2]}` en el `<Canvas>` (nunca dpr libre: en móviles de 3x arruina el rendimiento).
+- Antialias desactivado; el "glow" se consigue con materiales emisivos + halos aditivos, **no** con post-procesado (bloom es demasiado caro en móvil).
+- Recuento de partículas contenido y geometrías de baja resolución en las esferas.
+- Sin `hover`: toda la interacción es **tap y swipe**.
+
+---
+
+## 4. Arquitectura Técnica
 
 - **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4.
-- **Animación**: Framer Motion (transiciones grid ↔ detalle, shake al fallar contraseña, animación de desbloqueo, entradas escalonadas de tarjetas).
+- **3D**: `three` + `@react-three/fiber` + `@react-three/drei` (nebulosa, constelación, cámara).
+- **Animación 2D/UI**: Framer Motion (intro cinemática, aparición de la tarjeta, shake al fallar contraseña).
 - **Confeti**: `canvas-confetti`, solo en el Día 11.
 - **Iconografía**: `lucide-react`.
 - **Seguridad de contraseñas**: SHA-256 en cliente vía Web Crypto (`crypto.subtle`), sin dependencias externas. No hay backend: es disuasión de "view-source" casual, no un secreto de alto valor.
-- **Persistencia**: `localStorage` (vía `useSyncExternalStore`) para dos cosas — qué días ya se han resuelto (para no repetir un acertijo tras refrescar) y si el Modo Testing está activo.
+- **Persistencia**: `localStorage` (vía `useSyncExternalStore`) para tres cosas — qué días ya se han resuelto, si el Modo Testing está activo, y si la intro ya se ha visto.
 - **Todo es cliente**: no hay Server Components con lógica de negocio; toda la app es interactiva y vive en el navegador (SPA de facto dentro del App Router).
 
 ### Sistema modular de días
@@ -70,11 +121,14 @@ src/
   lib/
     hash.ts                   ← SHA-256 en cliente
     dates.ts                   ← ¿ha llegado ya la fecha de desbloqueo?
-    storage.ts                  ← progreso + modo testing (localStorage)
+    storage.ts                  ← progreso + modo testing + intro vista (localStorage)
+    constellation.ts             ← posiciones 3D de las 11 esferas (zigzag vertical)
   components/
-    GymkanaApp.tsx              ← orquestador: alterna grid ⇄ detalle de día
-    DayGrid.tsx / DayCard.tsx    ← el grid de 11 "candados"
-    DayContainer.tsx              ← componente GENÉRICO: gate de contraseña
+    GymkanaApp.tsx              ← orquestador de las 3 fases: intro → nebulosa → día
+    IntroSequence.tsx            ← cinemática narrativa de entrada
+    DayContainer.tsx              ← tarjeta glassmorphism + gate de contraseña
+    three/
+      NebulaScene.tsx               ← Canvas R3F: partículas, constelación, cámara
     ui/
       GlassCard.tsx                 ← panel glassmorphism reutilizable
       GiftImageReveal.tsx            ← imagen con fallback si el fichero no existe
@@ -83,9 +137,11 @@ src/
       index.ts                         ← registro id → componente
 ```
 
+> **Nota histórica**: `DayGrid.tsx` y `DayCard.tsx` (el grid 2D original) se **eliminaron** en el pivote a 3D. Si se busca ese código, está en el historial de git antes del commit del rediseño.
+
 **Flujo de un día:**
 
-1. `GymkanaApp` decide si mostrar el grid o el detalle de un día concreto.
+1. `GymkanaApp` decide qué fase mostrar (intro / nebulosa / día enfocado).
 2. `DayContainer` (genérico) mira `requiresPassword` en la config del día:
    - Si `true`: pinta el riddle + input de contraseña, calcula el SHA-256 del texto introducido y lo compara con `passwordHash`. Si falla → shake + mensaje de error. Si acierta → llama a `onUnlock()`.
    - Si `false`: delega directamente en el componente `Day{n}` correspondiente, que implementa su propio reto interno (quiz, puzzle, minijuego, mensaje al revés) y llama a `onUnlock()` cuando el usuario lo supera.
@@ -95,29 +151,31 @@ Añadir un día nuevo (o rehacer uno) = crear `Day{n}.tsx` con la firma `{ confi
 
 ---
 
-## 4. Guía de Configuración (paso a paso)
+## 5. Guía de Configuración (paso a paso)
 
 Todo el contenido editable vive en **`src/config/gymkanaConfig.ts`**. Es un array `gymkanaConfig: DayConfig[]` con un objeto por día. Los campos disponibles (no todos los días usan todos) están documentados uno a uno en `src/types/gymkana.ts`.
 
-### 4.1. Cambiar las fechas
+### 5.1. Cambiar las fechas
 
 Cada día tiene un campo `unlockDate` en formato `"YYYY-MM-DD"`:
 
 ```ts
 {
   id: 1,
-  unlockDate: "2026-09-01",   // ← cambiar por la fecha real
+  unlockDate: "2026-10-02",   // ← Día 1 = 2 de octubre
   ...
 }
 ```
 
-Un día se vuelve jugable en el grid en cuanto la fecha local del dispositivo alcanza `unlockDate` (comparación por `src/lib/dates.ts`). Para la gymkana real, las 11 fechas deben cubrir el rango real de vacaciones (día 2 → día 12 del mes correspondiente), con el `id: 11` cayendo exactamente en el día del cumpleaños.
+Un día se vuelve alcanzable en la constelación en cuanto la fecha local del dispositivo alcanza `unlockDate` (comparación por `src/lib/dates.ts`).
 
-### 4.2. Cambiar acertijos, pistas y textos
+**Las fechas ya están puestas y son las definitivas**: `2026-10-02` (Día 1) … `2026-10-12` (Día 11, el cumpleaños). Solo hay que tocarlas si el viaje cambia de fechas — en ese caso, mantener siempre 11 días consecutivos y que el `id: 11` caiga exactamente en el cumpleaños.
+
+### 5.2. Cambiar acertijos, pistas y textos
 
 Todos los textos visibles (`riddle`, `hintExtra`, `rewardTitle`, `rewardDescription`, textos de quiz, mensaje cifrado, etc.) son strings normales dentro del objeto de cada día. Se editan directamente ahí, sin tocar ningún componente.
 
-### 4.3. Generar una contraseña nueva (¡el paso importante!)
+### 5.3. Generar una contraseña nueva (¡el paso importante!)
 
 Las contraseñas **nunca se escriben en texto plano** en el config — se guarda el hash SHA-256 de la contraseña normalizada (minúsculas + sin espacios al principio/final), y el navegador compara ese mismo hash contra lo que la persona escribe.
 
@@ -157,7 +215,7 @@ Las contraseñas **nunca se escriben en texto plano** en el config — se guarda
 
 ---
 
-## 5. Gestión de Assets
+## 6. Gestión de Assets
 
 Los ficheros van dentro de `/public` y se referencian en `gymkanaConfig.ts` con la ruta empezando por `/`. Si un fichero no existe todavía, la app **no se rompe**: las imágenes muestran un placeholder elegante indicando dónde colocarlas, y los reproductores de audio/vídeo simplemente no suenan/reproducen.
 
@@ -174,13 +232,13 @@ Hay sendos `README.md` recordatorio dentro de `public/audio/` y `public/videos/`
 
 ---
 
-## 6. Modo Testing
+## 7. Modo Testing
 
 Permite navegar los 11 días **sin esperar a que llegue la fecha real**, para poder probar toda la gymkana de principio a fin antes de regalarla.
 
 **Dos formas de activarlo:**
 
-1. **Gesto oculto en la propia web**: tocar/pulsar 5 veces seguidas (en menos de 2 segundos) el título **"11 Días de Sorpresas"**. Se activa un badge "🧪 Modo Testing activo" y todos los días quedan disponibles en el grid independientemente de su `unlockDate`. El estado se guarda en `localStorage`, así que persiste entre recargas hasta que se vuelva a tocar 5 veces para desactivarlo.
+1. **Gesto oculto en la propia web**: tocar 5 veces seguidas (en menos de 2 segundos) el título de la cabecera sobre la nebulosa. Se activa un badge "🧪 Modo Testing activo", todas las esferas de la constelación quedan alcanzables independientemente de su `unlockDate`, y aparece un atajo para **volver a ver la intro**. El estado se guarda en `localStorage`, así que persiste entre recargas hasta que se vuelva a tocar 5 veces para desactivarlo.
 2. **Variable de entorno**: en `.env.local` (copiar desde `.env.local.example`):
    ```
    NEXT_PUBLIC_TESTING_MODE=true
@@ -191,18 +249,19 @@ Permite navegar los 11 días **sin esperar a que llegue la fecha real**, para po
 
 ---
 
-## 7. Estado actual y pendientes
+## 8. Estado actual y pendientes
 
 Esto resume qué está terminado y qué queda por hacer para que la gymkana esté lista para regalarse de verdad. Útil como lista de control al retomar el proyecto.
 
 **Hecho:**
 - App completa y funcional: los 11 días son jugables de principio a fin (no hay stubs vacíos).
 - Arquitectura modular verificada (build, typecheck y lint en verde).
-- Flujo completo probado en navegador: grid con bloqueo por fecha, Modo Testing, gate de contraseña (fallo con shake + acierto), Día 4 con fallback de imagen, Día 11 con confeti y muro de vídeos.
+- Flujo completo probado en navegador: bloqueo por fecha, Modo Testing, gate de contraseña (fallo con shake + acierto), Día 4 con fallback de imagen, Día 11 con confeti y muro de vídeos.
+- **Fechas reales puestas**: 2–12 de octubre de 2026.
+- **Pivote visual a experiencia 3D** (nebulosa + constelación + intro cinemática), mobile-first portrait.
 - Repositorio en GitHub (`origin/main`) al día.
 
 **Pendiente antes de regalar la gymkana:**
-- Actualizar las 11 `unlockDate` en `gymkanaConfig.ts` para que cubran el rango real de vacaciones (día 2 → día 12 del mes correspondiente), con el Día 11 cayendo en el cumpleaños real.
 - Sustituir las 5 contraseñas placeholder (`valencia`, `perfect`, `carmin`, `sushi`, `gucci`) por las reales, generando cada hash con `scripts/generate-hash.mjs`.
 - Coordinar con Marta y Dani las claves reales de los Días 4 y 9 (y avisarles de qué frase van a recibir por WhatsApp).
 - Producir/editar las fotos reales: `makeup-funny.jpg` (Día 4) y `bag-funny.jpg` (Día 9) — fotos humorísticas o generadas/retocadas con IA de la persona posando.
