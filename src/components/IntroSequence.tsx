@@ -1,33 +1,36 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Rocket, Sparkles } from "lucide-react";
 
-/** Líneas narrativas de la intro. Se revelan escalonadas, no requiere tocar nada. */
+/**
+ * Intro cinemática. El texto se revela escalonado sobre la nebulosa vista de
+ * lejos, y el botón dispara el salto a hiperespacio: a partir de ahí manda la
+ * escena 3D, así que este overlay solo tiene que quitarse de en medio rápido.
+ */
+
 const NARRATIVE = [
   "El 2 de octubre acaba de empezar nuestro viaje.",
-  "Pero hay un problema: tus regalos no cabían en la maleta.",
-  "Así que se han quedado en casa, esperándote.",
-  "Para descubrir qué te espera a la vuelta, tendrás que ganártelo:",
-  "once días, once estrellas y un acertijo en cada una.",
+  "Pero tus regalos no cabían en la maleta.",
+  "Se han quedado en casa, esperándote.",
 ];
 
-/** Retardo (s) en el que aparece cada línea. */
-const LINE_DELAY = 0.7;
-const FIRST_LINE_AT = 1.1;
-const BUTTON_AT = FIRST_LINE_AT + NARRATIVE.length * LINE_DELAY + 0.4;
+const LINE_DELAY = 0.75;
+const FIRST_LINE_AT = 0.9;
+const CLOSER_AT = FIRST_LINE_AT + NARRATIVE.length * LINE_DELAY + 0.2;
+const BUTTON_AT = CLOSER_AT + 0.9;
 
 export function IntroSequence({ onStart }: { onStart: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 0.8 } }}
+      // Sale deprisa: en cuanto arranca el salto, el protagonista es el 3D.
+      exit={{ opacity: 0, transition: { duration: 0.35 } }}
       className="fixed inset-0 z-30 flex flex-col justify-between
-        bg-[radial-gradient(ellipse_at_center,rgba(11,6,32,0.55),rgba(11,6,32,0.92))]
+        bg-[radial-gradient(ellipse_at_center,rgba(7,3,26,0.35),rgba(7,3,26,0.88))]
         px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))]"
     >
-      {/* Cabecera */}
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,30 +43,32 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
         </p>
       </motion.div>
 
-      {/* Narrativa */}
       <div className="space-y-5">
         {NARRATIVE.map((line, index) => (
           <motion.p
             key={line}
             initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{
-              duration: 1,
-              delay: FIRST_LINE_AT + index * LINE_DELAY,
-              ease: "easeOut",
-            }}
-            className={
-              index === NARRATIVE.length - 1
-                ? "text-balance text-center text-2xl font-semibold leading-snug text-white"
-                : "text-balance text-center text-lg leading-relaxed text-white/80"
-            }
+            transition={{ duration: 1, delay: FIRST_LINE_AT + index * LINE_DELAY, ease: "easeOut" }}
+            className="text-balance text-center text-lg leading-relaxed text-white/80"
           >
             {line}
           </motion.p>
         ))}
+
+        <motion.p
+          initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.1, delay: CLOSER_AT, ease: "easeOut" }}
+          className="text-balance text-center text-2xl font-semibold leading-snug text-white"
+        >
+          Once días, once estrellas.
+          <span className="mt-1 block text-base font-normal text-fuchsia-200/80">
+            Enciéndelas todas y verás lo que forman.
+          </span>
+        </motion.p>
       </div>
 
-      {/* Llamada a la acción */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -73,23 +78,25 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
         <motion.button
           type="button"
           onClick={onStart}
-          whileTap={{ scale: 0.97 }}
+          whileTap={{ scale: 0.96 }}
           animate={{
             boxShadow: [
               "0 0 26px rgba(236,72,153,0.35)",
-              "0 0 46px rgba(236,72,153,0.6)",
+              "0 0 52px rgba(236,72,153,0.65)",
               "0 0 26px rgba(236,72,153,0.35)",
             ],
           }}
-          transition={{ boxShadow: { duration: 2.6, repeat: Infinity, ease: "easeInOut" } }}
-          className="w-full rounded-2xl bg-gradient-to-r from-rose-400 via-fuchsia-500 to-violet-500
+          transition={{ boxShadow: { duration: 2.4, repeat: Infinity, ease: "easeInOut" } }}
+          className="flex w-full items-center justify-center gap-2.5 rounded-2xl
+            bg-gradient-to-r from-rose-400 via-fuchsia-500 to-violet-500
             px-6 py-5 text-lg font-semibold text-white"
         >
+          <Rocket className="h-5 w-5" />
           Comenzar Viaje
         </motion.button>
 
         <p className="text-center text-xs text-white/40">
-          Desliza para explorar la nebulosa · Toca una estrella para abrirla
+          Prepárate para el salto
         </p>
       </motion.div>
     </motion.div>

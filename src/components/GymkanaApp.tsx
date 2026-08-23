@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
-import { FlaskConical, Lock, RotateCcw, Sparkles } from "lucide-react";
+import { FlaskConical, Lock, RotateCcw, Sparkles, ZoomIn, ZoomOut } from "lucide-react";
 import {
   DEFAULT_TESTING_MODE,
   GYMKANA_SUBTITLE,
@@ -39,6 +39,10 @@ export function GymkanaApp() {
   const [cardOpen, setCardOpen] = useState(false);
   const [centeredIndex, setCenteredIndex] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
+  /** Vista alejada: se ve el corazón entero en vez de viajar de estrella a estrella. */
+  const [mapView, setMapView] = useState(false);
+  /** Salto a hiperespacio en curso (solo la primera vez, tras la intro). */
+  const [warping, setWarping] = useState(false);
 
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -102,22 +106,49 @@ export function GymkanaApp() {
     setSelectedDayId(null);
   }, []);
 
+  /** Arranca el salto; la intro se retira y manda la escena 3D. */
+  const handleStartJourney = useCallback(() => {
+    setWarping(true);
+    setIntroSeen(true);
+  }, [setIntroSeen]);
+
+  const handleWarpComplete = useCallback(() => setWarping(false), []);
+
   const selectedDay = gymkanaConfig.find((day) => day.id === selectedDayId) ?? null;
   const centeredDay = gymkanaConfig[centeredIndex];
   const centeredState = sphereStates[centeredIndex];
   const showIntro = !introSeen;
-  const hudVisible = !showIntro && !selectedDayId;
+  const hudVisible = !showIntro && !warping && !selectedDayId;
+
+  /** Días resueltos seguidos desde el principio: es lo que ilumina la curva. */
+  const solvedCount = useMemo(() => {
+    let n = 0;
+    for (const day of gymkanaConfig) {
+      if (!unlockedDays.includes(day.id)) break;
+      n++;
+    }
+    return n;
+  }, [unlockedDays]);
+
+  const todayIndex = todayId
+    ? gymkanaConfig.findIndex((d) => d.id === todayId)
+    : 0;
 
   return (
-    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#0b0620]">
+    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
       <NebulaScene
         days={gymkanaConfig}
         sphereStates={sphereStates}
+        solvedCount={solvedCount}
+        todayIndex={todayIndex}
         focusedDayId={selectedDayId}
-        introMode={showIntro}
+        mapView={mapView}
+        warping={warping}
         onTapDay={handleTapDay}
         onFocusArrived={handleFocusArrived}
+        onWarpComplete={handleWarpComplete}
         onCenteredIndexChange={setCenteredIndex}
+        onMapViewChange={setMapView}
       />
 
       {/* ---------------------------------------------------------------- */}
@@ -229,16 +260,40 @@ export function GymkanaApp() {
               </motion.button>
 
               <p className="text-center text-[11px] text-white/35">
-                Desliza arriba y abajo para recorrer la constelación
+                {mapView
+                  ? "Toca una estrella para abrir su día"
+                  : "Desliza para recorrer · pellizca para ver el corazón"}
               </p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Alejar/acercar. Además del pellizco, un botón: el gesto de dos dedos
+          no es evidente y sin botón el mapa quedaría escondido. */}
+      <AnimatePresence>
+        {hudVisible && (
+          <motion.button
+            key="map-toggle"
+            type="button"
+            onClick={() => setMapView(!mapView)}
+            whileTap={{ scale: 0.94 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            aria-label={mapView ? "Acercar a la constelación" : "Ver el corazón entero"}
+            className="fixed right-5 z-20 flex h-12 w-12 items-center justify-center
+              rounded-full border border-white/20 bg-white/10 text-white/80 backdrop-blur-md
+              top-[max(6.5rem,calc(env(safe-area-inset-top)+5rem))]"
+          >
+            {mapView ? <ZoomIn className="h-5 w-5" /> : <ZoomOut className="h-5 w-5" />}
+          </motion.button>
+        )}
+      </AnimatePresence>
+
       {/* Intro cinemática */}
       <AnimatePresence>
-        {showIntro && <IntroSequence key="intro" onStart={() => setIntroSeen(true)} />}
+        {showIntro && <IntroSequence key="intro" onStart={handleStartJourney} />}
       </AnimatePresence>
 
       {/* Tarjeta del día: solo cuando la cámara ha terminado el zoom */}
