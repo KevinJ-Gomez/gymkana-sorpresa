@@ -1,5 +1,5 @@
-import { GymkanaApp } from "@/components/GymkanaApp";
+import { AppShell } from "@/components/AppShell";
 
 export default function Home() {
-  return <GymkanaApp />;
+  return <AppShell />;
 }

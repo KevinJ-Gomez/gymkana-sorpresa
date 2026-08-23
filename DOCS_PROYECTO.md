@@ -246,6 +246,18 @@ Permite navegar los 11 días **sin esperar a que llegue la fecha real**, para po
    ```
    Con esto el Modo Testing arranca activado por defecto en ese entorno.
 
+### Probar desde el ordenador
+
+La gymkana sigue siendo **solo móvil**: no existe una versión de escritorio "adaptada", ni se va a hacer. Pero para poder probarla cómodamente desde el ordenador, al abrir la web en una pantalla grande (`min-width: 1024px` + ratón) aparece una **vista previa de escritorio**: la app real montada dentro de un iframe con el tamaño exacto de un móvil (iPhone SE / iPhone 14 / Pixel 7, seleccionable).
+
+Esto es importante: **no es una adaptación ni una segunda implementación**. Dentro del iframe el viewport mide de verdad 390×844, así que las media queries, `100dvh`, los safe-area insets y el 3D se comportan igual que en un teléfono. Lo que se ve en el ordenador es la versión móvil, píxel por píxel.
+
+- Se arrastra **con el ratón** dentro del móvil igual que se haría con el dedo.
+- El botón *Abrir a pantalla completa* abre `/?embed=1` en una pestaña nueva: ese parámetro salta la vista previa y pinta la app directamente ocupando toda la ventana.
+- El progreso y el Modo Testing se guardan en `localStorage` del navegador, compartidos entre la vista previa y la pestaña a pantalla completa (mismo origen).
+
+Ficheros: `src/components/AppShell.tsx` (decide móvil vs. escritorio) y `src/components/desktop/DesktopFrame.tsx` (el marco). Ninguno de los dos toca la app móvil.
+
 ⚠️ **Antes de desplegar la versión real** que verá la persona sorprendida: asegurarse de que `NEXT_PUBLIC_TESTING_MODE` sea `false` (o no exista) en el entorno de producción, y de no dejar el Modo Testing activado (vía el gesto oculto) en el navegador/dispositivo que ella vaya a usar.
 
 ---
