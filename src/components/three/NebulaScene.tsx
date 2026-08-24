@@ -314,10 +314,10 @@ export function NebulaScene({
       if (!d.active || mapView) return;
       const dy = e.clientY - d.startY;
       d.moved = Math.max(d.moved, Math.abs(dy));
-      // Arrastrar hacia arriba avanza hacia el Día 11. Ojo con el signo: el
-      // índice del recorrido CRECE con el día, así que el gesto va restado
-      // (dy es negativo al subir el dedo).
-      const next = d.startPos - dy * DRAG_PER_INDEX;
+      // Scroll natural (como en cualquier móvil): arrastrar hacia abajo tira
+      // del contenido y avanza hacia el Día 11; arrastrar hacia arriba
+      // retrocede. dy es positivo al bajar el dedo, así que se suma directo.
+      const next = d.startPos + dy * DRAG_PER_INDEX;
       pathPos.current = Math.min(days.length - 1, Math.max(0, next));
       onCenteredIndexChange(pathPosToIndex(pathPos.current, days.length));
     }
