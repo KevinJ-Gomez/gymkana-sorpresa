@@ -51,24 +51,20 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 2,
     unlockDate: "2026-10-03",
-    title: "Nuestro primer viaje",
+    title: "El Origen de Todo",
     icon: "🗺️",
+    lucideIcon: "image",
     requiresPassword: true,
     passwordHashes: [
-      "626b208a365327e7ecd6ad5af2f39c8d08c2ad85a264bd0006450c4d034ba740",
+      "cac3c03c2529bd685c51ebc0eff22dba24902df06c6bb23cb336d637f455343b",
+      "7920ee522fade9f24296c73a3487b8bccef582abac7550f541c6c31263fb94c4",
     ],
-    passwordPlaceholder: "¿A dónde fuimos?",
+    passwordPlaceholder: "¿Dónde fue nuestra primera cita?",
     riddle:
-      "La primera vez que hicimos las maletas juntos, sin saber muy bien qué nos esperaba. ¿Recuerdas el nombre de aquella ciudad?",
-    hintExtra: "Pista: fue la primera sello en nuestro pasaporte de pareja.",
-    rewardTitle: "Nuestro primer viaje",
-    rewardDescription: "Una pequeña galería con los mejores momentos.",
-    galleryCaptions: [
-      "El primer paseo",
-      "Esa cena inolvidable",
-      "Perdidos por el centro",
-      "La foto que no sale en ningún álbum",
-    ],
+      "Todo gran viaje tiene un punto de partida. Viajemos por un momento al pasado, justo a aquel día donde los nervios y las miradas lo decían todo. ¿Recuerdas el nombre del bar donde tuvimos nuestra primera cita a solas?",
+    rewardTitle: "El comienzo",
+    rewardDescription:
+      "Ahí empezó todo. Quién nos iba a decir en aquel bar que acabaríamos sumando tantos kilómetros juntos. Te he preparado un pequeño mosaico, pero el cristal está un poco empañado...",
   },
   {
     id: 3,
