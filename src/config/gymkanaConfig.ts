@@ -64,7 +64,7 @@ export const gymkanaConfig: DayConfig[] = [
       "Todo gran viaje tiene un punto de partida. Viajemos por un momento al pasado, justo a aquel día donde los nervios y las miradas lo decían todo. ¿Recuerdas el nombre del bar donde tuvimos nuestra primera cita a solas?",
     rewardTitle: "El comienzo",
     rewardDescription:
-      "Ahí empezó todo. Quién nos iba a decir en aquel bar que acabaríamos sumando tantos kilómetros juntos. Te he preparado un pequeño mosaico, pero el cristal está un poco empañado...",
+      "¡Correcto! Ahí en El Tuno empezó todo. Como sorpresa por acertar hoy, te he preparado algo muy especial: nuestra pequeña historia resumida en todas esas fotos que he ido guardando con muchísimo cariño durante todo este tiempo.",
   },
   {
     id: 3,
