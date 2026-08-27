@@ -35,8 +35,8 @@ Estas son las **fechas reales y definitivas** (ya reflejadas en `unlockDate` den
 
 | Día | Fecha | Dinámica / acertijo | Premio o revelación |
 |---|---|---|---|
-| **1** | 2 oct | Sin contraseña. Mensaje de bienvenida: los regalos físicos se han quedado en casa por el equipaje, y hay que ganárselos aquí, día a día. | Texto de bienvenida — arranca la gymkana. |
-| **2** | 3 oct | Acertijo sobre el primer viaje en pareja (adivinar el nombre de la ciudad). | Galería de fotos placeholder de aquel viaje (a sustituir por fotos reales). |
+| **1** 🎁 *Móvil* | 2 oct | **El Aliado Perfecto:** La intro explica que casi todo se quedó en casa salvo una excepción. El acertijo es adivinar que necesita un móvil/iphone para las fotos. | Se revela que el regalo es físico y debe buscarlo en el bolsillo pequeño de la mochila negra. |
+| **2** 🖼️ *Polaroid* | 3 oct | **El Origen de Todo:** Acertijo sobre el inicio de la relación. Hay que recordar el nombre del bar de la primera cita a solas ("El Tuno"). | Mosaico interactivo (5-10 fotos) flotando sobre la nebulosa rosa. **Efecto "Rasca y Gana":** Las fotos aparecen empañadas y debe limpiarlas con el dedo. Cada foto lleva un comentario escrito y la última foto revela que la está esperando impresa en físico tipo Polaroid. |
 | **3** | 4 oct | Adivinar una canción a partir de una pista con emojis. | La canción sonando (reproductor de audio) + una carta de amor escrita. |
 | **4** 🎁 *Maquillaje* | 5 oct | Sin acertijo "de lógica": hay que **pedir la clave a una amiga (Marta) por WhatsApp**, diciéndole la frase clave ("la clave del día 4"). | Se revela una **foto humorística/generada con IA** de la propia persona "maquillada", con el mensaje de que el maquillaje real ya la espera en casa. |
 | **5** | 6 oct | Quiz interactivo de pareja (preguntas sobre la relación, sin fallos permitidos). | Vale digital canjeable por una cena a elección durante el viaje. |
