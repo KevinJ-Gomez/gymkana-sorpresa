@@ -24,7 +24,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Empezamos esta aventura casi sin darnos cuenta. Aquí están nuestros primeros recuerdos...",
     folder: "/gallery/1_inicios",
-    imageCount: 15,
+    imageCount: 2,
   },
   {
     id: "postureos",
@@ -32,7 +32,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Poco a poco fuimos ganando confianza, tanta que pronto descubrí que, para ti, cualquier espejo es la excusa perfecta para una foto o un recuerdo.",
     folder: "/gallery/2_postureo",
-    imageCount: 20,
+    imageCount: 31,
   },
   {
     id: "viajes",
@@ -40,7 +40,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Después de dominar todos los espejos que nos íbamos encontrando, empezamos a conocer mundo juntos.",
     folder: "/gallery/3_viajes",
-    imageCount: 30,
+    imageCount: 38,
   },
   {
     id: "cara_b",
@@ -48,7 +48,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Aunque, no todo en nuestra vida es postureo... que conste que no hago malas fotos, veo la vida de otra 'forma'.",
     folder: "/gallery/4_intimas",
-    imageCount: 15,
+    imageCount: 52,
   },
   {
     id: "duros",
@@ -56,7 +56,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Pero más allá de los viajes y las risas, también nos ha tocado apretar los dientes. La vida a veces se hace un poco cuesta arriba, pero juntos hemos sabido sostenernos en los momentos más duros y difíciles.",
     folder: "/gallery/5_duros",
-    imageCount: 10,
+    imageCount: 8,
   },
   {
     id: "felicidad",
@@ -66,7 +66,7 @@ const chapters: Chapter[] = [
     closingText:
       "Juntos hemos podido superar siempre los malos momentos y así será siempre.",
     folder: "/gallery/6_felicidad",
-    imageCount: 20,
+    imageCount: 33,
   },
 ];
 
