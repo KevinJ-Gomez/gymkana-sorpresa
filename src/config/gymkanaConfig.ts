@@ -53,7 +53,7 @@ export const gymkanaConfig: DayConfig[] = [
     unlockDate: "2026-10-03",
     title: "El Origen de Todo",
     icon: "🗺️",
-    lucideIcon: "image",
+    lucideIcon: "heart",
     requiresPassword: true,
     passwordHashes: [
       "cac3c03c2529bd685c51ebc0eff22dba24902df06c6bb23cb336d637f455343b",
