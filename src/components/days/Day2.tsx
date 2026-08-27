@@ -22,7 +22,7 @@ const chapters: Chapter[] = [
     id: "inicios",
     title: "Los Inicios",
     connectorText:
-      "Poco a poco fuimos ganando confianza, tanta que pronto descubrí que, para ti, cualquier espejo es la excusa perfecta para una foto o un recuerdo.",
+      "Empezamos esta aventura casi sin darnos cuenta. Aquí están nuestros primeros recuerdos...",
     folder: "/gallery/1_inicios",
     imageCount: 15,
   },
@@ -30,7 +30,7 @@ const chapters: Chapter[] = [
     id: "postureos",
     title: "Postureos y Modelaje",
     connectorText:
-      "Después de dominar todos los espejos que nos íbamos encontrando, empezamos a conocer mundo juntos.",
+      "Poco a poco fuimos ganando confianza, tanta que pronto descubrí que, para ti, cualquier espejo es la excusa perfecta para una foto o un recuerdo.",
     folder: "/gallery/2_postureo",
     imageCount: 20,
   },
@@ -38,7 +38,7 @@ const chapters: Chapter[] = [
     id: "viajes",
     title: "Conociendo mundo",
     connectorText:
-      "Aunque, no todo en nuestra vida es postureo... que conste que no hago malas fotos, veo la vida de otra 'forma'.",
+      "Después de dominar todos los espejos que nos íbamos encontrando, empezamos a conocer mundo juntos.",
     folder: "/gallery/3_viajes",
     imageCount: 30,
   },
@@ -46,7 +46,7 @@ const chapters: Chapter[] = [
     id: "cara_b",
     title: "La Cara B",
     connectorText:
-      "Pero más allá de los viajes y las risas, también nos ha tocado apretar los dientes. La vida a veces se hace un poco cuesta arriba, pero juntos hemos sabido sostenernos en los momentos más duros y difíciles.",
+      "Aunque, no todo en nuestra vida es postureo... que conste que no hago malas fotos, veo la vida de otra 'forma'.",
     folder: "/gallery/4_intimas",
     imageCount: 15,
   },
@@ -54,13 +54,15 @@ const chapters: Chapter[] = [
     id: "duros",
     title: "Apretando los dientes",
     connectorText:
-      "Y precisamente por habernos sostenido en lo malo, ahora sabemos disfrutar, exprimir cada sonrisa y querernos en lo bueno.",
+      "Pero más allá de los viajes y las risas, también nos ha tocado apretar los dientes. La vida a veces se hace un poco cuesta arriba, pero juntos hemos sabido sostenernos en los momentos más duros y difíciles.",
     folder: "/gallery/5_duros",
     imageCount: 10,
   },
   {
     id: "felicidad",
     title: "Superación y Cariño",
+    connectorText:
+      "Y precisamente por habernos sostenido en lo malo, ahora sabemos disfrutar, exprimir cada sonrisa y querernos en lo bueno.",
     closingText:
       "Juntos hemos podido superar siempre los malos momentos y así será siempre.",
     folder: "/gallery/6_felicidad",
