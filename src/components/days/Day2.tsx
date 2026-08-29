@@ -22,7 +22,7 @@ const chapters: Chapter[] = [
     id: "inicios",
     title: "Los Inicios",
     connectorText:
-      "Empezamos esta aventura casi sin darnos cuenta. Aquí están nuestros primeros recuerdos...",
+      "Empezamos esta aventura casi sin darnos cuenta. No tengo muchas fotos de esos primeros días, pero sí muchos recuerdos y momentos que nos han hecho llegar hasta aquí.",
     folder: "/gallery/1_inicios",
     imageCount: 2,
   },
@@ -30,7 +30,7 @@ const chapters: Chapter[] = [
     id: "postureos",
     title: "Postureos y Modelaje",
     connectorText:
-      "Poco a poco fuimos ganando confianza, tanta que pronto descubrí que, para ti, cualquier espejo es la excusa perfecta para una foto o un recuerdo.",
+      "Poco a poco fuimos ganando confianza y pronto descubrí que, para ti, cualquier espejo es la excusa perfecta para una foto o un recuerdo.",
     folder: "/gallery/2_postureo",
     imageCount: 31,
   },
@@ -38,15 +38,15 @@ const chapters: Chapter[] = [
     id: "viajes",
     title: "Conociendo mundo",
     connectorText:
-      "Después de dominar todos los espejos que nos íbamos encontrando, empezamos a conocer mundo juntos.",
+      "Después de dominar todos los espejos que nos íbamos encontrando, empezamos a conocer mundo juntos y a vivir momentos único e inolvidables.",
     folder: "/gallery/3_viajes",
-    imageCount: 38,
+    imageCount: 37,
   },
   {
     id: "cara_b",
     title: "La Cara B",
     connectorText:
-      "Aunque, no todo en nuestra vida es postureo... que conste que no hago malas fotos, veo la vida de otra 'forma'.",
+      "Aunque, no todo en nuestra vida es postureo... y que conste que no hago malas fotos, veo la vida de otra 'forma'.",
     folder: "/gallery/4_intimas",
     imageCount: 52,
   },
@@ -66,67 +66,103 @@ const chapters: Chapter[] = [
     closingText:
       "Juntos hemos podido superar siempre los malos momentos y así será siempre.",
     folder: "/gallery/6_felicidad",
-    imageCount: 33,
+    imageCount: 31,
   },
 ];
 
 // ==========================================
-// EFECTO TEXTO FLOTANTE ESTABLE (SIN MOVIMIENTO)
+// CONFIGURACIONES ESPECIALES DE FOTOS
 // ==========================================
-function FloatingStreamingText({
+
+// Textos flotantes en la parte alta de fotos específicas
+const PHOTO_CAPTIONS: Record<string, string> = {
+  // 3_viajes: fotos 3 a 7
+  "/gallery/3_viajes/3.jpg": "Nuestra primera escapada juntos...",
+  "/gallery/3_viajes/4.jpg": "Nuestra primera escapada juntos...",
+  "/gallery/3_viajes/5.jpg": "Nuestra primera escapada juntos...",
+  "/gallery/3_viajes/6.jpg": "Nuestra primera escapada juntos...",
+  "/gallery/3_viajes/7.jpg": "Nuestra primera escapada juntos...",
+
+  // 3_viajes: fotos 15 a 20
+  "/gallery/3_viajes/15.jpg": "Valencia y nuestro segundo Voltereta...",
+  "/gallery/3_viajes/16.jpg": "Valencia y nuestro segundo Voltereta...",
+  "/gallery/3_viajes/17.jpg": "Valencia y nuestro segundo Voltereta...",
+  "/gallery/3_viajes/18.jpg": "Valencia y nuestro segundo Voltereta...",
+  "/gallery/3_viajes/19.jpg": "Valencia y nuestro segundo Voltereta...",
+  "/gallery/3_viajes/20.jpg": "Valencia y nuestro segundo Voltereta...",
+
+  // 3_viajes: fotos 32 y 33
+  "/gallery/3_viajes/32.jpg": "Primer eclipse juntos ❤️",
+  "/gallery/3_viajes/33.jpg": "Primer eclipse juntos ❤️",
+
+  // 3_viajes: fotos 34, 35 y 36
+  "/gallery/3_viajes/34.jpg": "Nuestra primera vez en la playa juntos 🥰",
+  "/gallery/3_viajes/35.jpg": "Nuestra primera vez en la playa juntos 🥰",
+  "/gallery/3_viajes/36.jpg": "Nuestra primera vez en la playa juntos 🥰",
+};
+
+// Rotación para corregir fotos con la cabeza hacia la izquierda (+90 grados)
+const IMAGE_ROTATIONS: Record<string, number> = {
+  "/gallery/3_viajes/8.jpg": 90,
+  "/gallery/4_intimas/21.jpg": 90,
+  "/gallery/4_intimas/22.jpg": 90,
+  "/gallery/5_duros/7.jpg": 90,
+};
+
+// Listas explícitas de imágenes existentes en disco por capítulo
+const CHAPTER_IMAGE_LISTS: Record<string, number[]> = {
+  inicios: [1, 2],
+  postureos: Array.from({ length: 31 }, (_, i) => i + 1),
+  viajes: Array.from({ length: 37 }, (_, i) => i + 1),
+  cara_b: Array.from({ length: 52 }, (_, i) => i + 1),
+  duros: [2, 3, 4, 5, 6, 7, 8, 1], // en 5_duros la imagen 1.jpg debe mostrarse la última y empezar por la número 2
+  felicidad: [
+    2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+    24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 23, // la última foto debe ser la número 23
+  ],
+};
+
+// Helper para obtener el orden personalizado de imágenes de cada capítulo
+function getChapterImageOrder(chapterId: string, imageCount: number): number[] {
+  if (CHAPTER_IMAGE_LISTS[chapterId]) {
+    return CHAPTER_IMAGE_LISTS[chapterId];
+  }
+  return Array.from({ length: imageCount }, (_, i) => i + 1);
+}
+
+// ==========================================
+// EFECTO MÁQUINA DE ESCRIBIR SUTIL
+// ==========================================
+function SubtleTypewriterText({
   text,
   isPaused,
-  duration,
 }: {
   text: string;
   isPaused?: boolean;
-  duration: number;
 }) {
-  const words = useMemo(() => text.split(/\s+/), [text]);
-  const [activeWordIndex, setActiveWordIndex] = useState(0);
-
-  // Intervalo por palabra: ritmo cómodo y pausado para leer con calma
-  const msPerWord = useMemo(() => {
-    const availableMs = Math.max(3000, duration - 2500);
-    return Math.max(320, availableMs / (words.length + 1));
-  }, [duration, words.length]);
+  const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
-    setActiveWordIndex(0);
-    let current = 0;
+    setCharCount(0);
+    let count = 0;
     const interval = setInterval(() => {
       if (isPaused) return;
-      current += 1;
-      setActiveWordIndex(current);
-      if (current >= words.length) {
+      count += 1;
+      setCharCount(count);
+      if (count >= text.length) {
         clearInterval(interval);
       }
-    }, msPerWord);
+    }, 38); // 38ms por caracter: cadencia suave, fluida y sin saltos
     return () => clearInterval(interval);
-  }, [words, isPaused, msPerWord]);
+  }, [text, isPaused]);
 
   return (
     <div className="max-w-2xl px-6 py-8 text-center select-none">
-      <p className="font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed sm:leading-loose tracking-wide">
-        {words.map((word, i) => {
-          const isCurrent = i === activeWordIndex;
-          const isRevealed = i <= activeWordIndex;
-
-          return (
-            <span
-              key={`${word}-${i}`}
-              className={`inline-block mr-2 sm:mr-3 transition-all duration-300 ${
-                !isRevealed
-                  ? "opacity-0"
-                  : isCurrent
-                  ? "text-pink-300 font-semibold drop-shadow-[0_0_18px_rgba(244,114,182,0.9)] scale-105"
-                  : "text-white/95 font-normal drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] scale-100"
-              }`}
-            >
-              {word}
-            </span>
-          );
-        })}
+      <p className="font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed sm:leading-loose text-white/95 drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+        {text.slice(0, charCount)}
+        {charCount < text.length && (
+          <span className="ml-1.5 inline-block h-[0.9em] w-[2px] animate-pulse bg-pink-400 align-middle shadow-[0_0_10px_rgba(244,114,182,0.9)]" />
+        )}
       </p>
     </div>
   );
@@ -137,7 +173,7 @@ function FloatingStreamingText({
 // ==========================================
 type Slide =
   | { type: "intro"; content: string; duration: number }
-  | { type: "image"; src: string; duration: number }
+  | { type: "image"; src: string; duration: number; caption?: string }
   | { type: "closing"; content: string; duration: number }
   | { type: "end"; content: string; duration: number };
 
@@ -163,25 +199,32 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
   const slides = useMemo<Slide[]>(() => {
     const list: Slide[] = [];
     chapters.forEach((ch) => {
-      // Tarjeta de texto inicial del capítulo: duración calibrada para leerse de forma fluida
+      // Tarjeta de texto inicial del capítulo
       if (ch.connectorText) {
-        const wordCount = ch.connectorText.split(/\s+/).length;
-        const textDuration = Math.max(6500, wordCount * 360 + 3000);
+        const textDuration = Math.max(6000, ch.connectorText.length * 40 + 2800);
         list.push({ type: "intro", content: ch.connectorText, duration: textDuration });
       }
 
       // Velocidad según la cantidad de fotos:
-      // Si hay más de 15 fotos en la sección -> 1.05 segundos (1.7x a la anterior de 1.8s)
-      // En secciones con 15 o menos fotos -> 2.2 segundos
+      // Secciones con más de 15 fotos -> 1.05s (1.7x a 1.8s)
+      // Secciones con 15 o menos fotos -> 2.2s
       const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
 
-      for (let i = 1; i <= ch.imageCount; i++) {
-        list.push({ type: "image", src: `${ch.folder}/${i}.jpg`, duration: imgDuration });
-      }
+      const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+      imageOrder.forEach((imgNum) => {
+        const src = `${ch.folder}/${imgNum}.jpg`;
+        // Si es la última foto de felicidad (la número 23), desaparece más lento
+        const duration = ch.id === "felicidad" && imgNum === 23 ? 3800 : imgDuration;
+        list.push({
+          type: "image",
+          src,
+          duration,
+          caption: PHOTO_CAPTIONS[src],
+        });
+      });
 
       if (ch.closingText) {
-        const wordCount = ch.closingText.split(/\s+/).length;
-        const closeDuration = Math.max(6500, wordCount * 360 + 3000);
+        const closeDuration = Math.max(6000, ch.closingText.length * 40 + 2800);
         list.push({ type: "closing", content: ch.closingText, duration: closeDuration });
       }
     });
@@ -353,21 +396,43 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
             {activeSlide.type === "image" ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={activeSlide.src}
-                alt="Slideshow image"
-                className="max-h-full max-w-full rounded-md object-contain shadow-2xl pointer-events-none"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
+              <div className="relative flex h-full w-full items-center justify-center">
+                {/* Texto superior específico para fotos destacadas */}
+                {activeSlide.caption && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute top-10 sm:top-12 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-4 text-center max-w-lg w-full"
+                  >
+                    <span className="inline-block rounded-full bg-black/65 px-5 py-2 text-sm sm:text-base font-serif text-pink-200 shadow-2xl backdrop-blur-md border border-white/15 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                      {activeSlide.caption}
+                    </span>
+                  </motion.div>
+                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeSlide.src}
+                  alt="Slideshow image"
+                  style={
+                    IMAGE_ROTATIONS[activeSlide.src]
+                      ? {
+                          transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
+                          maxHeight: "75vw",
+                          maxWidth: "75vh",
+                        }
+                      : undefined
+                  }
+                  className="max-h-full max-w-full rounded-md object-contain shadow-2xl pointer-events-none"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
+              </div>
             ) : (
               <div className="flex flex-col items-center justify-center text-center">
-                <FloatingStreamingText
+                <SubtleTypewriterText
                   text={activeSlide.content}
                   isPaused={isPaused}
-                  duration={activeSlide.duration}
                 />
                 {activeSlide.type === "end" && (
                   <motion.button
@@ -466,9 +531,18 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
   if (chapter.connectorText) {
     slides.push({ type: "intro", content: chapter.connectorText, duration: 4000 });
   }
-  for (let i = 1; i <= chapter.imageCount; i++) {
-    slides.push({ type: "image", src: `${chapter.folder}/${i}.jpg`, duration: 0 });
-  }
+
+  const imageOrder = getChapterImageOrder(chapter.id, chapter.imageCount);
+  imageOrder.forEach((imgNum) => {
+    const src = `${chapter.folder}/${imgNum}.jpg`;
+    slides.push({
+      type: "image",
+      src,
+      duration: 0,
+      caption: PHOTO_CAPTIONS[src],
+    });
+  });
+
   if (chapter.closingText) {
     slides.push({ type: "closing", content: chapter.closingText, duration: 4000 });
   }
@@ -519,14 +593,32 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
                 </p>
               </div>
             ) : activeSlide.type === "image" ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={activeSlide.src}
-                alt={`Imagen ${page}`}
-                className="max-h-full max-w-full rounded-md object-contain shadow-2xl"
-                draggable={false}
-                onError={(e) => { e.currentTarget.style.display = "none"; }}
-              />
+              <div className="relative flex h-full w-full items-center justify-center">
+                {activeSlide.caption && (
+                  <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-4 text-center max-w-lg w-full">
+                    <span className="inline-block rounded-full bg-black/65 px-5 py-2 text-sm sm:text-base font-serif text-pink-200 shadow-2xl backdrop-blur-md border border-white/15 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+                      {activeSlide.caption}
+                    </span>
+                  </div>
+                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeSlide.src}
+                  alt={`Imagen ${page}`}
+                  style={
+                    IMAGE_ROTATIONS[activeSlide.src]
+                      ? {
+                          transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
+                          maxHeight: "75vw",
+                          maxWidth: "75vh",
+                        }
+                      : undefined
+                  }
+                  className="max-h-full max-w-full rounded-md object-contain shadow-2xl"
+                  draggable={false}
+                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+                />
+              </div>
             ) : null}
           </motion.div>
         </AnimatePresence>
