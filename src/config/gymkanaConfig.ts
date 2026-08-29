@@ -71,19 +71,23 @@ export const gymkanaConfig: DayConfig[] = [
     unlockDate: "2026-10-04",
     title: "Adivina la canción",
     icon: "🎵",
+    lucideIcon: "music",
     requiresPassword: true,
     passwordHashes: [
-      "fafe97f7def328bbd4f10779b9625a8aa0bfaa143d7ae64e6f5770e47b51cd1d",
+      "74a27b3ad46fa5d6500a7fcb3da10bd5315c98349c5c5154a709205ef5bd4374", // con la misma piedra
+      "2df927712b42d39deaa37d3d78095b60a21a1016563d88f09b0f11e8feb7c38d", // tropece de nuevo con la misma piedra
+      "741de9e562ad6b4fd735d6d77d3504885ea2ddc83e0dafdb41fedff1e7dd108a", // tropecé de nuevo con la misma piedra
+      "2e0b653172239a07388e18e7b0692f8031a37094b4f1051e883455584bce52b0", // tropece de nuevo y con la misma piedra
+      "744607af11c164db3c03ce5d3e33d303c6adb3b7fac937313f66fd424dc59de5", // tropecé de nuevo y con la misma piedra
+      "d9a90d35fc8c622be9717be133c8f74a37ab6ae822f77f6229c7fb04966a8edc", // julio iglesias - con la misma piedra
+      "c89efa0038337b349a51d9aaebdb61baa7efb184b167e920cb2350bae7447fb8", // julio iglesias con la misma piedra
     ],
-    passwordPlaceholder: "Título de la canción",
-    riddle: "Adivina la canción con estos emojis:",
-    emojiClue: "💍 ⏳ 😍 🎶",
-    hintExtra: "Es esa canción que sonaba en bucle aquel verano.",
-    rewardTitle: "Sonando solo para ti",
-    rewardDescription: "Dale al play y lee despacio.",
-    songFile: "/audio/day3-song.mp3",
-    letterText:
-      "Desde el primer día supe que contigo todo sería distinto. Cada canción que hemos hecho nuestra guarda un trocito de nosotros. Gracias por llenarme la vida de banda sonora. Te quiero.",
+    passwordPlaceholder: "¿Qué canción es?",
+    riddle: "¿Qué temazo esconde esta secuencia? 🚶‍♂️💥🪨 🔄 🎶",
+    rewardTitle: "Cena Romántica",
+    rewardDescription:
+      "¡Bingo! Ve preparando el estómago, porque tu premio de hoy es una cena romántica en un sitio muy especial... (Pronto te daré las coordenadas exactas).",
+    songFile: "/audio/piedra.mp3",
   },
   {
     id: 4,
