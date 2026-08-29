@@ -206,19 +206,7 @@ const FLOWERS: FlowerData[] = [
   },
 ];
 
-// ELEMENTOS DECORATIVOS ADICIONALES (RAMAS, LAVANDAS, PANICULATA DORADA Y CAPULLOS SECUNDARIOS)
-const DECORATIVE_BRANCHES = [
-  // Espigas de lavanda y campanillas
-  { d: "M200,470 Q110,270 45,100", color: "#a855f7", dots: [{ cx: 45, cy: 100 }, { cx: 55, cy: 120 }, { cx: 68, cy: 145 }, { cx: 80, cy: 170 }] },
-  { d: "M200,470 Q290,270 355,100", color: "#a855f7", dots: [{ cx: 355, cy: 100 }, { cx: 345, cy: 120 }, { cx: 332, cy: 145 }, { cx: 320, cy: 170 }] },
-  // Ramas de bayas doradas y eucalipto
-  { d: "M200,470 Q150,220 85,60", color: "#fbbf24", dots: [{ cx: 85, cy: 60 }, { cx: 98, cy: 75 }, { cx: 110, cy: 95 }] },
-  { d: "M200,470 Q250,220 315,60", color: "#fbbf24", dots: [{ cx: 315, cy: 60 }, { cx: 302, cy: 75 }, { cx: 290, cy: 95 }] },
-  // Brotes centrales decorativos
-  { d: "M200,470 Q185,240 170,120", color: "#34d399", dots: [{ cx: 170, cy: 120 }, { cx: 178, cy: 140 }] },
-  { d: "M200,470 Q215,240 230,120", color: "#34d399", dots: [{ cx: 230, cy: 120 }, { cx: 222, cy: 140 }] },
-];
-
+// ELEMENTOS DECORATIVOS ADICIONALES (CAPULLOS Y BAYAS DECORATIVAS NATURALES)
 const DECORATIVE_BUDS = [
   { cx: 50, cy: 210, r: 6, color: "#f472b6" },
   { cx: 350, cy: 210, r: 6, color: "#f472b6" },
@@ -600,35 +588,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             />
           ))}
 
-          {/* 3. ELEMENTOS DECORATIVOS SECUNDARIOS (RAMAS, LAVANDAS Y BAYAS DORADAS) */}
-          {DECORATIVE_BRANCHES.map((branch, i) => (
-            <g key={`dec-branch-${i}`}>
-              <motion.path
-                d={branch.d}
-                fill="none"
-                stroke={branch.color}
-                strokeWidth="1.2"
-                strokeDasharray="3 3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.2, delay: 0.5 + i * 0.1 }}
-              />
-              {branch.dots.map((dot, j) => (
-                <motion.circle
-                  key={`dot-${i}-${j}`}
-                  cx={dot.cx}
-                  cy={dot.cy}
-                  r="3"
-                  fill={branch.color}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: j * 0.2 }}
-                />
-              ))}
-            </g>
-          ))}
-
-          {/* 4. CAPULLOS DECORATIVOS SECUNDARIOS (PARA MÁS FRONDOSIDAD) */}
+          {/* 3. CAPULLOS DECORATIVOS SECUNDARIOS (PARA MÁS FRONDOSIDAD NATURAL) */}
           {DECORATIVE_BUDS.map((bud, i) => (
             <motion.circle
               key={`dec-bud-${i}`}
@@ -636,14 +596,14 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               cy={bud.cy}
               r={bud.r}
               fill={bud.color}
-              opacity="0.7"
+              opacity="0.65"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.8, delay: 0.8 + i * 0.05 }}
             />
           ))}
 
-          {/* 5. TALLOS PRINCIPALES DE LAS 13 FLORES */}
+          {/* 4. TALLOS PRINCIPALES DE LAS 13 FLORES (VERDE ESMERALDA NATURAL) */}
           {FLOWERS.map((flower) => {
             const isBloomed = revealedIds.includes(flower.id);
             const isTarget = flower.id === nextTargetId;
@@ -653,8 +613,8 @@ export function Day7({ isUnlocked }: DayComponentProps) {
                 key={`stem-${flower.id}`}
                 d={flower.stemD}
                 fill="none"
-                stroke={isTarget ? "#fbbf24" : "url(#emeraldStem)"}
-                strokeWidth={isTarget ? "4" : isBloomed ? "3.5" : "2"}
+                stroke="url(#emeraldStem)"
+                strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2"}
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
