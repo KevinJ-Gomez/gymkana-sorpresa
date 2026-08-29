@@ -43,7 +43,7 @@ export const gymkanaConfig: DayConfig[] = [
     ],
     passwordPlaceholder: "¿Qué es?",
     riddle:
-      "Para capturar la magia de este viaje y que no se nos olvide nunca, vas a necesitar un buen aliado. Tiene memoria pero no cerebro, y tiene lentes pero no gafas. ¿Qué es?",
+      "Para capturar la magia de este viaje y que no se nos olvide nunca, vas a necesitar un buen aliado. Tiene memoria pero no cerebro, y tiene lentes pero no gafas. ¿Qué es?(Pista: necesitas cambiarlo ya)",
     rewardTitle: "Tu primera estrella",
     rewardDescription:
       "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",

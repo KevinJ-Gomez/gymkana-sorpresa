@@ -105,7 +105,7 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
         {/* Badge del premio */}
         <div className="flex items-center justify-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
           <Utensils className="h-4 w-4" />
-          <span>Premio Revelado</span>
+          <span>Te has ganado...</span>
           <Sparkles className="h-4 w-4" />
         </div>
 

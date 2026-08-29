@@ -10,14 +10,15 @@ import { Rocket, Sparkles } from "lucide-react";
  */
 
 const NARRATIVE = [
-  "El 2 de octubre empieza nuestro viaje.",
-  "Como no teníamos espacio en las maletas, la mayoría de tus regalos se han quedado en casa esperándote.",
+  "Hoy comienza nuestro viaje juntos, además de empezar una cuentra atrás para tus 30 cumpleaños.",
+  "Durante los próximos 11 días, cada reto que completes te acercará a una sorpresa, cada una de ellas elegidas por mi y otras personas que te quieren mucho (no tanto como yo), con mucho amor y cariño especialmente para ti.",
+  "Como no teníamos espacio en las maletas, alguno de las sorpresas se han quedado en Zaragoza esperándote.",
   "Pero hay una pequeña excepción... algo que vas a necesitar para esta aventura.",
 ];
 
 /** Cierre destacado, con más peso tipográfico que el resto de la narrativa. */
 const CLOSER = "Once días. Once estrellas.";
-const CLOSER_SUB = "Enciéndelas todas y descubre qué te depara el final.";
+const CLOSER_SUB = "Enciéndelas todas y descubre qué te hemos preparado.";
 
 const LINE_DELAY = 0.75;
 const FIRST_LINE_AT = 0.9;
