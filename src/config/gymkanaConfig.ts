@@ -177,18 +177,19 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 7,
     unlockDate: "2026-10-08",
-    title: "Su comida favorita",
+    title: "Un Ramo Especial",
     icon: "🌸",
-    giftLabel: "Flores",
+    lucideIcon: "flower",
+    giftLabel: "Ramo Virtual",
     requiresPassword: true,
     passwordHashes: [
       "cf98f59c0c00358277374644241def187c6ff10d7d6a61bf0eb75bd4476344a3",
     ],
     passwordPlaceholder: "¿Cuál es tu plato favorito?",
     riddle: "¿Cuál es esa comida que pides sin dudar cada vez que te dejo elegir restaurante?",
-    rewardTitle: "Para ti",
-    rewardDescription: "Las flores de verdad ya están de camino.",
-    flowerCount: 5,
+    rewardTitle: "Lo que más amo de ti",
+    rewardDescription:
+      "Hoy no hay premio físico, pero te he preparado un ramo con las cosas que más me gustan de ti 💐 Toca cada flor para abrir sus pétalos y descubrir cada mensaje:",
   },
   {
     id: 8,
