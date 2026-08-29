@@ -10,7 +10,7 @@ const PUZZLE_PIECES = [
   { id: 0, text: "Tu novio no trama esto" },
   { id: 1, text: "completamente solo..." },
   { id: 2, text: "hay dos cómplices" },
-  { id: 3, text: "muy cercanas a ti" },
+  { id: 3, text: "muy cercanas a mi (y a ahora también a ti)" },
   { id: 4, text: "que hoy guardan" },
   { id: 5, text: "la pista secreta" },
   { id: 6, text: "del regalo especial" },
