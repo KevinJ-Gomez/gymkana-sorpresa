@@ -2,17 +2,20 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Sparkles, CheckCircle2, RotateCcw, Image as ImageIcon } from "lucide-react";
+import { Users, Sparkles, RotateCcw, Image as ImageIcon } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
-// Configuración de las 6 piezas del rompecabezas
+// 9 fragmentos que forman una frase completa y con sentido al ordenarse (cuadrícula 3x3)
 const PUZZLE_PIECES = [
-  { id: 0, label: "1", emoji: "🤫", hint: "Misión" },
-  { id: 1, label: "2", emoji: "🕵️‍♀️", hint: "Dos" },
-  { id: 2, label: "3", emoji: "👩‍👧", hint: "Cómplices" },
-  { id: 3, label: "4", emoji: "🎁", hint: "Tienen" },
-  { id: 4, label: "5", emoji: "🗝️", hint: "Tu" },
-  { id: 5, label: "6", emoji: "🎉", hint: "Regalo" },
+  { id: 0, text: "Tu novio no trama esto" },
+  { id: 1, text: "completamente solo..." },
+  { id: 2, text: "hay dos cómplices" },
+  { id: 3, text: "muy cercanas a ti" },
+  { id: 4, text: "que hoy guardan" },
+  { id: 5, text: "la pista secreta" },
+  { id: 6, text: "del regalo especial" },
+  { id: 7, text: "que con tanto amor" },
+  { id: 8, text: "te han preparado 🎁" },
 ];
 
 function shuffleArray(array: number[]): number[] {
@@ -36,14 +39,12 @@ function shuffleArray(array: number[]): number[] {
 }
 
 /**
- * Día 4: Rompecabezas de "Dos Cómplices".
- * Al resolver el puzzle táctil, se desbloquea la tarjeta con la foto de
- * su suegra y su cuñada y la instrucción para pedirles la pista del regalo.
+ * Día 4: Rompecabezas de frase coherente en 3x3 (9 piezas).
+ * El usuario intercambia piezas para reconstruir el mensaje de las cómplices.
  */
 export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
-  // Estado del puzzle: posiciones actuales de las piezas
   const [board, setBoard] = useState<number[]>(() =>
-    shuffleArray([0, 1, 2, 3, 4, 5])
+    shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8])
   );
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [moveCount, setMoveCount] = useState(0);
@@ -79,13 +80,13 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
       if (won && onUnlock) {
         setTimeout(() => {
           onUnlock();
-        }, 600);
+        }, 700);
       }
     }
   };
 
   const resetPuzzle = () => {
-    setBoard(shuffleArray([0, 1, 2, 3, 4, 5]));
+    setBoard(shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8]));
     setSelectedIdx(null);
     setMoveCount(0);
   };
@@ -115,7 +116,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
 
           {/* Título de la recompensa */}
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
-            {config.rewardTitle || "¡Cómplices Reveladas!"}
+            {config.rewardTitle || "¡Cómplices de hoy reveladas!"}
           </h3>
 
           {/* Foto de la Suegra y Cuñada con el regalo */}
@@ -151,7 +152,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
           <div className="rounded-xl border border-pink-500/20 bg-pink-500/10 p-4 text-center">
             <p className="text-sm sm:text-base leading-relaxed text-white/95 drop-shadow">
               {config.rewardDescription ||
-                "Hay dos personas muy especiales con una misión secreta para ti. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido tu regalo."}
+                "Hay dos personas muy especiales que te han preparado algo. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido el regalo que con tanto amor han elegido para ti."}
             </p>
           </div>
         </div>
@@ -160,22 +161,21 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
   }
 
   // ==========================================
-  // PANTALLA 1: MINIJUEGO DEL ROMPECABEZAS
+  // PANTALLA 1: MINIJUEGO DEL ROMPECABEZAS (3x3)
   // ==========================================
   return (
     <div className="space-y-4 text-center">
-      <p className="text-sm sm:text-base text-white/90 leading-relaxed">
+      <p className="text-sm sm:text-base text-white/90 leading-relaxed font-medium">
         {config.riddle ||
-          "Toca dos piezas para intercambiarlas de lugar y ordenar la secuencia del 1 al 6:"}
+          "Intercambia las piezas tocando una y luego otra para ordenar la frase con sentido:"}
       </p>
 
-      {/* Cuadrícula del Puzzle 3x2 */}
-      <div className="grid grid-cols-3 gap-2.5 sm:gap-3 max-w-sm mx-auto p-1">
+      {/* Cuadrícula del Puzzle 3x3 */}
+      <div className="grid grid-cols-3 gap-2 max-w-sm mx-auto p-1">
         <AnimatePresence>
           {board.map((pieceId, index) => {
             const piece = PUZZLE_PIECES[pieceId];
             const isSelected = selectedIdx === index;
-            const isInCorrectPlace = pieceId === index;
 
             return (
               <motion.button
@@ -184,24 +184,17 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 type="button"
                 onClick={() => handleTileClick(index)}
                 whileTap={{ scale: 0.95 }}
-                className={`relative flex aspect-square flex-col items-center justify-center rounded-2xl border transition-all select-none ${
+                className={`relative flex aspect-[4/3] flex-col items-center justify-center p-2 rounded-xl border text-center transition-all select-none ${
                   isSelected
-                    ? "border-pink-400 bg-pink-500/30 shadow-[0_0_20px_rgba(244,114,182,0.6)] ring-2 ring-pink-400 scale-105 z-10"
-                    : isInCorrectPlace
-                    ? "border-emerald-400/40 bg-emerald-500/15 text-white"
-                    : "border-white/20 bg-white/10 text-white hover:bg-white/15"
+                    ? "border-pink-400 bg-pink-500/40 shadow-[0_0_20px_rgba(244,114,182,0.7)] ring-2 ring-pink-400 scale-105 z-10"
+                    : isSolved
+                    ? "border-emerald-400/60 bg-emerald-500/25 text-white"
+                    : "border-white/15 bg-white/10 text-white/90 hover:bg-white/15 active:bg-white/20 backdrop-blur-md"
                 }`}
               >
-                <span className="text-2xl sm:text-3xl mb-0.5">{piece.emoji}</span>
-                <span className="text-xs font-semibold uppercase tracking-wider text-pink-200">
-                  {piece.hint}
+                <span className="text-[11px] sm:text-xs font-medium leading-snug tracking-tight text-white drop-shadow">
+                  {piece.text}
                 </span>
-                <span className="absolute top-1.5 left-2 text-[10px] font-mono text-white/50">
-                  #{piece.label}
-                </span>
-                {isInCorrectPlace && (
-                  <CheckCircle2 className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-emerald-300" />
-                )}
               </motion.button>
             );
           })}

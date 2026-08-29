@@ -103,7 +103,7 @@ export const gymkanaConfig: DayConfig[] = [
       "Hay dos personas muy especiales que te han preparado algo. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido el regalo que con tanto amor han elegido para ti.",
     imageSrc: "/images/day4-complices.jpg",
     imageCaption: "¡Ellas tienen la ubicación de tu regalo!, preguntales por él.",
-    puzzlePieces: 6,
+    puzzlePieces: 9,
   },
   {
     id: 5,
