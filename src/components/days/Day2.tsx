@@ -231,7 +231,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
     list.push({
       type: "end",
-      content: "Pregúntame por una pequeña sorpresa... (tienes tu premio físico esperándote)",
+      content: "Además has ganado una pequeña sorpresa... (tienes tu premio físico esperándote)",
       duration: 7500,
     });
     return list;
@@ -371,6 +371,24 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
         </>
       )}
 
+      {/* Texto superior flotante, grande, sin recuadro y continuo (no desaparece entre fotos consecutivas) */}
+      <div className="absolute top-10 sm:top-14 left-1/2 -translate-x-1/2 z-40 pointer-events-none px-6 text-center max-w-2xl w-full">
+        <AnimatePresence mode="wait">
+          {activeSlide.type === "image" && activeSlide.caption && (
+            <motion.p
+              key={activeSlide.caption}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35 }}
+              className="font-serif text-xl sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none"
+            >
+              {activeSlide.caption}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Slide Content (Swipeable en modo pausado) */}
       <div className="relative flex h-full w-full items-center justify-center p-4">
         <AnimatePresence mode="wait" custom={direction}>
@@ -397,18 +415,6 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
           >
             {activeSlide.type === "image" ? (
               <div className="relative flex h-full w-full items-center justify-center">
-                {/* Texto superior específico para fotos destacadas */}
-                {activeSlide.caption && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-10 sm:top-12 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-4 text-center max-w-lg w-full"
-                  >
-                    <span className="inline-block rounded-full bg-black/65 px-5 py-2 text-sm sm:text-base font-serif text-pink-200 shadow-2xl backdrop-blur-md border border-white/15 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                      {activeSlide.caption}
-                    </span>
-                  </motion.div>
-                )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeSlide.src}
@@ -566,6 +572,24 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
         <X className="h-6 w-6" />
       </button>
 
+      {/* Texto superior flotante para el carrusel manual */}
+      <div className="absolute top-8 sm:top-10 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-6 text-center max-w-2xl w-full">
+        <AnimatePresence mode="wait">
+          {activeSlide.type === "image" && activeSlide.caption && (
+            <motion.p
+              key={activeSlide.caption}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.3 }}
+              className="font-serif text-xl sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none"
+            >
+              {activeSlide.caption}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
       <div className="relative flex h-full w-full max-w-4xl items-center justify-center overflow-hidden px-4 sm:px-12">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -584,7 +608,7 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
               if (swipe < -10000) paginate(1);
               else if (swipe > 10000) paginate(-1);
             }}
-            className="absolute flex h-full w-full items-center justify-center p-4"
+            className="flex h-full w-full items-center justify-center p-4"
           >
             {activeSlide.type === "intro" || activeSlide.type === "closing" ? (
               <div className="max-w-md rounded-2xl border border-white/20 bg-white/10 p-8 text-center text-white shadow-2xl backdrop-blur-xl">
@@ -594,13 +618,6 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
               </div>
             ) : activeSlide.type === "image" ? (
               <div className="relative flex h-full w-full items-center justify-center">
-                {activeSlide.caption && (
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-4 text-center max-w-lg w-full">
-                    <span className="inline-block rounded-full bg-black/65 px-5 py-2 text-sm sm:text-base font-serif text-pink-200 shadow-2xl backdrop-blur-md border border-white/15 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
-                      {activeSlide.caption}
-                    </span>
-                  </div>
-                )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeSlide.src}
