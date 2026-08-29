@@ -64,7 +64,7 @@ const chapters: Chapter[] = [
     connectorText:
       "Y precisamente por habernos sostenido en lo malo, ahora sabemos disfrutar, exprimir cada sonrisa y querernos en lo bueno.",
     closingText:
-      "Juntos hemos podido superar siempre los malos momentos y así será siempre.",
+      "Juntos hemos podido superar siempre los malos momentos y así será siempre. Te amo ❤️",
     folder: "/gallery/6_felicidad",
     imageCount: 31,
   },
@@ -230,14 +230,8 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     });
 
     list.push({
-      type: "intro",
-      content: "Además has ganado una pequeña sorpresa... (tienes tu premio físico esperándote)",
-      duration: 6500,
-    });
-
-    list.push({
       type: "end",
-      content: "Te amo ❤️",
+      content: "Además has ganado una pequeña sorpresa... (tienes tu premio físico esperándote)",
       duration: 7500,
     });
     return list;
