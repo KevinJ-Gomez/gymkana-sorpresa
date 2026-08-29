@@ -24,7 +24,9 @@ export interface QuizQuestion {
   question: string;
   options: string[];
   /** Índice (0-based) de la opción correcta dentro de `options`. */
-  correctIndex: number;
+  correctIndex?: number;
+  /** Si hay varias opciones correctas (o todas). */
+  correctIndices?: number[];
 }
 
 export interface FriendVideo {

@@ -108,28 +108,49 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 5,
     unlockDate: "2026-10-06",
-    title: "Quiz de pareja",
+    title: "El Gran Duelo",
     icon: "❤️",
+    lucideIcon: "heart",
+    giftLabel: "Cena / Almuerzo",
     requiresPassword: false,
-    riddle: "Demuestra cuánto nos conoces. Tres preguntas, cero fallos permitidos.",
-    rewardTitle: "¡Vale digital desbloqueado!",
-    rewardDescription: "Canjéalo cuando quieras durante el viaje.",
-    voucherText: "1 cena a elección tuya, sin mirar el precio 🍽️",
+    riddle:
+      "Demuestra cuánto nos conoces en este duelo. 5 preguntas, 0 fallos permitidos. Si ganas, te organizo y pago una cena o almuerzo cuando quieras. Si fallas... ¡me la debes tú a mí! 🍽️",
+    rewardTitle: "¡Apuesta Ganada!",
+    rewardDescription:
+      "Has superado el quiz con un 5/5 impecable. Aquí tienes tu vale oficial para canjear cuando tú elijas.",
+    voucherText:
+      "1 Comida o Cena a tu elección, pagada y organizada al 100% por mí, cuando tú quieras y sin mirar el precio 🍽️💖",
     quizQuestions: [
       {
-        question: "¿Cuál fue nuestra primera cita de verdad?",
-        options: ["Cine", "Cena en el italiano", "Paseo por la playa", "Concierto"],
-        correctIndex: 1,
-      },
-      {
-        question: "¿Qué serie hemos maratoneado más veces?",
-        options: ["La que tú sabes", "Otra cualquiera", "Ninguna, no vemos series", "Todas por igual"],
+        question: "¿Qué día de la semana fue la primera vez que quedamos fuera del trabajo?",
+        options: ["Martes", "Jueves", "Viernes", "Sábado", "No hemos quedado nunca"],
         correctIndex: 0,
       },
       {
-        question: "¿Cuál es mi excusa favorita para pedir postre?",
-        options: ["\"Es para compartir\"", "\"Hoy toca\"", "\"Un día es un día\"", "Todas las anteriores"],
+        question: "¿Qué es lo que más me llamó la atención de ti cuando nos conocimos?",
+        options: [
+          "El pelo",
+          "Los ronquidos",
+          "Los ojos",
+          "Forma de ser",
+          "La uña pequeña del pie inexistente",
+        ],
         correctIndex: 3,
+      },
+      {
+        question: "¿Quién de los 2 se orienta peor sin GPS?",
+        options: ["Hajar", "Hajar Mahfoudi", "Ajar", "Jayar"],
+        correctIndices: [0, 1, 2, 3],
+      },
+      {
+        question: "¿Cómo se llama el bicho peludo que hay suelto por casa de los Gómez Ulloa?",
+        options: ["Paco", "Kiwi", "Manzana", "Alergia con patas", "Coco"],
+        correctIndex: 1,
+      },
+      {
+        question: "¿Quién ganó la famosa carrera de ver quién era más rápido corriendo?",
+        options: ["Tú de tú", "Yo de yo", "Todas son correctas"],
+        correctIndices: [0, 1, 2],
       },
     ],
   },
