@@ -183,10 +183,17 @@ export const gymkanaConfig: DayConfig[] = [
     giftLabel: "Ramo Virtual",
     requiresPassword: true,
     passwordHashes: [
-      "cf98f59c0c00358277374644241def187c6ff10d7d6a61bf0eb75bd4476344a3",
+      "a4c18ee0ada59e343691ef4ddc0e502b86679f2eaa6a5576a0ec3c9ea0658e36", // pasta
+      "cf98f59c0c00358277374644241def187c6ff10d7d6a61bf0eb75bd4476344a3", // sushi
+      "54fa0ac6fb7ba4b0ec2dc9fc8f7d5c553c5c3be6f964e3f6dd49795adda51010", // mcdonald
+      "d944bfb18e1258bfa8deb6009a3067b89caad6ad97c83e0f3459b1481f686d1b", // mcdonalds
+      "8128aa9710e45fcbcb031332a12032d32f02c661ba21643eb9e8363eb03cd162", // mcdonald's
+      "5dc6116beeb6e495d9812ffe4c9e787bf8789313e66e8edffb1bf1b8ee65faba", // mc donald
+      "7a0afeedbdbdc386ced9af3bfc5ed734880374e69e9f355e5a916b2cfaaf3178", // mc donalds
+      "193f3b77f354d7e2bb8d7c8e49b1857fb64f5ce1546701ffcf41fa0d9a29ce48", // mc donald's
     ],
-    passwordPlaceholder: "¿Cuál es tu plato favorito?",
-    riddle: "¿Cuál es esa comida que pides sin dudar cada vez que te dejo elegir restaurante?",
+    passwordPlaceholder: "Escribe la comida...",
+    riddle: "¿Cuál es la comida que más disfruto comiendo contigo?",
     rewardTitle: "Lo que más amo de ti",
     rewardDescription:
       "Hoy no hay premio físico, pero te he preparado un ramo con las cosas que más me gustan de ti 💐 Toca cada flor para abrir sus pétalos y descubrir cada mensaje:",
