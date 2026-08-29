@@ -71,7 +71,7 @@ const chapters: Chapter[] = [
 ];
 
 // ==========================================
-// EFECTO TEXTO FLOTANTE PROGRESIVO (STREAMING)
+// EFECTO TEXTO FLOTANTE ESTABLE (SIN MOVIMIENTO)
 // ==========================================
 function FloatingStreamingText({
   text,
@@ -85,10 +85,10 @@ function FloatingStreamingText({
   const words = useMemo(() => text.split(/\s+/), [text]);
   const [activeWordIndex, setActiveWordIndex] = useState(0);
 
-  // Intervalo por palabra: ritmo agradable y pausado (~340ms por palabra)
+  // Intervalo por palabra: ritmo cómodo y pausado para leer con calma
   const msPerWord = useMemo(() => {
     const availableMs = Math.max(3000, duration - 2500);
-    return Math.max(300, availableMs / (words.length + 2));
+    return Math.max(320, availableMs / (words.length + 1));
   }, [duration, words.length]);
 
   useEffect(() => {
@@ -98,53 +98,36 @@ function FloatingStreamingText({
       if (isPaused) return;
       current += 1;
       setActiveWordIndex(current);
-      if (current >= words.length + 5) {
+      if (current >= words.length) {
         clearInterval(interval);
       }
     }, msPerWord);
     return () => clearInterval(interval);
   }, [words, isPaused, msPerWord]);
 
-  // Tamaño de la ventana de palabras visibles
-  const WINDOW_SIZE = 7;
-  const tailCutoff =
-    activeWordIndex < words.length
-      ? activeWordIndex - WINDOW_SIZE
-      : Math.max(0, words.length - WINDOW_SIZE - 2);
-
   return (
-    <div className="flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5 px-6 py-8 text-center select-none">
-      {words.map((word, i) => {
-        const isUpcoming = i > activeWordIndex;
-        const isPast = i <= tailCutoff;
+    <div className="max-w-2xl px-6 py-8 text-center select-none">
+      <p className="font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed sm:leading-loose tracking-wide">
+        {words.map((word, i) => {
+          const isCurrent = i === activeWordIndex;
+          const isRevealed = i <= activeWordIndex;
 
-        if (isUpcoming || isPast) {
-          return null;
-        }
-
-        const isLatestWord = i === activeWordIndex;
-
-        return (
-          <motion.span
-            key={`${word}-${i}`}
-            initial={{ opacity: 0, y: 12, scale: 0.92 }}
-            animate={{
-              opacity: isLatestWord ? 1 : 0.85,
-              y: 0,
-              scale: 1,
-            }}
-            exit={{ opacity: 0, y: -10, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
-            className={`font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed tracking-wide ${
-              isLatestWord
-                ? "text-pink-300 font-semibold drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]"
-                : "text-white"
-            } drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]`}
-          >
-            {word}
-          </motion.span>
-        );
-      })}
+          return (
+            <span
+              key={`${word}-${i}`}
+              className={`inline-block mr-2 sm:mr-3 transition-all duration-300 ${
+                !isRevealed
+                  ? "opacity-0"
+                  : isCurrent
+                  ? "text-pink-300 font-semibold drop-shadow-[0_0_18px_rgba(244,114,182,0.9)] scale-105"
+                  : "text-white/95 font-normal drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)] scale-100"
+              }`}
+            >
+              {word}
+            </span>
+          );
+        })}
+      </p>
     </div>
   );
 }
@@ -188,9 +171,9 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       }
 
       // Velocidad según la cantidad de fotos:
-      // Si hay más de 15 fotos en la sección -> 1.8 segundos
+      // Si hay más de 15 fotos en la sección -> 1.05 segundos (1.7x a la anterior de 1.8s)
       // En secciones con 15 o menos fotos -> 2.2 segundos
-      const imgDuration = ch.imageCount > 15 ? 1800 : 2200;
+      const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
 
       for (let i = 1; i <= ch.imageCount; i++) {
         list.push({ type: "image", src: `${ch.folder}/${i}.jpg`, duration: imgDuration });
