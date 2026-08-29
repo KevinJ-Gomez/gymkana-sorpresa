@@ -111,10 +111,10 @@ export const gymkanaConfig: DayConfig[] = [
     title: "El Gran Duelo",
     icon: "❤️",
     lucideIcon: "heart",
-    giftLabel: "Cena / Almuerzo",
+    giftLabel: "Reto Especial",
     requiresPassword: false,
     riddle:
-      "Demuestra cuánto nos conoces en este duelo. 5 preguntas, 0 fallos permitidos. Si ganas, te organizo y pago una cena o almuerzo cuando quieras. Si fallas... ¡me la debes tú a mí! 🍽️",
+      "Demuestra cuánto nos conoces en este duelo. 5 preguntas, 0 fallos permitidos. Si aciertas las 5, desbloquearás una gran recompensa... pero si fallas aunque sea una sola pregunta, ¡habrá consecuencias y tendrás que pagar una apuesta! 🤫🔥",
     rewardTitle: "¡Apuesta Ganada!",
     rewardDescription:
       "Has superado el quiz con un 5/5 impecable. Aquí tienes tu vale oficial para canjear cuando tú elijas.",

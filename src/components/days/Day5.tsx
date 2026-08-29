@@ -2,17 +2,19 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Sparkles, AlertCircle, RotateCcw, CheckCircle, Utensils, Heart } from "lucide-react";
+import { Trophy, Sparkles, AlertCircle, RotateCcw, CheckCircle, Utensils, Heart, Swords, ShieldAlert, Gift } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 /**
  * Día 5: El Gran Duelo de Pareja.
  * Reto de 5 preguntas con 0 fallos permitidos.
- * - Si acierta las 5: Gana un vale de cena/almuerzo organizado y pagado.
- * - Si falla: Pantalla de derrota cómica con la apuesta perdida y botón de reintento.
+ * - Instrucciones iniciales sin desvelar el premio ni el castigo.
+ * - Si acierta las 5: Gana el vale de comida/cena organizada y pagada.
+ * - Si falla: Pantalla cómica de derrota con la apuesta y botón de reintento.
  */
 export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
   const questions = config.quizQuestions ?? [];
+  const [hasStarted, setHasStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isFailed, setIsFailed] = useState(false);
@@ -59,6 +61,7 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
     setSelectedOption(null);
     setIsFailed(false);
     setIsChecking(false);
+    setHasStarted(false);
   };
 
   // ==========================================
@@ -142,7 +145,7 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
             La regla era <strong>0 fallos</strong>... ¡así que me debes una cena o almuerzo pagada y organizada por ti cuando yo quiera! 🍽️✨
           </p>
           <p className="text-xs text-white/60 italic pt-1">
-            Pero como soy generoso, tienes una segunda oportunidad para intentar ganar tu vale:
+            Pero como soy generoso, puedes volver a intentarlo para intentar ganar tu vale:
           </p>
         </div>
 
@@ -159,7 +162,63 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
   }
 
   // ==========================================
-  // PANTALLA 3: PREGUNTAS DEL QUIZ (PASO A PASO)
+  // PANTALLA 3: INSTRUCCIONES DEL DUELO (ANTES DE EMPEZAR)
+  // ==========================================
+  if (!hasStarted) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="space-y-5 rounded-2xl border border-white/20 bg-white/10 p-6 sm:p-7 text-center backdrop-blur-xl shadow-2xl"
+      >
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
+          <Swords className="h-4 w-4 text-pink-300" />
+          <span>Duelo de Pareja</span>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow">
+            ¿Cuánto nos conoces?
+          </h3>
+          <p className="text-sm text-white/80 leading-relaxed">
+            Ha llegado el momento de poner a prueba tu memoria con 5 preguntas sobre nuestra historia, viajes y manías.
+          </p>
+        </div>
+
+        {/* Reglas del Reto */}
+        <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-4 text-left text-xs sm:text-sm text-white/90">
+          <div className="flex items-start gap-2.5">
+            <span className="text-base">🎯</span>
+            <p><strong>5 Preguntas en total</strong> sobre nosotros.</p>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <ShieldAlert className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
+            <p><strong className="text-amber-200">0 Fallos permitidos:</strong> un solo error y perderás el duelo.</p>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <Gift className="h-4 w-4 text-pink-300 shrink-0 mt-0.5" />
+            <p><strong>Si aciertas las 5:</strong> Desbloquearás una recompensa muy especial para ti.</p>
+          </div>
+          <div className="flex items-start gap-2.5">
+            <span className="text-base">😈</span>
+            <p><strong>Si fallas:</strong> ¡Pierdes la apuesta y tendrás que pagar el castigo!</p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setHasStarted(true)}
+          className="w-full rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 px-6 py-4 font-semibold text-white shadow-xl transition hover:scale-[1.02] active:scale-95 text-base"
+        >
+          ¡Acepto el reto! 🚀
+        </button>
+      </motion.div>
+    );
+  }
+
+  // ==========================================
+  // PANTALLA 4: PREGUNTAS DEL QUIZ (PASO A PASO)
   // ==========================================
   const currentQuestion = questions[currentIndex];
   const progressPercent = ((currentIndex + 1) / questions.length) * 100;
