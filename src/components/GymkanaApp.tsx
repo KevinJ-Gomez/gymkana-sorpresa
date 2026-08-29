@@ -296,8 +296,8 @@ export function GymkanaApp() {
             exit={{ opacity: 0, scale: 0.8 }}
             aria-label={mapView ? "Acercar a la constelación" : "Ver el corazón entero"}
             className="fixed right-5 z-20 flex h-12 w-12 items-center justify-center
-              rounded-full border border-white/20 bg-white/10 text-white/80 backdrop-blur-md
-              top-[max(6.5rem,calc(env(safe-area-inset-top)+5rem))]"
+              rounded-full border border-white/20 bg-black/40 text-white/90 shadow-xl backdrop-blur-lg transition-all hover:bg-black/60 active:scale-95
+              bottom-[13.5rem] sm:bottom-[13rem]"
           >
             {mapView ? <ZoomIn className="h-5 w-5" /> : <ZoomOut className="h-5 w-5" />}
           </motion.button>
