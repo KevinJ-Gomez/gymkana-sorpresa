@@ -206,17 +206,14 @@ const FLOWERS: FlowerData[] = [
   },
 ];
 
-// ELEMENTOS DECORATIVOS ADICIONALES (RAMAS, LAVANDAS, PANICULATA DORADA Y CAPULLOS SECUNDARIOS)
+// ELEMENTOS DECORATIVOS ADICIONALES (LAVANDAS Y BROTES NATURALES DENTRO DEL RAMO)
 const DECORATIVE_BRANCHES = [
-  // Espigas de lavanda y campanillas
-  { d: "M200,470 Q110,270 45,100", color: "#a855f7", dots: [{ cx: 45, cy: 100 }, { cx: 55, cy: 120 }, { cx: 68, cy: 145 }, { cx: 80, cy: 170 }] },
-  { d: "M200,470 Q290,270 355,100", color: "#a855f7", dots: [{ cx: 355, cy: 100 }, { cx: 345, cy: 120 }, { cx: 332, cy: 145 }, { cx: 320, cy: 170 }] },
-  // Ramas de bayas doradas y eucalipto
-  { d: "M200,470 Q150,220 85,60", color: "#fbbf24", dots: [{ cx: 85, cy: 60 }, { cx: 98, cy: 75 }, { cx: 110, cy: 95 }] },
-  { d: "M200,470 Q250,220 315,60", color: "#fbbf24", dots: [{ cx: 315, cy: 60 }, { cx: 302, cy: 75 }, { cx: 290, cy: 95 }] },
-  // Brotes centrales decorativos
-  { d: "M200,470 Q185,240 170,120", color: "#34d399", dots: [{ cx: 170, cy: 120 }, { cx: 178, cy: 140 }] },
-  { d: "M200,470 Q215,240 230,120", color: "#34d399", dots: [{ cx: 230, cy: 120 }, { cx: 222, cy: 140 }] },
+  // Espigas de lavanda y campanillas integradas en el contorno del ramo
+  { d: "M200,470 Q130,300 70,180", color: "#a855f7", dots: [{ cx: 70, cy: 180 }, { cx: 80, cy: 205 }, { cx: 95, cy: 235 }] },
+  { d: "M200,470 Q270,300 330,180", color: "#a855f7", dots: [{ cx: 330, cy: 180 }, { cx: 320, cy: 205 }, { cx: 305, cy: 235 }] },
+  // Brotes verdes centrales decorativos
+  { d: "M200,470 Q185,260 170,140", color: "#34d399", dots: [{ cx: 170, cy: 140 }, { cx: 178, cy: 165 }] },
+  { d: "M200,470 Q215,260 230,140", color: "#34d399", dots: [{ cx: 230, cy: 140 }, { cx: 222, cy: 165 }] },
 ];
 
 const DECORATIVE_BUDS = [
@@ -653,8 +650,8 @@ export function Day7({ isUnlocked }: DayComponentProps) {
                 key={`stem-${flower.id}`}
                 d={flower.stemD}
                 fill="none"
-                stroke={isTarget ? "#fbbf24" : "url(#emeraldStem)"}
-                strokeWidth={isTarget ? "4" : isBloomed ? "3.5" : "2"}
+                stroke="url(#emeraldStem)"
+                strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2"}
                 strokeLinecap="round"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
