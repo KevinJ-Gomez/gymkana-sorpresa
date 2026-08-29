@@ -325,28 +325,30 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black select-none"
     >
-      {/* Botón Saltar y Estado */}
-      <div className="absolute right-6 top-6 z-50 flex items-center gap-3">
-        {isPaused && (
-          <span className="rounded-full border border-pink-500/30 bg-pink-500/20 px-3 py-1 text-xs font-medium text-pink-300 backdrop-blur-md animate-pulse">
-            Pausado
-          </span>
-        )}
-        <button
-          onClick={onFinish}
-          className="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition hover:bg-white/20"
-        >
-          Saltar
-        </button>
-      </div>
-
       {/* Barra de progreso de la diapositiva actual */}
-      <div className="absolute left-0 top-0 h-1 w-full bg-white/10">
+      <div className="absolute left-0 top-0 h-1 w-full bg-white/10 z-50">
         <motion.div
           className={`h-full ${isPaused ? "bg-pink-300/60" : "bg-pink-400"}`}
           style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
           transition={{ duration: 0 }}
         />
+      </div>
+
+      {/* Barra superior con botón Saltar y Estado */}
+      <div className="absolute inset-x-0 top-0 z-50 flex items-center justify-between px-6 pt-5 pb-3 pointer-events-none">
+        {isPaused ? (
+          <span className="pointer-events-auto rounded-full border border-pink-500/30 bg-pink-500/20 px-3.5 py-1 text-xs font-medium text-pink-300 backdrop-blur-md animate-pulse">
+            Pausado
+          </span>
+        ) : (
+          <div />
+        )}
+        <button
+          onClick={onFinish}
+          className="pointer-events-auto rounded-full bg-black/60 border border-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-105 active:scale-95 shadow-lg"
+        >
+          Saltar
+        </button>
       </div>
 
       {/* Flechas de navegación rápida en modo pausado */}
@@ -371,17 +373,17 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
         </>
       )}
 
-      {/* Texto superior flotante, grande, sin recuadro y continuo (no desaparece entre fotos consecutivas) */}
-      <div className="absolute top-10 sm:top-14 left-1/2 -translate-x-1/2 z-40 pointer-events-none px-6 text-center max-w-2xl w-full">
+      {/* Texto superior flotante, grande, sin recuadro y continuo (con suficiente margen bajo la barra superior) */}
+      <div className="absolute top-20 sm:top-24 left-1/2 -translate-x-1/2 z-40 pointer-events-none px-6 text-center max-w-xl w-full">
         <AnimatePresence mode="wait">
           {activeSlide.type === "image" && activeSlide.caption && (
             <motion.p
               key={activeSlide.caption}
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35 }}
-              className="font-serif text-xl sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none"
+              className="font-serif text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none leading-snug"
             >
               {activeSlide.caption}
             </motion.p>
@@ -565,15 +567,16 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md">
+      {/* Botón cerrar */}
       <button
         onClick={onClose}
-        className="absolute right-6 top-6 z-50 rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20"
+        className="absolute right-5 top-5 z-50 rounded-full bg-black/60 border border-white/20 p-2.5 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-105 active:scale-95 shadow-lg"
       >
-        <X className="h-6 w-6" />
+        <X className="h-5 w-5" />
       </button>
 
-      {/* Texto superior flotante para el carrusel manual */}
-      <div className="absolute top-8 sm:top-10 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-6 text-center max-w-2xl w-full">
+      {/* Texto superior flotante para el carrusel manual (con suficiente margen bajo el botón cerrar) */}
+      <div className="absolute top-20 sm:top-22 left-1/2 -translate-x-1/2 z-30 pointer-events-none px-6 text-center max-w-xl w-full">
         <AnimatePresence mode="wait">
           {activeSlide.type === "image" && activeSlide.caption && (
             <motion.p
@@ -582,7 +585,7 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
-              className="font-serif text-xl sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none"
+              className="font-serif text-lg sm:text-2xl md:text-3xl font-medium tracking-wide text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)] select-none leading-snug"
             >
               {activeSlide.caption}
             </motion.p>
