@@ -206,16 +206,7 @@ const FLOWERS: FlowerData[] = [
   },
 ];
 
-// ELEMENTOS DECORATIVOS ADICIONALES (LAVANDAS Y BROTES NATURALES DENTRO DEL RAMO)
-const DECORATIVE_BRANCHES = [
-  // Espigas de lavanda y campanillas integradas en el contorno del ramo
-  { d: "M200,470 Q130,300 70,180", color: "#a855f7", dots: [{ cx: 70, cy: 180 }, { cx: 80, cy: 205 }, { cx: 95, cy: 235 }] },
-  { d: "M200,470 Q270,300 330,180", color: "#a855f7", dots: [{ cx: 330, cy: 180 }, { cx: 320, cy: 205 }, { cx: 305, cy: 235 }] },
-  // Brotes verdes centrales decorativos
-  { d: "M200,470 Q185,260 170,140", color: "#34d399", dots: [{ cx: 170, cy: 140 }, { cx: 178, cy: 165 }] },
-  { d: "M200,470 Q215,260 230,140", color: "#34d399", dots: [{ cx: 230, cy: 140 }, { cx: 222, cy: 165 }] },
-];
-
+// ELEMENTOS DECORATIVOS ADICIONALES (CAPULLOS Y BAYAS DECORATIVAS NATURALES)
 const DECORATIVE_BUDS = [
   { cx: 50, cy: 210, r: 6, color: "#f472b6" },
   { cx: 350, cy: 210, r: 6, color: "#f472b6" },
@@ -597,35 +588,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             />
           ))}
 
-          {/* 3. ELEMENTOS DECORATIVOS SECUNDARIOS (RAMAS, LAVANDAS Y BAYAS DORADAS) */}
-          {DECORATIVE_BRANCHES.map((branch, i) => (
-            <g key={`dec-branch-${i}`}>
-              <motion.path
-                d={branch.d}
-                fill="none"
-                stroke={branch.color}
-                strokeWidth="1.2"
-                strokeDasharray="3 3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.2, delay: 0.5 + i * 0.1 }}
-              />
-              {branch.dots.map((dot, j) => (
-                <motion.circle
-                  key={`dot-${i}-${j}`}
-                  cx={dot.cx}
-                  cy={dot.cy}
-                  r="3"
-                  fill={branch.color}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: [1, 1.3, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: j * 0.2 }}
-                />
-              ))}
-            </g>
-          ))}
-
-          {/* 4. CAPULLOS DECORATIVOS SECUNDARIOS (PARA MÁS FRONDOSIDAD) */}
+          {/* 3. CAPULLOS DECORATIVOS SECUNDARIOS (PARA MÁS FRONDOSIDAD NATURAL) */}
           {DECORATIVE_BUDS.map((bud, i) => (
             <motion.circle
               key={`dec-bud-${i}`}
@@ -633,7 +596,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               cy={bud.cy}
               r={bud.r}
               fill={bud.color}
-              opacity="0.7"
+              opacity="0.65"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.8, delay: 0.8 + i * 0.05 }}
