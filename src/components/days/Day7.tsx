@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart, X, BookOpen, ChevronRight, Flower2 } from "lucide-react";
+import { Sparkles, Heart, X, BookOpen, ChevronRight, Flower2, Check } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 interface FlowerData {
@@ -11,7 +11,6 @@ interface FlowerData {
   cy: number;
   stemD: string;
   name: string;
-  type: "rose" | "peony" | "orchid" | "lotus" | "dahlia" | "sunflower" | "lily";
   colorStart: string;
   colorMid: string;
   colorEnd: string;
@@ -20,15 +19,14 @@ interface FlowerData {
   text: string;
 }
 
-// 13 FLORES PRINCIPALES CON SUS FRASES (EN ORDEN DEL 1 AL 13)
+// 13 FLORES PRINCIPALES CON SUS TALLOS EXACTOS Y DEDICATORIAS
 const FLOWERS: FlowerData[] = [
   {
     id: 1,
     cx: 200,
     cy: 70,
-    stemD: "M200,470 Q200,270 200,70",
+    stemD: "M200,470 L200,70",
     name: "Gran Rosa Eterna",
-    type: "rose",
     colorStart: "#ff2a6d",
     colorMid: "#e11d48",
     colorEnd: "#881337",
@@ -38,11 +36,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 2,
-    cx: 130,
+    cx: 125,
     cy: 95,
-    stemD: "M200,470 Q165,280 130,95",
+    stemD: "M200,470 Q160,280 125,95",
     name: "Peonía Rosa Blush",
-    type: "peony",
     colorStart: "#f472b6",
     colorMid: "#db2777",
     colorEnd: "#9d174d",
@@ -52,11 +49,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 3,
-    cx: 270,
+    cx: 275,
     cy: 95,
-    stemD: "M200,470 Q235,280 270,95",
+    stemD: "M200,470 Q240,280 275,95",
     name: "Orquídea Púrpura",
-    type: "orchid",
     colorStart: "#c084fc",
     colorMid: "#9333ea",
     colorEnd: "#581c87",
@@ -66,11 +62,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 4,
-    cx: 70,
+    cx: 65,
     cy: 145,
-    stemD: "M200,470 Q130,310 70,145",
+    stemD: "M200,470 Q130,310 65,145",
     name: "Flor de Loto Dorada",
-    type: "lotus",
     colorStart: "#fde047",
     colorMid: "#f59e0b",
     colorEnd: "#b45309",
@@ -80,11 +75,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 5,
-    cx: 330,
+    cx: 335,
     cy: 145,
-    stemD: "M200,470 Q270,310 330,145",
+    stemD: "M200,470 Q270,310 335,145",
     name: "Flor de Cerezo Carmesí",
-    type: "rose",
     colorStart: "#fb7185",
     colorMid: "#e11d48",
     colorEnd: "#9f1239",
@@ -94,11 +88,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 6,
-    cx: 145,
-    cy: 165,
-    stemD: "M200,470 Q170,320 145,165",
+    cx: 140,
+    cy: 175,
+    stemD: "M200,470 Q170,320 140,175",
     name: "Girasol de Fuego",
-    type: "sunflower",
     colorStart: "#fbbf24",
     colorMid: "#ea580c",
     colorEnd: "#9a3412",
@@ -108,11 +101,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 7,
-    cx: 255,
-    cy: 165,
-    stemD: "M200,470 Q230,320 255,165",
+    cx: 260,
+    cy: 175,
+    stemD: "M200,470 Q230,320 260,175",
     name: "Dalia de Amatista",
-    type: "dahlia",
     colorStart: "#e879f9",
     colorMid: "#c026d3",
     colorEnd: "#701a75",
@@ -123,10 +115,9 @@ const FLOWERS: FlowerData[] = [
   {
     id: 8,
     cx: 200,
-    cy: 215,
-    stemD: "M200,470 Q200,340 200,215",
+    cy: 230,
+    stemD: "M200,470 L200,230",
     name: "Rosa Rubí Central",
-    type: "rose",
     colorStart: "#f43f5e",
     colorMid: "#be123c",
     colorEnd: "#4c0519",
@@ -136,11 +127,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 9,
-    cx: 90,
-    cy: 240,
-    stemD: "M200,470 Q145,360 90,240",
+    cx: 85,
+    cy: 255,
+    stemD: "M200,470 Q145,360 85,255",
     name: "Orquídea Fucsia",
-    type: "orchid",
     colorStart: "#f472b6",
     colorMid: "#be185d",
     colorEnd: "#831843",
@@ -150,11 +140,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 10,
-    cx: 310,
-    cy: 240,
-    stemD: "M200,470 Q255,360 310,240",
+    cx: 315,
+    cy: 255,
+    stemD: "M200,470 Q255,360 315,255",
     name: "Lirio de Cristal",
-    type: "lily",
     colorStart: "#38bdf8",
     colorMid: "#0284c7",
     colorEnd: "#075985",
@@ -164,11 +153,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 11,
-    cx: 140,
-    cy: 295,
-    stemD: "M200,470 Q170,385 140,295",
+    cx: 135,
+    cy: 315,
+    stemD: "M200,470 Q170,395 135,315",
     name: "Peonía Coral",
-    type: "peony",
     colorStart: "#fb923c",
     colorMid: "#e11d48",
     colorEnd: "#9f1239",
@@ -178,11 +166,10 @@ const FLOWERS: FlowerData[] = [
   },
   {
     id: 12,
-    cx: 260,
-    cy: 295,
-    stemD: "M200,470 Q230,385 260,295",
+    cx: 265,
+    cy: 315,
+    stemD: "M200,470 Q230,395 265,315",
     name: "Dalia de Fuego",
-    type: "dahlia",
     colorStart: "#f87171",
     colorMid: "#dc2626",
     colorEnd: "#7f1d1d",
@@ -193,10 +180,9 @@ const FLOWERS: FlowerData[] = [
   {
     id: 13,
     cx: 200,
-    cy: 345,
-    stemD: "M200,470 Q200,410 200,345",
+    cy: 365,
+    stemD: "M200,470 L200,365",
     name: "Capullo del Deseo",
-    type: "lotus",
     colorStart: "#fb7185",
     colorMid: "#f59e0b",
     colorEnd: "#ea580c",
@@ -206,22 +192,10 @@ const FLOWERS: FlowerData[] = [
   },
 ];
 
-// ELEMENTOS DECORATIVOS ADICIONALES (CAPULLOS Y BAYAS DECORATIVAS NATURALES)
-const DECORATIVE_BUDS = [
-  { cx: 50, cy: 210, r: 6, color: "#f472b6" },
-  { cx: 350, cy: 210, r: 6, color: "#f472b6" },
-  { cx: 110, cy: 190, r: 5, color: "#fbbf24" },
-  { cx: 290, cy: 190, r: 5, color: "#fbbf24" },
-  { cx: 165, cy: 260, r: 5.5, color: "#38bdf8" },
-  { cx: 235, cy: 260, r: 5.5, color: "#38bdf8" },
-  { cx: 100, cy: 330, r: 5, color: "#e879f9" },
-  { cx: 300, cy: 330, r: 5, color: "#e879f9" },
-];
-
 /**
- * Componente de Flor Botánica Vectorial con Estado Guiado
+ * Gráfico individual de cada flor en SVG con iluminación y animación de apertura
  */
-function GuidedFlowerGraphic({
+function FlowerGraphicNode({
   flower,
   isBloomed,
   isTarget,
@@ -234,8 +208,8 @@ function GuidedFlowerGraphic({
   isLocked: boolean;
   onClick: () => void;
 }) {
-  const gradId = `flowerGrad-${flower.id}`;
-  const glowId = `flowerGlow-${flower.id}`;
+  const gradId = `fg-${flower.id}`;
+  const glowId = `fgl-${flower.id}`;
 
   return (
     <g
@@ -257,7 +231,7 @@ function GuidedFlowerGraphic({
         </filter>
       </defs>
 
-      {/* Halo de Flor Activa / Guía (Resplandor Dorado Intenso) */}
+      {/* Halo de Guía Activa para la flor a abrir */}
       {isTarget && (
         <motion.circle
           r="26"
@@ -273,7 +247,7 @@ function GuidedFlowerGraphic({
         />
       )}
 
-      {/* Aura de color exterior */}
+      {/* Resplandor de color exterior */}
       <motion.circle
         r={isBloomed ? 26 : isTarget ? 20 : 12}
         fill={isTarget ? "#fbbf24" : flower.glowRgba}
@@ -285,7 +259,7 @@ function GuidedFlowerGraphic({
         transition={{ duration: isTarget ? 1.2 : 2.2, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Pétalos florales */}
+      {/* Capas de Pétalos Botánicos */}
       <motion.g
         initial={{ scale: 0 }}
         animate={{ scale: isBloomed ? 1.25 : isTarget ? 1.05 : 0.75 }}
@@ -306,7 +280,7 @@ function GuidedFlowerGraphic({
           />
         ))}
 
-        {/* Pétalos interiores (cuando está abierta) */}
+        {/* Pétalos interiores cuando florece */}
         {isBloomed &&
           [22.5, 112.5, 202.5, 292.5].map((angle, i) => (
             <motion.path
@@ -346,7 +320,7 @@ function GuidedFlowerGraphic({
         </text>
       )}
 
-      {/* Pequeño letrero 'Toca aquí' sobre la flor objetivo activa */}
+      {/* Cartelito flotante indicador '¡Toca #X!' */}
       {isTarget && (
         <motion.g
           animate={{ y: [-3, 3, -3] }}
@@ -358,7 +332,7 @@ function GuidedFlowerGraphic({
             width="48"
             height="14"
             rx="7"
-            fill="rgba(0,0,0,0.8)"
+            fill="rgba(0,0,0,0.85)"
             stroke="#fbbf24"
             strokeWidth="1"
           />
@@ -380,7 +354,7 @@ function GuidedFlowerGraphic({
 }
 
 /**
- * Día 7: Ramo Ficticio Espectacular Creciendo con Flores Guía Ordenadas (1 a 13) y Elementos Decorativos.
+ * Día 7: Ramo Ficticio Espectacular Creciendo con Tallos Ligeros y Visibles en Todas las Flores.
  */
 export function Day7({ isUnlocked }: DayComponentProps) {
   const [hasStartedGrowth, setHasStartedGrowth] = useState(false);
@@ -390,18 +364,15 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
   if (!isUnlocked) return null;
 
-  // Siguiente flor que debe abrirse en orden (1 a 13)
   const nextTargetId = revealedIds.length < FLOWERS.length ? revealedIds.length + 1 : null;
 
   const handleOpenFlower = (flower: FlowerData) => {
-    // Si es la siguiente flor en la secuencia o ya está abierta
     if (revealedIds.includes(flower.id)) {
       setActiveFlower(flower);
     } else if (flower.id === nextTargetId) {
       setActiveFlower(flower);
       setRevealedIds((prev) => [...prev, flower.id]);
     } else {
-      // Si toca una flor posterior, le avisamos cuál debe abrir primero
       const target = FLOWERS.find((f) => f.id === nextTargetId);
       if (target) {
         setActiveFlower(target);
@@ -463,11 +434,11 @@ export function Day7({ isUnlocked }: DayComponentProps) {
   }
 
   // ==========================================
-  // FASE 2: RAMO ESPECTACULAR CON FLORES GUÍA
+  // FASE 2: RAMO BOTÁNICO ESPECTACULAR
   // ==========================================
   return (
     <div className="relative flex flex-col items-center space-y-4 text-center select-none">
-      {/* Barra de progreso superior con guía */}
+      {/* Barra de progreso superior */}
       <div className="w-full max-w-sm space-y-1.5">
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-pink-300 px-1">
           <span>Flores abiertas: {revealedIds.length} / 13</span>
@@ -485,14 +456,14 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         </div>
       </div>
 
-      {/* LIENZO SVG: EL RAMO BOTÁNICO CRECIENDO EN EL ESPACIO NOCTURNO */}
+      {/* LIENZO SVG: EL RAMO BOTÁNICO CRECIENDO */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
         className="relative w-full max-w-[375px] aspect-[4/5] rounded-3xl border border-white/20 bg-gradient-to-b from-[#180624] via-[#100318] to-[#08020c] overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.35)]"
       >
-        {/* Nebulosa de luz de fondo que se expande con el progreso */}
+        {/* Nebulosa de luz de fondo */}
         <motion.div
           className="pointer-events-none absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
           animate={{
@@ -508,7 +479,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
           }}
         />
 
-        {/* Polvo estelar y destellos en el fondo */}
+        {/* Estrellas blancas y destellos flotantes */}
         {[
           { cx: 40, cy: 50, r: 1.5 },
           { cx: 360, cy: 70, r: 2 },
@@ -535,13 +506,13 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         <svg viewBox="0 0 400 520" className="absolute inset-0 h-full w-full">
           <defs>
             <linearGradient id="emeraldStem" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" stopColor="#064e3b" />
-              <stop offset="50%" stopColor="#059669" />
-              <stop offset="100%" stopColor="#34d399" />
+              <stop offset="0%" stopColor="#047857" />
+              <stop offset="50%" stopColor="#10b981" />
+              <stop offset="100%" stopColor="#6ee7b7" />
             </linearGradient>
             <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#34d399" />
-              <stop offset="100%" stopColor="#065f46" />
+              <stop offset="0%" stopColor="#059669" />
+              <stop offset="100%" stopColor="#022c22" />
             </linearGradient>
             <linearGradient id="goldRibbon" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#fbbf24" />
@@ -554,7 +525,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             </linearGradient>
           </defs>
 
-          {/* 1. ENVOLTORIO FLORAL ELEGANTE (CONO BASE) */}
+          {/* 1. ENVOLTORIO BASE */}
           <motion.path
             initial={{ scaleY: 0, opacity: 0 }}
             animate={{ scaleY: 1, opacity: 1 }}
@@ -567,7 +538,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             strokeOpacity="0.5"
           />
 
-          {/* 2. HOJAS BOTÁNICAS VERDES QUE BROTAN */}
+          {/* 2. HOJAS BOTÁNICAS VERDES DE FONDO (SUAVES Y TRASLÚCIDAS PARA NO TAPAR LOS TALLOS) */}
           {[
             { d: "M200,420 Q110,350 70,310 Q120,290 200,380", delay: 0.4 },
             { d: "M200,420 Q290,350 330,310 Q280,290 200,380", delay: 0.5 },
@@ -580,50 +551,48 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               key={`leaf-${idx}`}
               d={leaf.d}
               fill="url(#leafGrad)"
-              opacity="0.8"
+              opacity="0.5"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.8 }}
+              animate={{ scale: 1, opacity: 0.5 }}
               transition={{ duration: 1, delay: leaf.delay, ease: "easeOut" }}
               style={{ transformOrigin: "200px 420px" }}
             />
           ))}
 
-          {/* 3. CAPULLOS DECORATIVOS SECUNDARIOS (PARA MÁS FRONDOSIDAD NATURAL) */}
-          {DECORATIVE_BUDS.map((bud, i) => (
-            <motion.circle
-              key={`dec-bud-${i}`}
-              cx={bud.cx}
-              cy={bud.cy}
-              r={bud.r}
-              fill={bud.color}
-              opacity="0.65"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.8 + i * 0.05 }}
-            />
-          ))}
-
-          {/* 5. TALLOS PRINCIPALES DE LAS 13 FLORES */}
+          {/* 3. LOS 13 TALLOS BOTÁNICOS PRINCIPALES (PINTADOS POR ENCIMA DE LAS HOJAS) */}
           {FLOWERS.map((flower) => {
             const isBloomed = revealedIds.includes(flower.id);
             const isTarget = flower.id === nextTargetId;
 
             return (
-              <motion.path
-                key={`stem-${flower.id}`}
-                d={flower.stemD}
-                fill="none"
-                stroke="url(#emeraldStem)"
-                strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2"}
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.4, delay: flower.id * 0.05, ease: "easeInOut" }}
-              />
+              <g key={`stem-group-${flower.id}`}>
+                {/* Sombra de profundidad del tallo */}
+                <motion.path
+                  d={flower.stemD}
+                  fill="none"
+                  stroke="#022c22"
+                  strokeWidth={isTarget ? "5" : isBloomed ? "4.5" : "3.5"}
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.4, delay: flower.id * 0.05, ease: "easeInOut" }}
+                />
+                {/* Trazo verde esmeralda luminoso del tallo */}
+                <motion.path
+                  d={flower.stemD}
+                  fill="none"
+                  stroke="url(#emeraldStem)"
+                  strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2.2"}
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.4, delay: flower.id * 0.05, ease: "easeInOut" }}
+                />
+              </g>
             );
           })}
 
-          {/* 6. LAZO DE SATÉN DORADO EN LA BASE */}
+          {/* 4. LAZO DE SATÉN DORADO EN LA BASE */}
           <motion.g
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -639,18 +608,19 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               stroke="#f59e0b"
               strokeWidth="5"
               strokeLinecap="round"
+              fill="none"
             />
             <circle cx="0" cy="-7" r="7" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5" />
           </motion.g>
 
-          {/* 7. LAS 13 FLORES BOTÁNICAS PRINCIPALES CON GUÍA SECUENCIAL */}
+          {/* 5. LAS 13 FLORES BOTÁNICAS PRINCIPALES CON GUÍA SECUENCIAL */}
           {FLOWERS.map((flower) => {
             const isBloomed = revealedIds.includes(flower.id);
             const isTarget = flower.id === nextTargetId;
             const isLocked = !isBloomed && !isTarget;
 
             return (
-              <GuidedFlowerGraphic
+              <FlowerGraphicNode
                 key={flower.id}
                 flower={flower}
                 isBloomed={isBloomed}
