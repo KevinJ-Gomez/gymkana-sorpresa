@@ -2,183 +2,156 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart, X, Flower2, BookOpen, ChevronRight } from "lucide-react";
+import { Sparkles, Heart, X, Flower2, BookOpen, ChevronRight, Check } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 interface FlowerNode {
   id: number;
-  x: number; // Porcentaje X (0-100) en el lienzo del ramo
-  y: number; // Porcentaje Y (0-100)
+  x: number; // Porcentaje horizontal exacto sobre la flor en la foto
+  y: number; // Porcentaje vertical exacto
   name: string;
   emoji: string;
   colorGrad: string;
-  auraColor: string;
-  bloomEmoji: string;
-  stemPath: string; // Curva SVG del tallo desde la base (200, 430)
+  glowColor: string;
   text: string;
 }
 
-const BOUQUET_NODES: FlowerNode[] = [
+// Las 13 posiciones exactas mapeadas sobre cada flor real del ramo
+const BOUQUET_FLOWERS: FlowerNode[] = [
   {
     id: 1,
-    x: 50,
-    y: 12,
-    name: "Rosa Real",
-    emoji: "🌹",
-    bloomEmoji: "💋",
-    colorGrad: "from-rose-500 via-red-500 to-pink-600",
-    auraColor: "rgba(244,63,94,0.7)",
-    stemPath: "M200,430 Q200,260 200,90",
+    x: 62,
+    y: 26,
+    name: "Orquídea de Luz",
+    emoji: "✨",
+    colorGrad: "from-pink-400 via-fuchsia-400 to-purple-500",
+    glowColor: "rgba(232, 121, 249, 0.85)",
     text: "Amo todos los besos que me das a diario y todas las veces que me pides que te dé más.",
   },
   {
     id: 2,
-    x: 32,
-    y: 18,
-    name: "Peonía Rosa",
+    x: 73,
+    y: 25,
+    name: "Orquídea Cristal",
     emoji: "🌸",
-    bloomEmoji: "🌸",
-    colorGrad: "from-pink-400 via-rose-400 to-fuchsia-500",
-    auraColor: "rgba(244,114,182,0.7)",
-    stemPath: "M200,430 Q160,260 130,120",
+    colorGrad: "from-fuchsia-400 via-pink-400 to-rose-500",
+    glowColor: "rgba(244, 114, 182, 0.85)",
     text: "Amo cuidarte, mimarte y consentirte cada vez que puedo.",
   },
   {
     id: 3,
-    x: 68,
-    y: 18,
-    name: "Orquídea Violeta",
+    x: 59,
+    y: 31,
+    name: "Orquídea Celestial",
     emoji: "🌺",
-    bloomEmoji: "🌺",
-    colorGrad: "from-fuchsia-400 via-purple-500 to-pink-600",
-    auraColor: "rgba(217,70,239,0.7)",
-    stemPath: "M200,430 Q240,260 270,120",
+    colorGrad: "from-violet-400 via-purple-500 to-pink-500",
+    glowColor: "rgba(192, 132, 252, 0.85)",
     text: "Amo que tú también me cuides y me mimes cuando puedes.",
   },
   {
     id: 4,
-    x: 18,
-    y: 28,
-    name: "Flor de Loto",
-    emoji: "✨",
-    bloomEmoji: "✨",
-    colorGrad: "from-amber-300 via-yellow-400 to-orange-500",
-    auraColor: "rgba(251,191,36,0.7)",
-    stemPath: "M200,430 Q130,300 75,170",
+    x: 69,
+    y: 30,
+    name: "Orquídea Radiante",
+    emoji: "💫",
+    colorGrad: "from-purple-400 via-fuchsia-500 to-pink-600",
+    glowColor: "rgba(217, 70, 239, 0.85)",
     text: "Amo la buena persona que eres y que me haces ser.",
   },
   {
     id: 5,
-    x: 82,
-    y: 28,
-    name: "Flor de Cerezo",
-    emoji: "🍳",
-    bloomEmoji: "🍳",
-    colorGrad: "from-orange-400 via-rose-400 to-red-500",
-    auraColor: "rgba(249,115,22,0.7)",
-    stemPath: "M200,430 Q270,300 325,170",
+    x: 29,
+    y: 30,
+    name: "Rosa Roja de Pasión",
+    emoji: "🌹",
+    colorGrad: "from-rose-500 via-red-600 to-pink-600",
+    glowColor: "rgba(244, 63, 94, 0.9)",
     text: "Amo cada comida que me preparas con esfuerzo y amor.",
   },
   {
     id: 6,
-    x: 38,
-    y: 35,
-    name: "Girasol de Luz",
+    x: 41,
+    y: 31,
+    name: "Rosa Terciopelo",
     emoji: "👑",
-    bloomEmoji: "👑",
-    colorGrad: "from-yellow-300 via-amber-400 to-orange-500",
-    auraColor: "rgba(250,204,21,0.7)",
-    stemPath: "M200,430 Q170,320 150,200",
+    colorGrad: "from-red-500 via-rose-600 to-pink-700",
+    glowColor: "rgba(225, 29, 72, 0.9)",
     text: "Amo lo orgulloso que me haces sentir de tenerte y lo bien que me siento al hablar de ti.",
   },
   {
     id: 7,
-    x: 62,
-    y: 35,
-    name: "Tulipán Radiante",
+    x: 49,
+    y: 28,
+    name: "Rosa Carmesí",
     emoji: "💬",
-    bloomEmoji: "💬",
-    colorGrad: "from-violet-400 via-fuchsia-500 to-purple-600",
-    auraColor: "rgba(167,139,250,0.7)",
-    stemPath: "M200,430 Q230,320 250,200",
+    colorGrad: "from-red-600 via-rose-600 to-amber-600",
+    glowColor: "rgba(239, 68, 68, 0.9)",
     text: "Amo lo bien que hablas de mí a otros.",
   },
   {
     id: 8,
-    x: 50,
-    y: 45,
-    name: "Corazón Floral",
+    x: 39,
+    y: 37,
+    name: "Rosa Espiral",
     emoji: "🤝",
-    bloomEmoji: "🤝",
-    colorGrad: "from-emerald-400 via-teal-500 to-cyan-600",
-    auraColor: "rgba(45,212,191,0.7)",
-    stemPath: "M200,430 Q200,340 200,245",
+    colorGrad: "from-rose-500 via-red-600 to-purple-600",
+    glowColor: "rgba(244, 63, 94, 0.9)",
     text: "Amo la forma en que me respetas a mí y cuidas nuestra relación.",
   },
   {
     id: 9,
-    x: 24,
-    y: 48,
-    name: "Dalia Magenta",
+    x: 30,
+    y: 43,
+    name: "Rosa de Amor",
     emoji: "🎁",
-    bloomEmoji: "🎁",
-    colorGrad: "from-pink-500 via-rose-500 to-purple-600",
-    auraColor: "rgba(236,72,153,0.7)",
-    stemPath: "M200,430 Q150,360 95,265",
+    colorGrad: "from-pink-500 via-rose-500 to-red-600",
+    glowColor: "rgba(236, 72, 153, 0.9)",
     text: "Amo cada vez que te acuerdas de mí y tienes detalles conmigo.",
   },
   {
     id: 10,
-    x: 76,
-    y: 48,
-    name: "Lirio Mágico",
+    x: 38,
+    y: 47,
+    name: "Rosa Eterna",
     emoji: "💍",
-    bloomEmoji: "💍",
-    colorGrad: "from-rose-400 via-pink-500 to-fuchsia-600",
-    auraColor: "rgba(251,113,133,0.7)",
-    stemPath: "M200,430 Q250,360 305,265",
+    colorGrad: "from-rose-500 via-pink-500 to-amber-400",
+    glowColor: "rgba(251, 113, 133, 0.9)",
     text: "Amo a mi futura mujer.",
   },
   {
     id: 11,
-    x: 35,
-    y: 60,
-    name: "Margarita Dorada",
+    x: 47,
+    y: 50,
+    name: "Rosa Rubí",
     emoji: "👨‍👩‍👧",
-    bloomEmoji: "👨‍👩‍👧",
-    colorGrad: "from-indigo-400 via-purple-500 to-pink-500",
-    auraColor: "rgba(129,140,248,0.7)",
-    stemPath: "M200,430 Q170,380 140,320",
+    colorGrad: "from-red-500 via-rose-500 to-fuchsia-600",
+    glowColor: "rgba(244, 63, 94, 0.9)",
     text: "Amo la forma en la que cuidas a tu familia y sobre todo a tu hermano.",
   },
   {
     id: 12,
-    x: 65,
-    y: 60,
-    name: "Clavel de Pasión",
+    x: 51,
+    y: 38,
+    name: "Peonía Blush",
     emoji: "🔥",
-    bloomEmoji: "🔥",
-    colorGrad: "from-red-500 via-rose-500 to-amber-500",
-    auraColor: "rgba(239,68,68,0.7)",
-    stemPath: "M200,430 Q230,380 260,320",
+    colorGrad: "from-pink-300 via-rose-400 to-pink-500",
+    glowColor: "rgba(244, 114, 182, 0.85)",
     text: "Amo cada parte de tu cuerpo.",
   },
   {
     id: 13,
-    x: 50,
-    y: 68,
-    name: "Flor del Deseo",
+    x: 60,
+    y: 43,
+    name: "Gran Peonía Imperial",
     emoji: "🍑",
-    bloomEmoji: "🍑",
-    colorGrad: "from-orange-400 via-pink-500 to-rose-600",
-    auraColor: "rgba(251,146,60,0.8)",
-    stemPath: "M200,430 Q200,390 200,350",
+    colorGrad: "from-pink-400 via-rose-500 to-amber-500",
+    glowColor: "rgba(251, 146, 60, 0.95)",
     text: "Amo darte cachetes en el culo y otras cosas... cuando te agachas.",
   },
 ];
 
 /**
- * Día 7: Ramo Ficticio Mágico y Creciente con 13 Flores Reales Interactivas.
+ * Día 7: Ramo Ficticio Espectacular con Foto Artística Hiperrealista + Puntos Interactivos Táctiles
  */
 export function Day7({ isUnlocked }: DayComponentProps) {
   const [hasStartedBouquet, setHasStartedBouquet] = useState(false);
@@ -195,8 +168,8 @@ export function Day7({ isUnlocked }: DayComponentProps) {
     }
   };
 
-  const isAllRevealed = revealedIds.length === BOUQUET_NODES.length;
-  const progressPercent = (revealedIds.length / BOUQUET_NODES.length) * 100;
+  const isAllRevealed = revealedIds.length === BOUQUET_FLOWERS.length;
+  const progressPercent = (revealedIds.length / BOUQUET_FLOWERS.length) * 100;
 
   // ==========================================
   // FASE 1: MENSAJE INTRODUCTORIO
@@ -216,7 +189,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         <div className="relative z-10 flex flex-col items-center space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
             <Flower2 className="h-4 w-4" />
-            <span>Un Regalo del Corazón</span>
+            <span>Un Regalo Especial</span>
             <Sparkles className="h-4 w-4" />
           </div>
 
@@ -226,10 +199,10 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
           <div className="rounded-2xl border border-pink-500/20 bg-pink-500/10 p-5 text-left space-y-3">
             <p className="text-sm sm:text-base leading-relaxed text-white/95 font-serif italic">
-              “Hoy no hay un paquete físico esperándote... pero te he preparado algo infinitamente más especial y verdadero:”
+              “Hoy no hay un regalo físico... pero te he preparado un ramo con las cosas que más me gustan de ti:”
             </p>
             <p className="text-xs sm:text-sm text-pink-200/90 leading-relaxed">
-              Un <strong>ramo mágico interactivo</strong> que irá floreciendo ante tus ojos. Cada flor guarda una de las 13 razones por las que me vuelves loco cada día.
+              Un <strong>ramo espectacular e infinito</strong> que guarda 13 flores mágicas. Toca cada flor para abrir sus pétalos y descubrir qué hace que te ame tanto cada día.
             </p>
           </div>
 
@@ -240,7 +213,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             whileTap={{ scale: 0.96 }}
             className="w-full rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-400 px-6 py-4 font-semibold text-white shadow-2xl transition hover:brightness-110 flex items-center justify-center gap-2 text-base"
           >
-            <span>Hacer florecer nuestro ramo</span>
+            <span>Descubrir nuestro ramo</span>
             <Sparkles className="h-5 w-5" />
           </motion.button>
         </div>
@@ -249,7 +222,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
   }
 
   // ==========================================
-  // FASE 2: EL RAMO REAL MÁGICO CRECIENDO
+  // FASE 2: EL RAMO ESPECTACULAR CON PUNTOS INTERACTIVOS
   // ==========================================
   return (
     <div className="relative flex flex-col items-center space-y-4 text-center">
@@ -257,7 +230,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
       <div className="w-full max-w-sm space-y-1.5">
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-pink-300 px-1">
           <span>Flores abiertas: {revealedIds.length} / 13</span>
-          <span>{isAllRevealed ? "¡Ramo Completo! ✨" : "Toca cada flor"}</span>
+          <span>{isAllRevealed ? "¡Ramo en esplendor! ✨" : "Toca las flores brillantes"}</span>
         </div>
         <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
           <motion.div
@@ -269,145 +242,80 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         </div>
       </div>
 
-      {/* LIENZO DEL RAMO FLORAL ESPECTACULAR (SVG + ELEMENTOS ORGÁNICOS) */}
-      <div className="relative w-full max-w-[360px] aspect-[4/5] rounded-3xl border border-white/20 bg-gradient-to-b from-[#1c0828]/90 via-[#13051d]/95 to-[#09020f] overflow-hidden shadow-[0_0_50px_rgba(236,72,153,0.25)] p-2">
-        {/* Aura luminosa de fondo que crece con cada flor descubierta */}
-        <motion.div
-          className="pointer-events-none absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl transition-all duration-700"
+      {/* LIENZO DEL RAMO HIPERREALISTA CON ILUMINACIÓN DINÁMICA */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative w-full max-w-[360px] aspect-[3/4] rounded-3xl border border-white/25 overflow-hidden shadow-[0_0_50px_rgba(236,72,153,0.35)] select-none bg-black"
+      >
+        {/* Imagen del Ramo de Flores Espectacular */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/day7-bouquet.jpg"
+          alt="Ramo de flores espectacular y mágico"
+          className="h-full w-full object-cover transition-all duration-700"
           style={{
-            width: `${160 + revealedIds.length * 15}px`,
-            height: `${160 + revealedIds.length * 15}px`,
-            background:
-              revealedIds.length > 8
-                ? "radial-gradient(circle, rgba(244,114,182,0.45) 0%, rgba(251,191,36,0.3) 50%, transparent 70%)"
-                : "radial-gradient(circle, rgba(244,114,182,0.25) 0%, transparent 70%)",
+            filter: `brightness(${1 + revealedIds.length * 0.02}) saturate(${
+              1 + revealedIds.length * 0.03
+            })`,
           }}
         />
 
-        {/* ESTRUCTURA BOTÁNICA (TALLOS, HOJAS Y LAZO) */}
-        <svg
-          viewBox="0 0 400 500"
-          className="absolute inset-0 h-full w-full pointer-events-none"
-        >
-          <defs>
-            <linearGradient id="stemGrad" x1="0" y1="1" x2="0" y2="0">
-              <stop offset="0%" stopColor="#064e3b" />
-              <stop offset="60%" stopColor="#059669" />
-              <stop offset="100%" stopColor="#34d399" />
-            </linearGradient>
-            <linearGradient id="ribbonGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#fb7185" />
-              <stop offset="50%" stopColor="#ec4899" />
-              <stop offset="100%" stopColor="#f59e0b" />
-            </linearGradient>
-          </defs>
+        {/* Halo resplandeciente de fondo */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
-          {/* Hojas decorativas de fondo */}
-          <path
-            d="M200,410 Q120,330 90,290 Q120,270 200,370"
-            fill="rgba(16,185,129,0.3)"
-          />
-          <path
-            d="M200,410 Q280,330 310,290 Q280,270 200,370"
-            fill="rgba(16,185,129,0.3)"
-          />
-          <path
-            d="M200,380 Q130,220 80,180 Q130,170 200,320"
-            fill="rgba(52,211,153,0.35)"
-          />
-          <path
-            d="M200,380 Q270,220 320,180 Q270,170 200,320"
-            fill="rgba(52,211,153,0.35)"
-          />
-
-          {/* Tallos vivos hacia cada una de las 13 flores */}
-          {BOUQUET_NODES.map((node) => {
-            const isRevealed = revealedIds.includes(node.id);
-            return (
-              <motion.path
-                key={node.id}
-                d={node.stemPath}
-                fill="none"
-                stroke="url(#stemGrad)"
-                strokeWidth={isRevealed ? "3" : "2"}
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.2, delay: node.id * 0.05 }}
-              />
-            );
-          })}
-
-          {/* Envoltorio / Lazo de Satén Dorado y Rosa en la base */}
-          <g transform="translate(200, 440)">
-            <ellipse cx="0" cy="5" rx="42" ry="16" fill="url(#ribbonGrad)" />
-            {/* Lazo y lazos colgantes */}
-            <path
-              d="M-30,0 Q-45,-15 -20,-20 Q-5,-10 0,0 Q5,-10 20,-20 Q45,-15 30,0 Z"
-              fill="#fb7185"
-            />
-            <circle cx="0" cy="-2" r="7" fill="#f59e0b" />
-            <path
-              d="M-10,5 Q-25,35 -35,50 M10,5 Q25,35 35,50"
-              stroke="#fb7185"
-              strokeWidth="4"
-              strokeLinecap="round"
-            />
-          </g>
-        </svg>
-
-        {/* 13 FLORES INTERACTIVAS DISTRIBUIDAS ORGÁNICAMENTE */}
-        {BOUQUET_NODES.map((flower) => {
+        {/* 13 FLORES INTERACTIVAS MAPICADAS DIRECTAMENTE SOBRE LAS FLORES */}
+        {BOUQUET_FLOWERS.map((flower) => {
           const isRevealed = revealedIds.includes(flower.id);
 
           return (
             <div
               key={flower.id}
-              className="absolute -translate-x-1/2 -translate-y-1/2"
+              className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
               style={{ left: `${flower.x}%`, top: `${flower.y}%` }}
             >
               <motion.button
                 type="button"
                 onClick={() => handleOpenFlower(flower)}
-                whileHover={{ scale: 1.2 }}
+                whileHover={{ scale: 1.25 }}
                 whileTap={{ scale: 0.9 }}
-                className="relative flex items-center justify-center select-none"
+                className="relative flex items-center justify-center"
               >
-                {/* Halo pulsante de flor cerrada o abierta */}
+                {/* Aura radiante animada */}
                 <motion.div
                   animate={{
-                    scale: isRevealed ? [1, 1.25, 1] : [0.9, 1.1, 0.9],
-                    opacity: isRevealed ? [0.6, 0.9, 0.6] : [0.3, 0.7, 0.3],
+                    scale: isRevealed ? [1, 1.4, 1] : [0.9, 1.2, 0.9],
+                    opacity: isRevealed ? [0.7, 1, 0.7] : [0.4, 0.85, 0.4],
                   }}
                   transition={{
-                    duration: isRevealed ? 2 : 2.5,
+                    duration: isRevealed ? 1.8 : 2.2,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="absolute inset-0 -m-3 rounded-full blur-md"
-                  style={{ background: flower.auraColor }}
+                  className="absolute -inset-2.5 rounded-full blur-md"
+                  style={{ background: flower.glowColor }}
                 />
 
-                {/* Flor Florecida vs Capullo Luminoso */}
+                {/* Botón de la Flor */}
                 <div
                   className={`relative flex items-center justify-center rounded-full border transition-all duration-300 ${
                     isRevealed
-                      ? `h-11 w-11 sm:h-12 sm:w-12 bg-gradient-to-br ${flower.colorGrad} border-white/60 shadow-xl scale-110`
-                      : "h-9 w-9 sm:h-10 sm:w-10 bg-[#1f0b29]/85 border-pink-400/40 hover:border-pink-300"
+                      ? `h-9 w-9 sm:h-10 sm:w-10 bg-gradient-to-br ${flower.colorGrad} border-white shadow-[0_0_20px_${flower.glowColor}] ring-2 ring-white/70 scale-110`
+                      : "h-7 w-7 sm:h-8 sm:w-8 bg-black/60 border-amber-300/80 shadow-[0_0_12px_rgba(251,191,36,0.8)] backdrop-blur-md"
                   }`}
                 >
                   {isRevealed ? (
-                    <motion.span
-                      initial={{ scale: 0, rotate: -45 }}
+                    <motion.div
+                      initial={{ scale: 0, rotate: -30 }}
                       animate={{ scale: 1, rotate: 0 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
-                      className="text-xl sm:text-2xl drop-shadow"
+                      className="flex items-center justify-center"
                     >
-                      {flower.bloomEmoji}
-                    </motion.span>
+                      <Check className="h-4 w-4 text-white drop-shadow stroke-[3]" />
+                    </motion.div>
                   ) : (
-                    <span className="text-sm sm:text-base animate-pulse">
-                      🌷
+                    <span className="text-xs sm:text-sm animate-pulse drop-shadow">
+                      ✨
                     </span>
                   )}
                 </div>
@@ -415,7 +323,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             </div>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Cierre cuando todas las flores han sido abiertas */}
       {isAllRevealed && (
@@ -426,7 +334,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         >
           <div className="flex items-center justify-center gap-2 text-pink-300 font-serif text-base sm:text-lg font-bold">
             <Heart className="h-5 w-5 fill-pink-400 text-pink-400" />
-            <span>¡Tu ramo está en pleno esplendor!</span>
+            <span>¡Has completado todo el ramo!</span>
             <Heart className="h-5 w-5 fill-pink-400 text-pink-400" />
           </div>
 
@@ -465,9 +373,9 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
               <div
                 className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${activeFlower.colorGrad} shadow-2xl text-3xl`}
-                style={{ boxShadow: `0 0 26px ${activeFlower.auraColor}` }}
+                style={{ boxShadow: `0 0 26px ${activeFlower.glowColor}` }}
               >
-                {activeFlower.bloomEmoji}
+                {activeFlower.emoji}
               </div>
 
               <p className="text-xs font-mono uppercase tracking-widest text-pink-300/80">
@@ -516,12 +424,12 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
               {/* Contenido con scroll */}
               <div className="flex-1 overflow-y-auto space-y-3 py-4 pr-1 text-left">
-                {BOUQUET_NODES.map((flower) => (
+                {BOUQUET_FLOWERS.map((flower) => (
                   <div
                     key={flower.id}
                     className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md"
                   >
-                    <span className="text-2xl shrink-0">{flower.bloomEmoji}</span>
+                    <span className="text-2xl shrink-0">{flower.emoji}</span>
                     <p className="text-xs sm:text-sm leading-relaxed text-white/95 font-serif">
                       {flower.text}
                     </p>
