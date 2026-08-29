@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Image as ImageIcon, FastForward, Play } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Image as ImageIcon, FastForward, Play, Pause } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 // ==========================================
@@ -71,6 +71,36 @@ const chapters: Chapter[] = [
 ];
 
 // ==========================================
+// EFECTO MÁQUINA DE ESCRIBIR (TYPEWRITER)
+// ==========================================
+function TypewriterText({ text, isPaused }: { text: string; isPaused?: boolean }) {
+  const [displayedLength, setDisplayedLength] = useState(0);
+
+  useEffect(() => {
+    setDisplayedLength(0);
+    let current = 0;
+    const interval = setInterval(() => {
+      if (isPaused) return;
+      current += 1;
+      setDisplayedLength(current);
+      if (current >= text.length) {
+        clearInterval(interval);
+      }
+    }, 35);
+    return () => clearInterval(interval);
+  }, [text, isPaused]);
+
+  return (
+    <span>
+      {text.slice(0, displayedLength)}
+      {displayedLength < text.length && (
+        <span className="ml-1 inline-block h-[1em] w-[2px] animate-pulse bg-pink-400 align-middle" />
+      )}
+    </span>
+  );
+}
+
+// ==========================================
 // FASE 2: REPRODUCTOR SLIDESHOW AUTOMÁTICO
 // ==========================================
 type Slide =
@@ -79,44 +109,73 @@ type Slide =
   | { type: "closing"; content: string; duration: number }
   | { type: "end"; content: string; duration: number };
 
+const slideshowVariants = {
+  enter: (direction: number) => ({
+    opacity: 0,
+    scale: 0.95,
+    x: direction > 0 ? 80 : direction < 0 ? -80 : 0,
+  }),
+  center: {
+    opacity: 1,
+    scale: 1,
+    x: 0,
+  },
+  exit: (direction: number) => ({
+    opacity: 0,
+    scale: 1.02,
+    x: direction > 0 ? -80 : direction < 0 ? 80 : 0,
+  }),
+};
+
 function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
   const slides = useMemo<Slide[]>(() => {
     const list: Slide[] = [];
     chapters.forEach((ch) => {
-      // Tarjeta de texto inicial del capítulo
+      // Tarjeta de texto inicial del capítulo con tiempo suficiente para escribirse y leerse
       if (ch.connectorText) {
-        list.push({ type: "intro", content: ch.connectorText, duration: 4000 });
+        const textDuration = Math.max(5500, ch.connectorText.length * 45 + 2500);
+        list.push({ type: "intro", content: ch.connectorText, duration: textDuration });
       }
-      // Todas las fotos pasan a una velocidad cómoda y constante (2.2s por foto)
-      // El usuario puede usar el joystick inferior para acelerar o ralentizar.
-      const imgDuration = 2200;
+
+      // Velocidad según la cantidad de fotos:
+      // Si hay más de 15 fotos en la sección -> 3.0 segundos
+      // En secciones con 15 o menos fotos -> 2.2 segundos
+      const imgDuration = ch.imageCount > 15 ? 3000 : 2200;
+
       for (let i = 1; i <= ch.imageCount; i++) {
         list.push({ type: "image", src: `${ch.folder}/${i}.jpg`, duration: imgDuration });
       }
+
       if (ch.closingText) {
-        list.push({ type: "closing", content: ch.closingText, duration: 4500 });
+        const closeDuration = Math.max(5500, ch.closingText.length * 45 + 2500);
+        list.push({ type: "closing", content: ch.closingText, duration: closeDuration });
       }
     });
+
     list.push({
       type: "end",
       content: "Pregúntame por una pequeña sorpresa... (tienes tu premio físico esperándote)",
-      duration: 6000,
+      duration: 7000,
     });
     return list;
   }, []);
 
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
   const activeSlide = slides[index];
 
   // Controlador de velocidad con Joystick
   const joystickX = useMotionValue(0);
-  // Mapeamos: -80px -> cámara lenta (0.2x), 0 -> normal (1x), 80px -> muy rápido (6x)
+  // Mapeamos: -80px -> cámara lenta (0.15x), 0 -> normal (1x), 80px -> muy rápido (8x)
   const speedMultiplier = useTransform(joystickX, [-80, 0, 80], [0.15, 1, 8]);
-  
+
   // Progreso visual (barra superior)
   const [progressPercent, setProgressPercent] = useState(0);
 
   useEffect(() => {
+    if (isPaused) return;
+
     let lastTime = performance.now();
     let progress = 0;
     let rafId: number;
@@ -130,6 +189,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
       if (progress >= activeSlide.duration) {
         if (index < slides.length - 1) {
+          setDirection(1);
           setIndex((prev) => prev + 1);
         } else {
           onFinish();
@@ -141,11 +201,33 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [index, activeSlide.duration, slides.length, onFinish, speedMultiplier]);
+  }, [index, activeSlide.duration, slides.length, onFinish, speedMultiplier, isPaused]);
 
   const handleDragEnd = () => {
     // Al soltar el joystick, vuelve al centro
     animate(joystickX, 0, { type: "spring", stiffness: 300, damping: 20 });
+  };
+
+  const goToPrev = () => {
+    if (index > 0) {
+      setDirection(-1);
+      setProgressPercent(0);
+      setIndex((prev) => prev - 1);
+    }
+  };
+
+  const goToNext = () => {
+    if (index < slides.length - 1) {
+      setDirection(1);
+      setProgressPercent(0);
+      setIndex((prev) => prev + 1);
+    } else {
+      onFinish();
+    }
+  };
+
+  const togglePause = () => {
+    setIsPaused((prev) => !prev);
   };
 
   return (
@@ -153,55 +235,97 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black select-none"
     >
-      {/* Botón Saltar */}
-      <button
-        onClick={onFinish}
-        className="absolute right-6 top-6 z-50 rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition hover:bg-white/20"
-      >
-        Saltar
-      </button>
+      {/* Botón Saltar y Estado */}
+      <div className="absolute right-6 top-6 z-50 flex items-center gap-3">
+        {isPaused && (
+          <span className="rounded-full border border-pink-500/30 bg-pink-500/20 px-3 py-1 text-xs font-medium text-pink-300 backdrop-blur-md animate-pulse">
+            Pausado
+          </span>
+        )}
+        <button
+          onClick={onFinish}
+          className="rounded-full bg-white/10 px-4 py-2 text-sm text-white backdrop-blur-md transition hover:bg-white/20"
+        >
+          Saltar
+        </button>
+      </div>
 
       {/* Barra de progreso de la diapositiva actual */}
       <div className="absolute left-0 top-0 h-1 w-full bg-white/10">
         <motion.div
-          className="h-full bg-pink-400"
+          className={`h-full ${isPaused ? "bg-pink-300/60" : "bg-pink-400"}`}
           style={{ width: `${Math.min(100, Math.max(0, progressPercent))}%` }}
           transition={{ duration: 0 }}
         />
       </div>
 
-      {/* Slide Content */}
+      {/* Flechas de navegación rápida en modo pausado */}
+      {isPaused && (
+        <>
+          <button
+            onClick={goToPrev}
+            disabled={index === 0}
+            className="absolute left-4 top-1/2 z-40 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 disabled:opacity-20 active:scale-95"
+            title="Foto anterior"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            onClick={goToNext}
+            disabled={index === slides.length - 1}
+            className="absolute right-4 top-1/2 z-40 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 disabled:opacity-20 active:scale-95"
+            title="Foto siguiente"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        </>
+      )}
+
+      {/* Slide Content (Swipeable en modo pausado) */}
       <div className="relative flex h-full w-full items-center justify-center p-4">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={index}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
+            custom={direction}
+            variants={slideshowVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             transition={{ duration: 0.3 }}
-            className="flex h-full w-full items-center justify-center"
+            drag={isPaused ? "x" : false}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.6}
+            onDragEnd={(e, { offset, velocity }) => {
+              if (!isPaused) return;
+              if (offset.x > 50 || velocity.x > 300) {
+                goToPrev();
+              } else if (offset.x < -50 || velocity.x < -300) {
+                goToNext();
+              }
+            }}
+            className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
             {activeSlide.type === "image" ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={activeSlide.src}
                 alt="Slideshow image"
-                className="max-h-full max-w-full rounded-md object-contain shadow-2xl"
+                className="max-h-full max-w-full rounded-md object-contain shadow-2xl pointer-events-none"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                 }}
               />
             ) : (
               <div className="max-w-xl rounded-2xl border border-white/20 bg-white/10 p-10 text-center shadow-2xl backdrop-blur-xl">
-                <p className="font-serif text-2xl leading-relaxed text-white">
-                  {activeSlide.content}
+                <p className="font-serif text-xl sm:text-2xl leading-relaxed text-white min-h-[4rem]">
+                  <TypewriterText text={activeSlide.content} isPaused={isPaused} />
                 </p>
                 {activeSlide.type === "end" && (
                   <button
                     onClick={onFinish}
-                    className="mt-8 rounded-full bg-pink-500 px-6 py-3 font-medium text-white transition hover:bg-pink-600"
+                    className="mt-8 rounded-full bg-pink-500 px-6 py-3 font-medium text-white transition hover:bg-pink-600 hover:scale-105 active:scale-95"
                   >
                     Ir a la Galería
                   </button>
@@ -212,26 +336,53 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
         </AnimatePresence>
       </div>
 
-      {/* Joystick Controlador de Velocidad */}
-      <div className="absolute bottom-10 flex flex-col items-center gap-3">
-        <div className="flex w-64 items-center justify-between px-2 text-xs text-white/50">
-          <span>🐢 Lento</span>
-          <span>Velocidad</span>
-          <span>Rápido 🐇</span>
-        </div>
-        <div className="relative flex h-14 w-64 items-center rounded-full bg-white/10 backdrop-blur-md shadow-inner">
-          <div className="absolute left-1/2 h-4 w-1 -translate-x-1/2 rounded bg-white/20" />
-          <motion.div
-            drag="x"
-            dragConstraints={{ left: -80, right: 80 }}
-            dragElastic={0}
-            dragMomentum={false}
-            onDragEnd={handleDragEnd}
-            style={{ x: joystickX }}
-            className="absolute left-1/2 ml-[calc(-1.75rem/2)] flex h-7 w-7 cursor-grab items-center justify-center rounded-full bg-white shadow-lg active:cursor-grabbing"
+      {/* Controles Inferiores: Pausa/Play + Joystick de Velocidad + Contador */}
+      <div className="absolute bottom-6 flex flex-col items-center gap-3 z-40">
+        {/* Indicador de gesto en pausa */}
+        {isPaused && (
+          <p className="text-xs text-pink-200/80 tracking-wide font-light animate-pulse">
+            Arrastra ‹ › para moverte entre recuerdos
+          </p>
+        )}
+
+        <div className="flex items-center gap-4">
+          {/* Botón Pausa / Reanudar */}
+          <button
+            onClick={togglePause}
+            className={`flex h-12 w-12 items-center justify-center rounded-full shadow-lg backdrop-blur-md transition-all active:scale-95 ${
+              isPaused
+                ? "bg-pink-500 text-white ring-4 ring-pink-500/30 hover:bg-pink-600"
+                : "bg-white/15 text-white hover:bg-white/25 border border-white/20"
+            }`}
+            title={isPaused ? "Reanudar película" : "Pausar película"}
           >
-            <div className="h-4 w-4 rounded-full bg-pink-500" />
-          </motion.div>
+            {isPaused ? <Play className="h-5 w-5 fill-white ml-0.5" /> : <Pause className="h-5 w-5 fill-white" />}
+          </button>
+
+          {/* Joystick Controlador de Velocidad */}
+          <div className="flex flex-col items-center gap-1">
+            <div className="flex w-52 sm:w-60 items-center justify-between px-2 text-[10px] text-white/50">
+              <span>🐢 Lento</span>
+              <span className="font-mono text-white/70">
+                {index + 1} / {slides.length}
+              </span>
+              <span>Rápido 🐇</span>
+            </div>
+            <div className="relative flex h-12 w-52 sm:w-60 items-center rounded-full bg-white/10 backdrop-blur-md shadow-inner border border-white/10">
+              <div className="absolute left-1/2 h-4 w-1 -translate-x-1/2 rounded bg-white/20" />
+              <motion.div
+                drag="x"
+                dragConstraints={{ left: -75, right: 75 }}
+                dragElastic={0}
+                dragMomentum={false}
+                onDragEnd={handleDragEnd}
+                style={{ x: joystickX }}
+                className="absolute left-1/2 ml-[calc(-1.5rem/2)] flex h-6 w-6 cursor-grab items-center justify-center rounded-full bg-white shadow-lg active:cursor-grabbing hover:scale-110 transition-transform"
+              >
+                <div className="h-3.5 w-3.5 rounded-full bg-pink-500" />
+              </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </motion.div>
