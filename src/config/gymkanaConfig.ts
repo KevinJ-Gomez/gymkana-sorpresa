@@ -98,11 +98,11 @@ export const gymkanaConfig: DayConfig[] = [
     giftLabel: "Regalo Familiar",
     requiresPassword: false,
     riddle: "Reconstruye el rompecabezas para descubrir quiénes tienen la clave de tu regalo de hoy...",
-    rewardTitle: "¡Cómplices Reveladas!",
+    rewardTitle: "¡Cómplices de hoy reveladas!",
     rewardDescription:
-      "Hay dos personas muy especiales con una misión secreta para ti. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido tu regalo.",
+      "Hay dos personas muy especiales que te han preparado algo. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido el regalo que con tanto amor han elegido para ti.",
     imageSrc: "/images/day4-complices.jpg",
-    imageCaption: "¡Ellas tienen la clave secreta de tu regalo!",
+    imageCaption: "¡Ellas tienen la ubicación de tu regalo!, preguntales por él.",
     puzzlePieces: 6,
   },
   {
