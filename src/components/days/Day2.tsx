@@ -230,8 +230,14 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     });
 
     list.push({
-      type: "end",
+      type: "intro",
       content: "Además has ganado una pequeña sorpresa... (tienes tu premio físico esperándote)",
+      duration: 6500,
+    });
+
+    list.push({
+      type: "end",
+      content: "Te amo ❤️",
       duration: 7500,
     });
     return list;
