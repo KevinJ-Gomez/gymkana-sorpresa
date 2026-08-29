@@ -98,6 +98,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
   const [error3, setError3] = useState(false);
 
   const [copiedPhrase, setCopiedPhrase] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const handleCopyPhrase = () => {
@@ -154,7 +155,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
   const isFullyUnlocked = isUnlocked || unlockedCount === 3;
 
   // =========================================================================
-  // PANTALLA DE RECOMPENSA: EL REGALO DESBLOQUEADO
+  // PANTALLA DE RECOMPENSA: EL REGALO DESBLOQUEADO CON FOTO
   // =========================================================================
   if (isFullyUnlocked) {
     return (
@@ -162,7 +163,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-3xl border border-pink-400/30 bg-gradient-to-b from-[#2a0e36] via-[#1a0724] to-[#0c0312] p-7 text-center shadow-2xl space-y-6"
+        className="relative overflow-hidden rounded-3xl border border-pink-400/30 bg-gradient-to-b from-[#2a0e36] via-[#1a0724] to-[#0c0312] p-6 sm:p-7 text-center shadow-2xl space-y-5"
       >
         <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-pink-500/25 blur-3xl" />
         <div className="pointer-events-none absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-amber-400/20 blur-3xl" />
@@ -173,11 +174,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           <ShoppingBag className="h-4 w-4" />
         </div>
 
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-tr from-pink-500 via-rose-400 to-amber-300 text-4xl shadow-[0_0_40px_rgba(244,114,182,0.6)]">
-          👜
-        </div>
-
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow">
             {config.rewardTitle}
           </h3>
@@ -186,8 +183,32 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/15 bg-white/5 p-5 text-left backdrop-blur-md space-y-3">
-          <p className="text-sm sm:text-base leading-relaxed text-white/95 font-serif italic">
+        {/* RECUADRO / VENTANA CENTRAL PARA LA FOTO DEL REGALO */}
+        <div className="relative mx-auto w-full max-w-[290px] aspect-[4/3] overflow-hidden rounded-2xl border border-pink-400/35 bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.25)] backdrop-blur-md flex items-center justify-center">
+          {config.imageSrc && !imageError ? (
+            <img
+              src={config.imageSrc}
+              alt="Foto del Regalo"
+              onError={() => setImageError(true)}
+              className="h-full w-full object-cover rounded-2xl transition-transform duration-500 hover:scale-105"
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center gap-2.5 p-4 text-center text-pink-200/80">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-pink-500/30 to-amber-400/20 border border-pink-400/30 text-2xl shadow-inner">
+                👜
+              </div>
+              <p className="text-xs font-serif italic text-white/95">
+                Tu nuevo bolso te espera
+              </p>
+              <p className="text-[10px] text-pink-300/60 font-mono">
+                [Espacio listo para la foto]
+              </p>
+            </div>
+          )}
+        </div>
+
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 text-left backdrop-blur-md space-y-2.5">
+          <p className="text-xs sm:text-sm leading-relaxed text-white/95 font-serif italic">
             “Has descifrado a los 3 cómplices y has abierto las 3 cerraduras secretas.”
           </p>
           <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
