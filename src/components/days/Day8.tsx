@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Lock,
   Unlock,
-  Key,
   CheckCircle2,
   AlertCircle,
   Copy,
@@ -13,6 +12,7 @@ import {
   Sparkles,
   ShoppingBag,
   Heart,
+  HelpCircle,
   MessageCircle,
 } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
@@ -77,8 +77,9 @@ async function sha256Hex(text: string): Promise<string> {
     .join("");
 }
 
+// Frase comprometida y divertida de agente secreto SIN revelar el bolso
 const EMBARRASSING_PHRASE =
-  "Hola, soy la reina de los bolsos extraviados y solicito formalmente mi clave secreta de acceso 💅🦩";
+  "Operación Secreta: Hola, soy un flamenco encubierto buscando su corona de plumas y solicito formalmente mi clave de acceso 🦩👑";
 
 /**
  * Día 8: El Candado de los 3 Cómplices (Madre, Hermana, Novio).
@@ -153,7 +154,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
   const isFullyUnlocked = isUnlocked || unlockedCount === 3;
 
   // =========================================================================
-  // PANTALLA DE RECOMPENSA: EL BOLSO DESBLOQUEADO
+  // PANTALLA DE RECOMPENSA: EL REGALO DESBLOQUEADO
   // =========================================================================
   if (isFullyUnlocked) {
     return (
@@ -244,22 +245,22 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         </div>
       </div>
 
-      {/* ADVERTENCIA Y FRASE EMBARAZOSA */}
+      {/* ADVERTENCIA Y FRASE COMPROMETIDA */}
       <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-5 text-left backdrop-blur-md space-y-3">
         <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs uppercase tracking-wider">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>Instrucciones de la Misión</span>
         </div>
         <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-          Para conseguir las 3 claves necesitas escribir por WhatsApp a <strong>3 personas concretas</strong>. No te diremos quiénes son: ¡debes arriesgarte y enviarles exactamente este mensaje!
+          Para abrir cada cerradura, lee atentamente el acertijo de cada cómplice. Si crees saber quién es esa persona, <strong>arriésgate a enviarle exactamente esta frase por WhatsApp</strong> para que te haga su pregunta secreta:
         </p>
         <p className="text-[11px] text-amber-200/80 italic">
-          (Cuidado: si te equivocas de persona, habrás hecho el ridículo más absoluto enviando esta frase sin sentido 💅🦩).
+          (Cuidado: si te equivocas de persona, habrás hecho el ridículo más absoluto enviándole este mensaje sin sentido 🦩👑).
         </p>
 
         {/* Caja para copiar la frase clave */}
         <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/20 bg-black/40 p-3.5 text-xs text-amber-200">
-          <p className="font-mono italic select-all leading-relaxed">
+          <p className="font-mono italic select-all leading-relaxed text-[11px] sm:text-xs">
             “{EMBARRASSING_PHRASE}”
           </p>
           <button
@@ -282,7 +283,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         </div>
       </div>
 
-      {/* LAS 3 CERRADURAS (ORDEN INVERTIDO: 1. MADRE, 2. HERMANA, 3. NOVIO) */}
+      {/* LAS 3 CERRADURAS CON SUS ACERTIJOS (ORDEN INVERTIDO: 1. MADRE, 2. HERMANA, 3. NOVIO) */}
       <div className="space-y-4">
         {/* ================================================================= */}
         {/* 1ª CERRADURA: LA MADRE (SUEGRA) */}
@@ -300,7 +301,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 1
               </span>
               <h4 className="font-serif font-bold text-sm sm:text-base text-white">
-                1ª Cerradura · Primer Cómplice
+                1ª Cerradura · El Primer Cómplice
               </h4>
             </div>
             {unlocked1 ? (
@@ -316,41 +317,50 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
             )}
           </div>
 
-          <p className="text-xs text-white/75 leading-relaxed mb-3">
-            {unlocked1
-              ? "¡Clave correcta! Has superado la pregunta de este cómplice."
-              : "¿Te has atrevido a escribirle a la primera persona y te ha hecho su pregunta secreta? Escribe su respuesta aquí:"}
-          </p>
-
-          {!unlocked1 && (
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input1}
-                  onChange={(e) => {
-                    setInput1(e.target.value);
-                    setError1(false);
-                  }}
-                  onKeyDown={(e) => e.key === "Enter" && handleVerify1()}
-                  placeholder="Introduce la respuesta..."
-                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-pink-400 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleVerify1}
-                  className="shrink-0 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
-                >
-                  Probar
-                </button>
+          {!unlocked1 ? (
+            <div className="space-y-3">
+              {/* Acertijo para deducir quién es */}
+              <div className="rounded-2xl border border-pink-500/20 bg-pink-500/10 p-3.5 text-xs text-pink-100/90 leading-relaxed font-serif italic">
+                “Cocina con amor insuperable, crió al chico de tus ojos y hoy te cuida y te quiere como a una hija más. En esta familia su palabra es ley... ¿Quién tiene tu primera clave?”
               </div>
-              {error1 && (
-                <p className="text-[11px] text-rose-400 flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3" />
-                  <span>Respuesta incorrecta. Revisa bien lo que te ha preguntado.</span>
-                </p>
-              )}
+
+              <p className="text-[11px] text-white/70 leading-relaxed">
+                Si crees saber quién es, mándale la frase por WhatsApp. Te responderá con una pregunta secreta cuya respuesta abre esta cerradura:
+              </p>
+
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input1}
+                    onChange={(e) => {
+                      setInput1(e.target.value);
+                      setError1(false);
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && handleVerify1()}
+                    placeholder="Introduce la respuesta a su pregunta..."
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-pink-400 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerify1}
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                  >
+                    Probar
+                  </button>
+                </div>
+                {error1 && (
+                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <span>Respuesta incorrecta. Revisa bien lo que te ha preguntado o si le has escrito a la persona correcta.</span>
+                  </p>
+                )}
+              </div>
             </div>
+          ) : (
+            <p className="text-xs text-emerald-300 font-medium">
+              ✨ ¡1ª Cerradura superada con éxito!
+            </p>
           )}
         </motion.div>
 
@@ -370,7 +380,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 2
               </span>
               <h4 className="font-serif font-bold text-sm sm:text-base text-white">
-                2ª Cerradura · Segundo Cómplice
+                2ª Cerradura · El Segundo Cómplice
               </h4>
             </div>
             {unlocked2 ? (
@@ -386,41 +396,50 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
             )}
           </div>
 
-          <p className="text-xs text-white/75 leading-relaxed mb-3">
-            {unlocked2
-              ? "¡Clave correcta! Segunda cerradura desbloqueada."
-              : "¿Le has enviado la frase al segundo cómplice y te ha respondido con su desafío? Escribe su respuesta aquí:"}
-          </p>
-
-          {!unlocked2 && (
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input2}
-                  onChange={(e) => {
-                    setInput2(e.target.value);
-                    setError2(false);
-                  }}
-                  onKeyDown={(e) => e.key === "Enter" && handleVerify2()}
-                  placeholder="Introduce la respuesta..."
-                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-purple-400 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleVerify2}
-                  className="shrink-0 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
-                >
-                  Probar
-                </button>
+          {!unlocked2 ? (
+            <div className="space-y-3">
+              {/* Acertijo para deducir quién es */}
+              <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-3.5 text-xs text-purple-100/90 leading-relaxed font-serif italic">
+                “No comparto tu sangre, pero comparto la infancia y los secretos del hombre que amas. Su madre es mi madre, su casa fue mi casa y hoy somos cómplices... ¿Quién soy?”
               </div>
-              {error2 && (
-                <p className="text-[11px] text-rose-400 flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3" />
-                  <span>Respuesta incorrecta. Pídele que te repita la pregunta.</span>
-                </p>
-              )}
+
+              <p className="text-[11px] text-white/70 leading-relaxed">
+                Si crees saber quién es, mándale la frase por WhatsApp y supera su pregunta secreta:
+              </p>
+
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input2}
+                    onChange={(e) => {
+                      setInput2(e.target.value);
+                      setError2(false);
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && handleVerify2()}
+                    placeholder="Introduce la respuesta a su pregunta..."
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-purple-400 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerify2}
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                  >
+                    Probar
+                  </button>
+                </div>
+                {error2 && (
+                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <span>Respuesta incorrecta. Pídele que te repita la pregunta o revisa la fecha/mes.</span>
+                  </p>
+                )}
+              </div>
             </div>
+          ) : (
+            <p className="text-xs text-emerald-300 font-medium">
+              ✨ ¡2ª Cerradura superada con éxito!
+            </p>
           )}
         </motion.div>
 
@@ -440,7 +459,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 3
               </span>
               <h4 className="font-serif font-bold text-sm sm:text-base text-white">
-                3ª Cerradura · Tercer Cómplice
+                3ª Cerradura · El Tercer Cómplice
               </h4>
             </div>
             {unlocked3 ? (
@@ -456,41 +475,50 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
             )}
           </div>
 
-          <p className="text-xs text-white/75 leading-relaxed mb-3">
-            {unlocked3
-              ? "¡Clave correcta! El candado está listo para abrirse por completo."
-              : "¿Le has enviado la frase al último cómplice y has adivinado su pregunta? Escribe su respuesta aquí:"}
-          </p>
-
-          {!unlocked3 && (
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={input3}
-                  onChange={(e) => {
-                    setInput3(e.target.value);
-                    setError3(false);
-                  }}
-                  onKeyDown={(e) => e.key === "Enter" && handleVerify3()}
-                  placeholder="Introduce la respuesta..."
-                  className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-amber-400 focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleVerify3}
-                  className="shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
-                >
-                  Probar
-                </button>
+          {!unlocked3 ? (
+            <div className="space-y-3">
+              {/* Acertijo para deducir quién es */}
+              <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3.5 text-xs text-amber-100/90 leading-relaxed font-serif italic">
+                “Comparto tu almohada, tus viajes y tus risas. Fui tu compañero antes de ser tu compañero de vida, y hoy soy quien más te ama en este universo... ¿Quién tiene tu última llave?”
               </div>
-              {error3 && (
-                <p className="text-[11px] text-rose-400 flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3" />
-                  <span>Respuesta incorrecta. Piensa bien en sus gustos favoritos.</span>
-                </p>
-              )}
+
+              <p className="text-[11px] text-white/70 leading-relaxed">
+                Si crees saber quién es, mándale la frase por WhatsApp y acierta su película favorita:
+              </p>
+
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={input3}
+                    onChange={(e) => {
+                      setInput3(e.target.value);
+                      setError3(false);
+                    }}
+                    onKeyDown={(e) => e.key === "Enter" && handleVerify3()}
+                    placeholder="Introduce la respuesta a su pregunta..."
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-amber-400 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerify3}
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                  >
+                    Probar
+                  </button>
+                </div>
+                {error3 && (
+                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3" />
+                    <span>Respuesta incorrecta. Piensa bien en sus sagas y películas de cabecera.</span>
+                  </p>
+                )}
+              </div>
             </div>
+          ) : (
+            <p className="text-xs text-emerald-300 font-medium">
+              ✨ ¡3ª Cerradura superada con éxito!
+            </p>
           )}
         </motion.div>
       </div>
