@@ -50,6 +50,7 @@ async function procesarFotos() {
             }
             
             await sharp(inputBuffer)
+              .rotate()
               .resize(1080, null, { withoutEnlargement: true })
               .jpeg({ quality: 80 })
               .toFile(outPath);

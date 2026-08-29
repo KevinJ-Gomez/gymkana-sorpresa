@@ -87,13 +87,14 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       if (ch.connectorText) {
         list.push({ type: "intro", content: ch.connectorText, duration: 4000 });
       }
-      // Imágenes: distribuimos unos 10-15 segundos por capítulo en total.
-      const imgDuration = Math.min(2500, Math.max(300, 15000 / ch.imageCount));
+      // Todas las fotos pasan a una velocidad cómoda y constante (2.2s por foto)
+      // El usuario puede usar el joystick inferior para acelerar o ralentizar.
+      const imgDuration = 2200;
       for (let i = 1; i <= ch.imageCount; i++) {
         list.push({ type: "image", src: `${ch.folder}/${i}.jpg`, duration: imgDuration });
       }
       if (ch.closingText) {
-        list.push({ type: "closing", content: ch.closingText, duration: 4000 });
+        list.push({ type: "closing", content: ch.closingText, duration: 4500 });
       }
     });
     list.push({
