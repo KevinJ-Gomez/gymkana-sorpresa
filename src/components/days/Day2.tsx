@@ -71,32 +71,81 @@ const chapters: Chapter[] = [
 ];
 
 // ==========================================
-// EFECTO MÁQUINA DE ESCRIBIR (TYPEWRITER)
+// EFECTO TEXTO FLOTANTE PROGRESIVO (STREAMING)
 // ==========================================
-function TypewriterText({ text, isPaused }: { text: string; isPaused?: boolean }) {
-  const [displayedLength, setDisplayedLength] = useState(0);
+function FloatingStreamingText({
+  text,
+  isPaused,
+  duration,
+}: {
+  text: string;
+  isPaused?: boolean;
+  duration: number;
+}) {
+  const words = useMemo(() => text.split(/\s+/), [text]);
+  const [activeWordIndex, setActiveWordIndex] = useState(0);
+
+  // Intervalo por palabra: ritmo agradable y pausado (~340ms por palabra)
+  const msPerWord = useMemo(() => {
+    const availableMs = Math.max(3000, duration - 2500);
+    return Math.max(300, availableMs / (words.length + 2));
+  }, [duration, words.length]);
 
   useEffect(() => {
-    setDisplayedLength(0);
+    setActiveWordIndex(0);
     let current = 0;
     const interval = setInterval(() => {
       if (isPaused) return;
       current += 1;
-      setDisplayedLength(current);
-      if (current >= text.length) {
+      setActiveWordIndex(current);
+      if (current >= words.length + 5) {
         clearInterval(interval);
       }
-    }, 35);
+    }, msPerWord);
     return () => clearInterval(interval);
-  }, [text, isPaused]);
+  }, [words, isPaused, msPerWord]);
+
+  // Tamaño de la ventana de palabras visibles
+  const WINDOW_SIZE = 7;
+  const tailCutoff =
+    activeWordIndex < words.length
+      ? activeWordIndex - WINDOW_SIZE
+      : Math.max(0, words.length - WINDOW_SIZE - 2);
 
   return (
-    <span>
-      {text.slice(0, displayedLength)}
-      {displayedLength < text.length && (
-        <span className="ml-1 inline-block h-[1em] w-[2px] animate-pulse bg-pink-400 align-middle" />
-      )}
-    </span>
+    <div className="flex max-w-2xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5 px-6 py-8 text-center select-none">
+      {words.map((word, i) => {
+        const isUpcoming = i > activeWordIndex;
+        const isPast = i <= tailCutoff;
+
+        if (isUpcoming || isPast) {
+          return null;
+        }
+
+        const isLatestWord = i === activeWordIndex;
+
+        return (
+          <motion.span
+            key={`${word}-${i}`}
+            initial={{ opacity: 0, y: 12, scale: 0.92 }}
+            animate={{
+              opacity: isLatestWord ? 1 : 0.85,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{ opacity: 0, y: -10, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className={`font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed tracking-wide ${
+              isLatestWord
+                ? "text-pink-300 font-semibold drop-shadow-[0_0_15px_rgba(244,114,182,0.6)]"
+                : "text-white"
+            } drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]`}
+          >
+            {word}
+          </motion.span>
+        );
+      })}
+    </div>
   );
 }
 
@@ -131,23 +180,25 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
   const slides = useMemo<Slide[]>(() => {
     const list: Slide[] = [];
     chapters.forEach((ch) => {
-      // Tarjeta de texto inicial del capítulo con tiempo suficiente para escribirse y leerse
+      // Tarjeta de texto inicial del capítulo: duración calibrada para leerse de forma fluida
       if (ch.connectorText) {
-        const textDuration = Math.max(5500, ch.connectorText.length * 45 + 2500);
+        const wordCount = ch.connectorText.split(/\s+/).length;
+        const textDuration = Math.max(6500, wordCount * 360 + 3000);
         list.push({ type: "intro", content: ch.connectorText, duration: textDuration });
       }
 
       // Velocidad según la cantidad de fotos:
-      // Si hay más de 15 fotos en la sección -> 3.0 segundos
+      // Si hay más de 15 fotos en la sección -> 1.8 segundos
       // En secciones con 15 o menos fotos -> 2.2 segundos
-      const imgDuration = ch.imageCount > 15 ? 3000 : 2200;
+      const imgDuration = ch.imageCount > 15 ? 1800 : 2200;
 
       for (let i = 1; i <= ch.imageCount; i++) {
         list.push({ type: "image", src: `${ch.folder}/${i}.jpg`, duration: imgDuration });
       }
 
       if (ch.closingText) {
-        const closeDuration = Math.max(5500, ch.closingText.length * 45 + 2500);
+        const wordCount = ch.closingText.split(/\s+/).length;
+        const closeDuration = Math.max(6500, wordCount * 360 + 3000);
         list.push({ type: "closing", content: ch.closingText, duration: closeDuration });
       }
     });
@@ -155,7 +206,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     list.push({
       type: "end",
       content: "Pregúntame por una pequeña sorpresa... (tienes tu premio físico esperándote)",
-      duration: 7000,
+      duration: 7500,
     });
     return list;
   }, []);
@@ -167,8 +218,19 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
   // Controlador de velocidad con Joystick
   const joystickX = useMotionValue(0);
-  // Mapeamos: -80px -> cámara lenta (0.15x), 0 -> normal (1x), 80px -> muy rápido (8x)
-  const speedMultiplier = useTransform(joystickX, [-80, 0, 80], [0.15, 1, 8]);
+  // Mapeamos: -70px -> cámara lenta (0.2x), 0 -> normal (1x), 70px -> muy rápido (6x)
+  const speedMultiplier = useTransform(joystickX, [-70, 0, 70], [0.2, 1, 6]);
+  const [speedLabel, setSpeedLabel] = useState("1.0x");
+
+  useEffect(() => {
+    return speedMultiplier.on("change", (v) => {
+      if (Math.abs(v - 1) < 0.08) {
+        setSpeedLabel("1.0x");
+      } else {
+        setSpeedLabel(`${v.toFixed(1)}x`);
+      }
+    });
+  }, [speedMultiplier]);
 
   // Progreso visual (barra superior)
   const [progressPercent, setProgressPercent] = useState(0);
@@ -204,8 +266,8 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
   }, [index, activeSlide.duration, slides.length, onFinish, speedMultiplier, isPaused]);
 
   const handleDragEnd = () => {
-    // Al soltar el joystick, vuelve al centro
-    animate(joystickX, 0, { type: "spring", stiffness: 300, damping: 20 });
+    // Al soltar el joystick, vuelve magnéticamente al centro
+    animate(joystickX, 0, { type: "spring", stiffness: 350, damping: 25 });
   };
 
   const goToPrev = () => {
@@ -318,17 +380,22 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
                 }}
               />
             ) : (
-              <div className="max-w-xl rounded-2xl border border-white/20 bg-white/10 p-10 text-center shadow-2xl backdrop-blur-xl">
-                <p className="font-serif text-xl sm:text-2xl leading-relaxed text-white min-h-[4rem]">
-                  <TypewriterText text={activeSlide.content} isPaused={isPaused} />
-                </p>
+              <div className="flex flex-col items-center justify-center text-center">
+                <FloatingStreamingText
+                  text={activeSlide.content}
+                  isPaused={isPaused}
+                  duration={activeSlide.duration}
+                />
                 {activeSlide.type === "end" && (
-                  <button
+                  <motion.button
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 }}
                     onClick={onFinish}
-                    className="mt-8 rounded-full bg-pink-500 px-6 py-3 font-medium text-white transition hover:bg-pink-600 hover:scale-105 active:scale-95"
+                    className="mt-6 rounded-full bg-pink-500 px-7 py-3 font-medium text-white shadow-2xl backdrop-blur-md transition hover:bg-pink-600 hover:scale-105 active:scale-95"
                   >
                     Ir a la Galería
-                  </button>
+                  </motion.button>
                 )}
               </div>
             )}
@@ -337,10 +404,10 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       </div>
 
       {/* Controles Inferiores: Pausa/Play + Joystick de Velocidad + Contador */}
-      <div className="absolute bottom-6 flex flex-col items-center gap-3 z-40">
+      <div className="absolute bottom-6 flex flex-col items-center gap-2.5 z-40">
         {/* Indicador de gesto en pausa */}
         {isPaused && (
-          <p className="text-xs text-pink-200/80 tracking-wide font-light animate-pulse">
+          <p className="text-xs text-pink-200/90 tracking-wide font-light animate-pulse drop-shadow">
             Arrastra ‹ › para moverte entre recuerdos
           </p>
         )}
@@ -361,25 +428,25 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
           {/* Joystick Controlador de Velocidad */}
           <div className="flex flex-col items-center gap-1">
-            <div className="flex w-52 sm:w-60 items-center justify-between px-2 text-[10px] text-white/50">
+            <div className="flex w-52 sm:w-60 items-center justify-between px-2 text-[10px] text-white/60">
               <span>🐢 Lento</span>
-              <span className="font-mono text-white/70">
-                {index + 1} / {slides.length}
+              <span className="font-mono text-pink-300 font-medium">
+                {speedLabel} ({index + 1}/{slides.length})
               </span>
               <span>Rápido 🐇</span>
             </div>
-            <div className="relative flex h-12 w-52 sm:w-60 items-center rounded-full bg-white/10 backdrop-blur-md shadow-inner border border-white/10">
-              <div className="absolute left-1/2 h-4 w-1 -translate-x-1/2 rounded bg-white/20" />
+            <div className="relative flex h-11 w-52 sm:w-60 items-center rounded-full bg-white/10 backdrop-blur-md shadow-inner border border-white/10 touch-none">
+              <div className="absolute left-1/2 h-3.5 w-1 -translate-x-1/2 rounded bg-white/25" />
               <motion.div
                 drag="x"
-                dragConstraints={{ left: -75, right: 75 }}
+                dragConstraints={{ left: -70, right: 70 }}
                 dragElastic={0}
                 dragMomentum={false}
                 onDragEnd={handleDragEnd}
                 style={{ x: joystickX }}
-                className="absolute left-1/2 ml-[calc(-1.5rem/2)] flex h-6 w-6 cursor-grab items-center justify-center rounded-full bg-white shadow-lg active:cursor-grabbing hover:scale-110 transition-transform"
+                className="absolute left-1/2 ml-[calc(-1.5rem/2)] flex h-6 w-6 cursor-grab items-center justify-center rounded-full bg-white shadow-lg active:cursor-grabbing touch-none select-none"
               >
-                <div className="h-3.5 w-3.5 rounded-full bg-pink-500" />
+                <div className="h-3 w-3 rounded-full bg-pink-500 pointer-events-none" />
               </motion.div>
             </div>
           </div>
