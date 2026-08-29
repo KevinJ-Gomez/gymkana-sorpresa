@@ -201,15 +201,18 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 8,
     unlockDate: "2026-10-09",
-    title: "Mensaje cifrado",
-    icon: "🔐",
+    title: "El Candado de los 3 Cómplices",
+    icon: "👜",
+    lucideIcon: "gift",
+    giftLabel: "Bolso",
     requiresPassword: false,
-    riddle: "Este mensaje viene al revés. Léelo con calma... o dale al botón para descifrarlo.",
-    rewardTitle: "Un amigo quiere decirte algo",
-    rewardDescription: "Sube el volumen.",
-    cipherMessage:
-      "adaz se azilaner al ,adan se elisopmi al euq odacas etsE .zulf ed anell átse adiv ut euq y ,zecilef sáes euq oseed etnemlaeR",
-    videoSrc: "/videos/day8-animo.mp4",
+    riddle:
+      "Para abrir este gran candado de 3 cerraduras, tendrás que arriesgarte a enviar un mensaje muy comprometedor por WhatsApp a 3 personas... ¡y responder a sus preguntas secretas!",
+    rewardTitle: "¡Segundo Regalo Familiar Revelado!",
+    rewardDescription:
+      "Has superado la prueba de los 3 cómplices y has abierto las 3 cerraduras. La familia tiene un bolso muy especial esperándote. ¡Pregúntales la pista final de dónde está escondido!",
+    imageSrc: "/images/day8-bolso.jpg",
+    imageCaption: "Un bolso elegido con mucho amor por tu familia política y tu novio.",
   },
   {
     id: 9,
