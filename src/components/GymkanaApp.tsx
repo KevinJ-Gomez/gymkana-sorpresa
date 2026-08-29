@@ -31,7 +31,7 @@ const NebulaScene = dynamic(
  * seguidas el título (gesto oculto, sin botón visible para la sorprendida).
  */
 export function GymkanaApp() {
-  const { unlockedDays, markUnlocked } = useUnlockedDays();
+  const { unlockedDays, markUnlocked, relockDay, resetUnlockedDays } = useUnlockedDays();
   const { testingMode, setTestingMode } = useTestingMode(DEFAULT_TESTING_MODE);
   const { introSeen, setIntroSeen } = useIntroSeen();
 
@@ -185,14 +185,27 @@ export function GymkanaApp() {
                     <FlaskConical className="h-3.5 w-3.5" />
                     Modo Testing activo
                   </span>
-                  <button
-                    onClick={() => setIntroSeen(false)}
-                    className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                      bg-white/10 px-3 py-1.5 text-xs text-white/70 active:bg-white/20"
-                  >
-                    <RotateCcw className="h-3 w-3" />
-                    Ver la intro otra vez
-                  </button>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        resetUnlockedDays();
+                        showToast("¡Todos los retos se han bloqueado!");
+                      }}
+                      className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
+                        bg-rose-500/20 border border-rose-500/40 px-3 py-1.5 text-xs font-medium text-rose-200 active:bg-rose-500/30 shadow-md"
+                    >
+                      <Lock className="h-3 w-3" />
+                      Bloquear todos los retos
+                    </button>
+                    <button
+                      onClick={() => setIntroSeen(false)}
+                      className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
+                        bg-white/10 px-3 py-1.5 text-xs text-white/70 active:bg-white/20"
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      Ver intro otra vez
+                    </button>
+                  </div>
                 </div>
               )}
             </header>
@@ -303,7 +316,9 @@ export function GymkanaApp() {
             key={selectedDay.id}
             config={selectedDay}
             isUnlocked={unlockedDays.includes(selectedDay.id)}
+            testingMode={testingMode}
             onUnlock={() => markUnlocked(selectedDay.id)}
+            onRelock={() => relockDay(selectedDay.id)}
             onClose={handleClose}
           />
         )}

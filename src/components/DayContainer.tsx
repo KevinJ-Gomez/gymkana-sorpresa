@@ -22,12 +22,16 @@ import { DAY_ICONS } from "@/components/ui/dayIcons";
 export function DayContainer({
   config,
   isUnlocked,
+  testingMode,
   onUnlock,
+  onRelock,
   onClose,
 }: {
   config: DayConfig;
   isUnlocked: boolean;
+  testingMode?: boolean;
   onUnlock: () => void;
+  onRelock?: () => void;
   onClose: () => void;
 }) {
   const [passwordInput, setPasswordInput] = useState("");
@@ -107,15 +111,29 @@ export function DayContainer({
               🎁 {config.giftLabel}
             </span>
           )}
-          <motion.span
+          {isUnlocked && onRelock && (
+            <button
+              onClick={onRelock}
+              title="Volver a probar reto (Bloquear)"
+              className="rounded-full bg-amber-400/20 border border-amber-400/30 px-2.5 py-1 text-xs font-medium text-amber-200 active:scale-95 transition hover:bg-amber-400/30"
+            >
+              Probar reto
+            </button>
+          )}
+          <motion.button
+            type="button"
+            onClick={isUnlocked && onRelock ? onRelock : undefined}
+            title={isUnlocked ? "Toca para bloquear y volver a probar" : undefined}
             animate={{ scale: isUnlocked ? [1, 1.3, 1] : 1 }}
             transition={{ duration: 0.4 }}
-            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
-              isUnlocked ? "bg-amber-400/20 text-amber-300" : "bg-white/10 text-white/60"
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition ${
+              isUnlocked
+                ? "bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 cursor-pointer"
+                : "bg-white/10 text-white/60"
             }`}
           >
             {isUnlocked ? <LockOpen className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-          </motion.span>
+          </motion.button>
         </div>
       </header>
 

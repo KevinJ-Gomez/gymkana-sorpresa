@@ -60,7 +60,22 @@ export function useUnlockedDays() {
     emitChange();
   }, []);
 
-  return { unlockedDays, markUnlocked };
+  const relockDay = useCallback((dayId: number) => {
+    const current = readUnlockedDays();
+    unlockedDaysCache = current.filter((id) => id !== dayId);
+    unlockedDaysHydrated = true;
+    window.localStorage.setItem(UNLOCKED_DAYS_KEY, JSON.stringify(unlockedDaysCache));
+    emitChange();
+  }, []);
+
+  const resetUnlockedDays = useCallback(() => {
+    unlockedDaysCache = [];
+    unlockedDaysHydrated = true;
+    window.localStorage.removeItem(UNLOCKED_DAYS_KEY);
+    emitChange();
+  }, []);
+
+  return { unlockedDays, markUnlocked, relockDay, resetUnlockedDays };
 }
 
 function readTestingMode(defaultValue: boolean): boolean {
