@@ -123,6 +123,7 @@ export function DayStar({
           opacity={style.glowOpacity}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
+          alphaTest={0.005}
           toneMapped={false}
         />
       </sprite>
@@ -137,6 +138,7 @@ export function DayStar({
             opacity={style.flare}
             depthWrite={false}
             blending={THREE.AdditiveBlending}
+            alphaTest={0.005}
             toneMapped={false}
           />
         </sprite>
