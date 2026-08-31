@@ -4,6 +4,8 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Image as ImageIcon, FastForward, Play, Pause } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
+import { InteractivePolaroid } from "@/components/effects/InteractivePolaroid";
+import { hapticTap } from "@/lib/haptics";
 
 // ==========================================
 // ESTRUCTURA DE DATOS
@@ -416,26 +418,34 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
             {activeSlide.type === "image" ? (
-              <div className="relative flex h-full w-full items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={activeSlide.src}
-                  alt="Slideshow image"
-                  style={
-                    IMAGE_ROTATIONS[activeSlide.src]
-                      ? {
-                          transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
-                          maxHeight: "75vw",
-                          maxWidth: "75vh",
-                        }
-                      : undefined
-                  }
-                  className="max-h-full max-w-full rounded-md object-contain shadow-2xl pointer-events-none"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                  }}
+              activeSlide.src === "/gallery/6_felicidad/23.jpg" ? (
+                <InteractivePolaroid
+                  imageSrc={activeSlide.src}
+                  caption="La última foto de nuestra historia juntos..."
+                  secretNote="Busca detrás de la funda de mi móvil"
                 />
-              </div>
+              ) : (
+                <div className="relative flex h-full w-full items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={activeSlide.src}
+                    alt="Slideshow image"
+                    style={
+                      IMAGE_ROTATIONS[activeSlide.src]
+                        ? {
+                            transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
+                            maxHeight: "75vw",
+                            maxWidth: "75vh",
+                          }
+                        : undefined
+                    }
+                    className="max-h-full max-w-full rounded-md object-contain shadow-2xl pointer-events-none"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                </div>
+              )
             ) : (
               <div className="flex flex-col items-center justify-center text-center">
                 <SubtleTypewriterText
@@ -620,25 +630,33 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
                 </p>
               </div>
             ) : activeSlide.type === "image" ? (
-              <div className="relative flex h-full w-full items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={activeSlide.src}
-                  alt={`Imagen ${page}`}
-                  style={
-                    IMAGE_ROTATIONS[activeSlide.src]
-                      ? {
-                          transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
-                          maxHeight: "75vw",
-                          maxWidth: "75vh",
-                        }
-                      : undefined
-                  }
-                  className="max-h-full max-w-full rounded-md object-contain shadow-2xl"
-                  draggable={false}
-                  onError={(e) => { e.currentTarget.style.display = "none"; }}
+              activeSlide.src === "/gallery/6_felicidad/23.jpg" ? (
+                <InteractivePolaroid
+                  imageSrc={activeSlide.src}
+                  caption="La última foto de nuestra historia juntos..."
+                  secretNote="Busca detrás de la funda de mi móvil"
                 />
-              </div>
+              ) : (
+                <div className="relative flex h-full w-full items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={activeSlide.src}
+                    alt={`Imagen ${page}`}
+                    style={
+                      IMAGE_ROTATIONS[activeSlide.src]
+                        ? {
+                            transform: `rotate(${IMAGE_ROTATIONS[activeSlide.src]}deg)`,
+                            maxHeight: "75vw",
+                            maxWidth: "75vh",
+                          }
+                        : undefined
+                    }
+                    className="max-h-full max-w-full rounded-md object-contain shadow-2xl"
+                    draggable={false}
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                  />
+                </div>
+              )
             ) : null}
           </motion.div>
         </AnimatePresence>

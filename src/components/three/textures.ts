@@ -39,48 +39,32 @@ export function getStarTexture(): THREE.CanvasTexture {
     canvas.height = size;
     const ctx = canvas.getContext("2d")!;
     const c = size / 2;
-    const maxR = c - 6;
 
-    // Fondo 100% transparente y limpio
-    ctx.clearRect(0, 0, size, size);
-
-    // Halo redondo que se apaga a rgba(0,0,0,0) antes del borde
-    const glow = ctx.createRadialGradient(c, c, 0, c, c, maxR);
+    // Halo redondo
+    const glow = ctx.createRadialGradient(c, c, 0, c, c, c);
     glow.addColorStop(0, "rgba(255,255,255,1)");
-    glow.addColorStop(0.15, "rgba(255,255,255,0.85)");
-    glow.addColorStop(0.4, "rgba(255,255,255,0.25)");
-    glow.addColorStop(0.85, "rgba(0,0,0,0)");
-    glow.addColorStop(1, "rgba(0,0,0,0)");
+    glow.addColorStop(0.12, "rgba(255,255,255,0.85)");
+    glow.addColorStop(0.35, "rgba(255,255,255,0.18)");
+    glow.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(c, c, maxR, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.fillRect(0, 0, size, size);
 
-    // Púas de difracción suaves y contenidas
+    // Púas de difracción (las que hacen que una luz parezca una estrella y no un punto)
     ctx.globalCompositeOperation = "lighter";
     for (const angle of [0, Math.PI / 2]) {
       ctx.save();
       ctx.translate(c, c);
       ctx.rotate(angle);
-      const spikeLen = maxR - 4;
-      const spike = ctx.createLinearGradient(-spikeLen, 0, spikeLen, 0);
-      spike.addColorStop(0, "rgba(0,0,0,0)");
-      spike.addColorStop(0.2, "rgba(255,255,255,0.25)");
-      spike.addColorStop(0.5, "rgba(255,255,255,0.85)");
-      spike.addColorStop(0.8, "rgba(255,255,255,0.25)");
-      spike.addColorStop(1, "rgba(0,0,0,0)");
+      const spike = ctx.createLinearGradient(-c, 0, c, 0);
+      spike.addColorStop(0, "rgba(255,255,255,0)");
+      spike.addColorStop(0.5, "rgba(255,255,255,0.75)");
+      spike.addColorStop(1, "rgba(255,255,255,0)");
       ctx.fillStyle = spike;
-      ctx.fillRect(-spikeLen, -1, spikeLen * 2, 2);
+      ctx.fillRect(-c, -1.1, size, 2.2);
       ctx.restore();
     }
 
     const texture = new THREE.CanvasTexture(canvas);
-    texture.generateMipmaps = false;
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.premultiplyAlpha = true;
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
     texture.needsUpdate = true;
     return texture;
   });
@@ -96,34 +80,23 @@ export function getFlareTexture(): THREE.CanvasTexture {
     canvas.height = h;
     const ctx = canvas.getContext("2d")!;
 
-    ctx.clearRect(0, 0, w, h);
-
     const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, "rgba(0,0,0,0)");
-    grad.addColorStop(0.2, "rgba(255,255,255,0.2)");
+    grad.addColorStop(0, "rgba(255,255,255,0)");
+    grad.addColorStop(0.35, "rgba(255,255,255,0.35)");
     grad.addColorStop(0.5, "rgba(255,255,255,1)");
-    grad.addColorStop(0.8, "rgba(255,255,255,0.2)");
-    grad.addColorStop(1, "rgba(0,0,0,0)");
+    grad.addColorStop(0.65, "rgba(255,255,255,0.35)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = grad;
 
     // Perfil vertical fino: ancho en el centro, casi nada en los extremos.
     for (let y = 0; y < h; y++) {
       const d = Math.abs(y - h / 2) / (h / 2);
-      if (d >= 1) continue;
       ctx.globalAlpha = Math.pow(1 - d, 6);
-      ctx.fillRect(4, y, w - 8, 1);
+      ctx.fillRect(0, y, w, 1);
     }
     ctx.globalAlpha = 1;
 
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.generateMipmaps = false;
-    texture.minFilter = THREE.LinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-    texture.premultiplyAlpha = true;
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.needsUpdate = true;
-    return texture;
+    return new THREE.CanvasTexture(canvas);
   });
 }
 
