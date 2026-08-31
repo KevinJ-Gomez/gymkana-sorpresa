@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 
 /**
  * Intro cinemática. El texto se revela escalonado sobre la nebulosa vista de
@@ -42,8 +42,8 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
         transition={{ duration: 1, delay: 0.2 }}
         className="text-center"
       >
-        <Sparkles className="mx-auto h-7 w-7 text-fuchsia-300" />
-        <p className="mt-3 text-xs font-medium uppercase tracking-[0.3em] text-fuchsia-200/70">
+        <Heart className="mx-auto h-7 w-7 text-pink-300 fill-pink-300/40" />
+        <p className="mt-3 text-xs font-medium uppercase tracking-[0.3em] text-pink-200/70">
           2 — 12 de octubre
         </p>
       </motion.div>

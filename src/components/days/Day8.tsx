@@ -9,7 +9,6 @@ import {
   AlertCircle,
   Copy,
   Check,
-  Sparkles,
   Heart,
   HelpCircle,
   MessageCircle,
@@ -171,7 +170,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <div className="pointer-events-none absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-amber-400/20 blur-3xl" />
 
         <div className="inline-flex items-center gap-2 rounded-full border border-pink-400/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-          <Sparkles className="h-4 w-4" />
+          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
           <span>¡Candado 100% Abierto!</span>
           <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
         </div>

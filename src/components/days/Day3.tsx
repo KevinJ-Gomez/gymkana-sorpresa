@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Play, Pause, Utensils, Sparkles } from "lucide-react";
+import { Play, Pause, Utensils, Heart } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 /**
@@ -104,9 +104,9 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
       <div className="relative z-10 flex flex-col items-center space-y-5">
         {/* Badge del premio */}
         <div className="flex items-center justify-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-          <Utensils className="h-4 w-4" />
+          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
           <span>Te has ganado...</span>
-          <Sparkles className="h-4 w-4" />
+          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
         </div>
 
         {/* Título del premio */}

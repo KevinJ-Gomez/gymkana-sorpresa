@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Sparkles, CheckCircle2, RotateCcw, Image as ImageIcon } from "lucide-react";
+import { Heart, Users, CheckCircle2, RotateCcw, Image as ImageIcon } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 // 9 fragmentos que forman una frase completa y con sentido al ordenarse (cuadrícula 3x3)
@@ -109,9 +109,9 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <div className="relative z-10 flex flex-col items-center space-y-4">
           {/* Badge de complicidad familiar */}
           <div className="flex items-center justify-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-            <Users className="h-4 w-4" />
+            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
             <span>Misión Familiar Desbloqueada</span>
-            <Sparkles className="h-4 w-4" />
+            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
           </div>
 
           {/* Título de la recompensa */}

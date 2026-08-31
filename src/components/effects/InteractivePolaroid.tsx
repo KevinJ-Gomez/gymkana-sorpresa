@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { RotateCw, Heart, Sparkles } from "lucide-react";
+import { RotateCw, Heart } from "lucide-react";
 import { hapticTap } from "@/lib/haptics";
 
 interface InteractivePolaroidProps {
@@ -69,7 +69,7 @@ export function InteractivePolaroid({
           >
             {/* Cabecera trasera */}
             <div className="flex items-center gap-1 text-amber-900/60 text-xs font-semibold uppercase tracking-widest pt-2">
-              <Sparkles className="h-3.5 w-3.5 text-amber-600" />
+              <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" />
               Pista Secreta
             </div>
 

@@ -10,7 +10,6 @@ import {
   Map,
   Music,
   Puzzle,
-  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import type { DayIconName } from "@/types/gymkana";
@@ -21,7 +20,7 @@ export const DAY_ICONS: Record<DayIconName, LucideIcon> = {
   gift: Gift,
   map: Map,
   music: Music,
-  sparkles: Sparkles,
+  sparkles: Heart,
   heart: Heart,
   puzzle: Puzzle,
   flower: Flower2,

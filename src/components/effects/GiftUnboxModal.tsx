@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Sparkles, Smile } from "lucide-react";
+import { Heart, Smile } from "lucide-react";
 import { hapticSuccess } from "@/lib/haptics";
 
 interface GiftUnboxModalProps {
@@ -75,11 +75,7 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
                 transition={{ duration: 1.4, ease: "easeOut" }}
                 className="pointer-events-none absolute z-20 flex items-center justify-center"
               >
-                {p.id % 2 === 0 ? (
-                  <Heart className="h-5 w-5 fill-current" style={{ color: p.color }} />
-                ) : (
-                  <Sparkles className="h-4 w-4" style={{ color: p.color }} />
-                )}
+                <Heart className="h-5 w-5 fill-current" style={{ color: p.color }} />
               </motion.div>
             ))}
 

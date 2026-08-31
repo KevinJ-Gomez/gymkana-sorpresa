@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart, X, BookOpen, ChevronRight, Flower2, Check } from "lucide-react";
+import { Heart, X, BookOpen, ChevronRight, Flower2, Check } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 import { hapticTap, hapticSuccess } from "@/lib/haptics";
 
@@ -431,7 +431,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
           <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
             <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
             <span>Un Regalo Especial</span>
-            <Sparkles className="h-4 w-4" />
+            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
           </div>
 
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
@@ -475,7 +475,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-pink-300 px-1">
           <span>Rosas abiertas: {revealedIds.length} / 13</span>
           <span>
-            {isAllRevealed ? "¡Ramo completo! ✨" : `Siguiente rosa: #${nextTargetId}`}
+            {isAllRevealed ? "¡Ramo completo! ❤️" : `Siguiente rosa: #${nextTargetId}`}
           </span>
         </div>
         <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">

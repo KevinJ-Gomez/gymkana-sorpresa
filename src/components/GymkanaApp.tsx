@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { AnimatePresence, motion } from "framer-motion";
-import { FlaskConical, Lock, RotateCcw, Sparkles, ZoomIn, ZoomOut } from "lucide-react";
+import { FlaskConical, Lock, RotateCcw, Heart, ZoomIn, ZoomOut } from "lucide-react";
 import {
   DEFAULT_TESTING_MODE,
   GYMKANA_SUBTITLE,
@@ -14,6 +14,11 @@ import { formatUnlockDate, isDateReached } from "@/lib/dates";
 import { useIntroSeen, useTestingMode, useUnlockedDays } from "@/lib/storage";
 import { IntroSequence } from "@/components/IntroSequence";
 import { DayContainer } from "@/components/DayContainer";
+import { TouchParticleTrail } from "@/components/effects/TouchParticleTrail";
+import { GiftUnboxModal } from "@/components/effects/GiftUnboxModal";
+import { CountdownTimer } from "@/components/hud/CountdownTimer";
+import { hapticTap, hapticSuccess } from "@/lib/haptics";
+import type { DayConfig } from "@/types/gymkana";
 import type { SphereState } from "@/components/three/NebulaScene";
 
 // El 3D se carga solo en cliente: evita cualquier problema de SSR/hidratación
@@ -43,6 +48,8 @@ export function GymkanaApp() {
   const [mapView, setMapView] = useState(false);
   /** Salto a hiperespacio en curso (solo la primera vez, tras la intro). */
   const [warping, setWarping] = useState(false);
+  /** Día que se está desenvolviendo con la caja de regalo */
+  const [unboxingDay, setUnboxingDay] = useState<DayConfig | null>(null);
 
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -68,11 +75,15 @@ export function GymkanaApp() {
   );
 
   function showToast(message: string) {
-    setToast(message);
     if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(null), 2600);
+    setToast(message);
+    toastTimer.current = setTimeout(() => setToast(null), 2800);
   }
 
+  /**
+   * Gesto oculto: 5 toques en el título en menos de 2 s activan/desactivan el
+   * Modo Testing en el dispositivo de la sorprendida sin dejar botones visibles.
+   */
   function handleSecretTap() {
     tapCount.current += 1;
     if (tapTimer.current) clearTimeout(tapTimer.current);
@@ -83,11 +94,15 @@ export function GymkanaApp() {
     if (tapCount.current >= 5) {
       tapCount.current = 0;
       setTestingMode(!testingMode);
+      showToast(
+        testingMode ? "Modo Testing desactivado" : "¡Modo Testing activado!",
+      );
     }
   }
 
   const handleTapDay = useCallback(
     (id: number) => {
+      hapticTap();
       const day = gymkanaConfig.find((d) => d.id === id);
       if (!day) return;
       if (!testingMode && !isDateReached(day.unlockDate)) {
@@ -108,6 +123,7 @@ export function GymkanaApp() {
 
   /** Arranca el salto; la intro se retira y manda la escena 3D. */
   const handleStartJourney = useCallback(() => {
+    hapticTap();
     setWarping(true);
     setIntroSeen(true);
   }, [setIntroSeen]);
@@ -136,6 +152,9 @@ export function GymkanaApp() {
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
+      {/* Estela mágica táctil de chispas en pantalla */}
+      <TouchParticleTrail />
+
       <NebulaScene
         days={gymkanaConfig}
         sphereStates={sphereStates}
@@ -174,7 +193,12 @@ export function GymkanaApp() {
               >
                 {GYMKANA_TITLE}
               </button>
-              <p className="mt-1 text-sm text-white/60">{GYMKANA_SUBTITLE}</p>
+              <p className="mt-0.5 text-xs sm:text-sm text-white/60">{GYMKANA_SUBTITLE}</p>
+
+              {/* Reloj Cuenta Atrás Estelar para el 30 Cumpleaños */}
+              <div className="mt-2.5 flex justify-center pointer-events-auto">
+                <CountdownTimer />
+              </div>
 
               {testingMode && (
                 <div className="mt-3 flex flex-col items-center gap-2">
@@ -226,14 +250,10 @@ export function GymkanaApp() {
                 )}
               </AnimatePresence>
 
-              {/* Además de tocar la esfera en 3D, esta tarjeta abre el día
-                  centrado: un objetivo grande y fijo para el pulgar, mucho más
-                  fiable que acertar a una esfera pequeña en perspectiva. */}
+              {/* Tarjeta de acción rápida centrada para abrir el día */}
               <motion.button
                 key={centeredDay.id}
                 type="button"
-                // El pulgar suele empezar el swipe justo sobre esta tarjeta:
-                // si el dedo se ha movido, era un gesto de scroll, no un tap.
                 onPointerDown={(e) => {
                   hudPointerStartY.current = e.clientY;
                 }}
@@ -249,24 +269,24 @@ export function GymkanaApp() {
                 className="pointer-events-auto mx-auto block w-full max-w-sm rounded-2xl
                   border border-white/15 bg-white/[0.07] px-5 py-4 text-center backdrop-blur-md"
               >
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-fuchsia-200/70">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-pink-200/70">
                   Día {centeredDay.id} · {formatUnlockDate(centeredDay.unlockDate)}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-white">
                   {centeredState === "locked" ? "Estrella apagada" : centeredDay.title}
                 </p>
-                <p className="mt-1.5 flex items-center justify-center gap-1.5 text-xs text-white/55">
+                <p className="mt-1.5 flex items-center justify-center gap-1.5 text-xs text-white/70">
                   {centeredState === "locked" ? (
                     <>
                       <Lock className="h-3 w-3" /> Aún no disponible
                     </>
                   ) : centeredState === "solved" ? (
                     <>
-                      <Sparkles className="h-3 w-3 text-amber-300" /> Completado
+                      <Heart className="h-3 w-3 fill-amber-300 text-amber-300" /> Completado
                     </>
                   ) : (
                     <>
-                      <Sparkles className="h-3 w-3 text-fuchsia-300" /> Toca para abrir
+                      <Heart className="h-3 w-3 fill-pink-400 text-pink-400" /> Toca para abrir
                     </>
                   )}
                 </p>
@@ -282,8 +302,7 @@ export function GymkanaApp() {
         )}
       </AnimatePresence>
 
-      {/* Alejar/acercar. Además del pellizco, un botón: el gesto de dos dedos
-          no es evidente y sin botón el mapa quedaría escondido. */}
+      {/* Alejar/acercar botón */}
       <AnimatePresence>
         {hudVisible && (
           <motion.button
@@ -309,7 +328,7 @@ export function GymkanaApp() {
         {showIntro && <IntroSequence key="intro" onStart={handleStartJourney} />}
       </AnimatePresence>
 
-      {/* Tarjeta del día: solo cuando la cámara ha terminado el zoom */}
+      {/* Tarjeta del día */}
       <AnimatePresence>
         {cardOpen && selectedDay && (
           <DayContainer
@@ -317,12 +336,23 @@ export function GymkanaApp() {
             config={selectedDay}
             isUnlocked={unlockedDays.includes(selectedDay.id)}
             testingMode={testingMode}
-            onUnlock={() => markUnlocked(selectedDay.id)}
+            onUnlock={() => {
+              markUnlocked(selectedDay.id);
+              setUnboxingDay(selectedDay);
+              hapticSuccess();
+            }}
             onRelock={() => relockDay(selectedDay.id)}
             onClose={handleClose}
           />
         )}
       </AnimatePresence>
+
+      {/* Modal festivo de apertura de caja de regalo con confeti */}
+      <GiftUnboxModal
+        isOpen={!!unboxingDay}
+        giftTitle={unboxingDay?.giftLabel}
+        onOpened={() => setUnboxingDay(null)}
+      />
 
       {/* La app está diseñada solo para vertical. */}
       <div
@@ -340,3 +370,5 @@ export function GymkanaApp() {
     </main>
   );
 }
+
+export default GymkanaApp;

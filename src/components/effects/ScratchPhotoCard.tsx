@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import { hapticScratch, hapticSuccess } from "@/lib/haptics";
 
 interface ScratchPhotoCardProps {
@@ -170,7 +170,7 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
                 transition={{ duration: 2.2, repeat: Infinity }}
                 className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 text-xs font-medium text-white backdrop-blur-md"
               >
-                <Sparkles className="h-3.5 w-3.5 text-pink-300" />
+                <Heart className="h-3.5 w-3.5 fill-pink-400 text-pink-400" />
                 Rasca con el dedo
               </motion.div>
             )}

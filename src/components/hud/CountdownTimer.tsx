@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const TARGET_DATE = new Date("2026-10-12T00:00:00+02:00").getTime();
 

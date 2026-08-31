@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Sparkles, AlertCircle, RotateCcw, CheckCircle, Utensils, Heart, Swords, ShieldAlert, Gift } from "lucide-react";
+import { Trophy, AlertCircle, RotateCcw, CheckCircle, Utensils, Heart, Swords, ShieldAlert, Gift } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 /**
@@ -84,7 +84,7 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
           <div className="flex items-center justify-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-200 backdrop-blur-md">
             <Trophy className="h-4 w-4 text-amber-300" />
             <span>¡Apuesta Ganada Impecable! (5/5)</span>
-            <Sparkles className="h-4 w-4 text-amber-300" />
+            <Heart className="h-4 w-4 fill-amber-300 text-amber-300" />
           </div>
 
           {/* Título de la recompensa */}
