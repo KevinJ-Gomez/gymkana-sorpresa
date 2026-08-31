@@ -551,29 +551,24 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             />
           </g>
 
-          {/* 2. HOLLAGE FRONDOSO Y EUCALIPTO (Rodeando todo el contorno del ramo) */}
+          {/* 2. HOLLAJE FRONDOSO Y EUCALIPTO (Integrado armoniosamente detrás del ramo) */}
           {[
-            // Hojas exteriores izquierdas
-            { d: "M100,340 Q30,260 20,200 Q70,220 120,300", delay: 0.2 },
-            { d: "M120,280 Q40,170 30,120 Q90,140 140,240", delay: 0.3 },
-            { d: "M160,200 Q80,90 70,50 Q130,80 180,180", delay: 0.4 },
-            // Hojas exteriores derechas
-            { d: "M300,340 Q370,260 380,200 Q330,220 280,300", delay: 0.25 },
-            { d: "M280,280 Q360,170 370,120 Q310,140 260,240", delay: 0.35 },
-            { d: "M240,200 Q320,90 330,50 Q270,80 220,180", delay: 0.45 },
-            // Hojas de relleno interiores
-            { d: "M200,380 Q130,300 90,260 Q150,240 200,340", delay: 0.5 },
-            { d: "M200,380 Q270,300 310,260 Q250,240 200,340", delay: 0.55 },
-            { d: "M200,320 Q150,200 110,160 Q170,150 200,280", delay: 0.6 },
-            { d: "M200,320 Q250,200 290,160 Q230,150 200,280", delay: 0.65 },
+            // Hojas laterales suaves bien integradas detrás de las rosas
+            { d: "M130,320 Q60,260 50,220 Q85,210 140,290 Z", delay: 0.2 },
+            { d: "M140,270 Q70,190 70,150 Q110,160 155,230 Z", delay: 0.3 },
+            { d: "M270,320 Q340,260 350,220 Q315,210 260,290 Z", delay: 0.25 },
+            { d: "M260,270 Q330,190 330,150 Q290,160 245,230 Z", delay: 0.35 },
+            // Hojas intermedias
+            { d: "M200,360 Q130,280 110,240 Q160,230 200,320 Z", delay: 0.4 },
+            { d: "M200,360 Q270,280 290,240 Q240,230 200,320 Z", delay: 0.45 },
           ].map((leaf, idx) => (
             <motion.path
               key={`leaf-${idx}`}
               d={leaf.d}
               fill="url(#eucalyptusLeaf)"
-              opacity="0.8"
+              opacity="0.85"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.8 }}
+              animate={{ scale: 1, opacity: 0.85 }}
               transition={{ duration: 0.8, delay: leaf.delay, ease: "easeOut" }}
               style={{ transformOrigin: "200px 440px" }}
             />

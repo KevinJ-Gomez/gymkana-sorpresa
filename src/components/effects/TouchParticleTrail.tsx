@@ -98,3 +98,4 @@ export function TouchParticleTrail() {
 }
 
 export default TouchParticleTrail;
+
