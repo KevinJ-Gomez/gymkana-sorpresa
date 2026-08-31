@@ -13,8 +13,8 @@ interface InteractivePolaroidProps {
 
 export function InteractivePolaroid({
   imageSrc = "/gallery/6_felicidad/23.jpg",
-  caption = "Un momento que guardo en el corazón ✨",
-  secretNote = "Busca detrás de la funda de mi móvil 📱✨",
+  caption,
+  secretNote = "Busca detrás de la funda de mi móvil",
 }: InteractivePolaroidProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -24,10 +24,10 @@ export function InteractivePolaroid({
   }
 
   return (
-    <div className="flex flex-col items-center py-4">
+    <div className="flex flex-col items-center py-2">
       {/* Contenedor 3D Flip */}
       <div
-        className="relative h-[390px] w-[300px] cursor-pointer select-none [perspective:1000px]"
+        className="relative h-[380px] w-[290px] sm:h-[410px] sm:w-[310px] cursor-pointer select-none [perspective:1000px]"
         onClick={handleFlip}
       >
         <motion.div
@@ -35,7 +35,7 @@ export function InteractivePolaroid({
           transition={{ duration: 0.7, ease: "easeInOut" }}
           className="relative h-full w-full rounded-2xl [transform-style:preserve-3d] shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
         >
-          {/* ================= CARA FRONTAL (FOTO POLAROID) ================= */}
+          {/* ================= CARA FRONTAL (FOTO POLAROID LIMPIA) ================= */}
           <div className="absolute inset-0 flex flex-col rounded-2xl bg-[#fcfbf9] p-4 text-zinc-800 [backface-visibility:hidden] border border-zinc-200">
             {/* Foto cuadrada */}
             <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-zinc-200 shadow-inner">
@@ -48,12 +48,14 @@ export function InteractivePolaroid({
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
             </div>
 
-            {/* Pie de foto manuscrito */}
-            <div className="mt-auto flex flex-col items-center justify-center pb-2 text-center">
-              <p className="font-serif text-sm italic text-zinc-700 tracking-wide">
-                {caption}
-              </p>
-              <span className="mt-2 flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-medium text-zinc-500 hover:bg-zinc-200 transition">
+            {/* Parte inferior de la Polaroid con botón girar */}
+            <div className="mt-auto flex flex-col items-center justify-center pb-1 text-center">
+              {caption && (
+                <p className="font-serif text-sm italic text-zinc-700 tracking-wide mb-1">
+                  {caption}
+                </p>
+              )}
+              <span className="flex items-center gap-1.5 rounded-full bg-zinc-100 px-3 py-1 text-[11px] font-medium text-zinc-500 hover:bg-zinc-200 transition">
                 <RotateCw className="h-3 w-3" />
                 Toca para dar la vuelta
               </span>
@@ -81,7 +83,7 @@ export function InteractivePolaroid({
               </p>
             </div>
 
-            {/* Pie trasero con sello */}
+            {/* Pie trasero */}
             <div className="w-full border-t border-amber-900/15 pt-3 pb-1">
               <p className="text-xs font-medium text-zinc-600">
                 Con todo mi amor ❤️

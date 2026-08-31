@@ -14,11 +14,6 @@ import { formatUnlockDate, isDateReached } from "@/lib/dates";
 import { useIntroSeen, useTestingMode, useUnlockedDays } from "@/lib/storage";
 import { IntroSequence } from "@/components/IntroSequence";
 import { DayContainer } from "@/components/DayContainer";
-import { TouchParticleTrail } from "@/components/effects/TouchParticleTrail";
-import { GiftUnboxModal } from "@/components/effects/GiftUnboxModal";
-import { CountdownTimer } from "@/components/hud/CountdownTimer";
-import { hapticTap, hapticSuccess } from "@/lib/haptics";
-import type { DayConfig } from "@/types/gymkana";
 import type { SphereState } from "@/components/three/NebulaScene";
 
 // El 3D se carga solo en cliente: evita cualquier problema de SSR/hidratación
@@ -48,8 +43,6 @@ export function GymkanaApp() {
   const [mapView, setMapView] = useState(false);
   /** Salto a hiperespacio en curso (solo la primera vez, tras la intro). */
   const [warping, setWarping] = useState(false);
-  /** Día que se está desenvolviendo con la caja de regalo */
-  const [unboxingDay, setUnboxingDay] = useState<DayConfig | null>(null);
 
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -95,7 +88,6 @@ export function GymkanaApp() {
 
   const handleTapDay = useCallback(
     (id: number) => {
-      hapticTap();
       const day = gymkanaConfig.find((d) => d.id === id);
       if (!day) return;
       if (!testingMode && !isDateReached(day.unlockDate)) {
@@ -116,7 +108,6 @@ export function GymkanaApp() {
 
   /** Arranca el salto; la intro se retira y manda la escena 3D. */
   const handleStartJourney = useCallback(() => {
-    hapticTap();
     setWarping(true);
     setIntroSeen(true);
   }, [setIntroSeen]);
@@ -145,9 +136,6 @@ export function GymkanaApp() {
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
-      {/* Estela mágica táctil de chispas en pantalla */}
-      <TouchParticleTrail />
-
       <NebulaScene
         days={gymkanaConfig}
         sphereStates={sphereStates}
@@ -186,12 +174,7 @@ export function GymkanaApp() {
               >
                 {GYMKANA_TITLE}
               </button>
-              <p className="mt-0.5 text-xs sm:text-sm text-white/60">{GYMKANA_SUBTITLE}</p>
-
-              {/* Reloj Cuenta Atrás Estelar para el 30 Cumpleaños */}
-              <div className="mt-2 flex justify-center pointer-events-auto">
-                <CountdownTimer />
-              </div>
+              <p className="mt-1 text-sm text-white/60">{GYMKANA_SUBTITLE}</p>
 
               {testingMode && (
                 <div className="mt-3 flex flex-col items-center gap-2">
@@ -334,22 +317,12 @@ export function GymkanaApp() {
             config={selectedDay}
             isUnlocked={unlockedDays.includes(selectedDay.id)}
             testingMode={testingMode}
-            onUnlock={() => {
-              markUnlocked(selectedDay.id);
-              setUnboxingDay(selectedDay);
-            }}
+            onUnlock={() => markUnlocked(selectedDay.id)}
             onRelock={() => relockDay(selectedDay.id)}
             onClose={handleClose}
           />
         )}
       </AnimatePresence>
-
-      {/* Modal festivo de apertura de caja de regalo con confeti */}
-      <GiftUnboxModal
-        isOpen={!!unboxingDay}
-        giftTitle={unboxingDay?.giftLabel}
-        onOpened={() => setUnboxingDay(null)}
-      />
 
       {/* La app está diseñada solo para vertical. */}
       <div

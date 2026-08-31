@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "
 import { X, ChevronLeft, ChevronRight, Image as ImageIcon, FastForward, Play, Pause } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 import { InteractivePolaroid } from "@/components/effects/InteractivePolaroid";
+import { PostureoMosaic } from "./PostureoMosaic";
 import { hapticTap } from "@/lib/haptics";
 
 // ==========================================
@@ -133,7 +134,7 @@ function getChapterImageOrder(chapterId: string, imageCount: number): number[] {
 }
 
 // ==========================================
-// EFECTO MÁQUINA DE ESCRIBIR SUTIL
+// COMPONENTE TEXTO TIPO MÁQUINA DE ESCRIBIR
 // ==========================================
 function SubtleTypewriterText({
   text,
@@ -176,6 +177,7 @@ function SubtleTypewriterText({
 type Slide =
   | { type: "intro"; content: string; duration: number }
   | { type: "image"; src: string; duration: number; caption?: string }
+  | { type: "mosaic"; images: string[]; text: string; duration: number }
   | { type: "closing"; content: string; duration: number }
   | { type: "end"; content: string; duration: number };
 
@@ -207,23 +209,30 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
         list.push({ type: "intro", content: ch.connectorText, duration: textDuration });
       }
 
-      // Velocidad según la cantidad de fotos:
-      // Secciones con más de 15 fotos -> 1.05s (1.7x a 1.8s)
-      // Secciones con 15 o menos fotos -> 2.2s
-      const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
-
-      const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
-      imageOrder.forEach((imgNum) => {
-        const src = `${ch.folder}/${imgNum}.jpg`;
-        // Si es la última foto de felicidad (la número 23), desaparece más lento
-        const duration = ch.id === "felicidad" && imgNum === 23 ? 3800 : imgDuration;
+      // En el capítulo Postureo: en vez de 31 slides pesadas, se muestra el mosaico dinámico
+      if (ch.id === "postureos") {
+        const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+        const images = imageOrder.map((imgNum) => `${ch.folder}/${imgNum}.jpg`);
         list.push({
-          type: "image",
-          src,
-          duration,
-          caption: PHOTO_CAPTIONS[src],
+          type: "mosaic",
+          images,
+          text: "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
+          duration: 8000,
         });
-      });
+      } else {
+        const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
+        const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+        imageOrder.forEach((imgNum) => {
+          const src = `${ch.folder}/${imgNum}.jpg`;
+          const duration = ch.id === "felicidad" && imgNum === 23 ? 4200 : imgDuration;
+          list.push({
+            type: "image",
+            src,
+            duration,
+            caption: PHOTO_CAPTIONS[src],
+          });
+        });
+      }
 
       if (ch.closingText) {
         const closeDuration = Math.max(6000, ch.closingText.length * 40 + 2800);
@@ -417,11 +426,12 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             }}
             className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
-            {activeSlide.type === "image" ? (
+            {activeSlide.type === "mosaic" ? (
+              <PostureoMosaic images={activeSlide.images} text={activeSlide.text} />
+            ) : activeSlide.type === "image" ? (
               activeSlide.src === "/gallery/6_felicidad/23.jpg" ? (
                 <InteractivePolaroid
                   imageSrc={activeSlide.src}
-                  caption="La última foto de nuestra historia juntos..."
                   secretNote="Busca detrás de la funda de mi móvil"
                 />
               ) : (
@@ -551,15 +561,25 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
   }
 
   const imageOrder = getChapterImageOrder(chapter.id, chapter.imageCount);
-  imageOrder.forEach((imgNum) => {
-    const src = `${chapter.folder}/${imgNum}.jpg`;
+  if (chapter.id === "postureos") {
+    const images = imageOrder.map((imgNum) => `${chapter.folder}/${imgNum}.jpg`);
     slides.push({
-      type: "image",
-      src,
+      type: "mosaic",
+      images,
+      text: "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
       duration: 0,
-      caption: PHOTO_CAPTIONS[src],
     });
-  });
+  } else {
+    imageOrder.forEach((imgNum) => {
+      const src = `${chapter.folder}/${imgNum}.jpg`;
+      slides.push({
+        type: "image",
+        src,
+        duration: 0,
+        caption: PHOTO_CAPTIONS[src],
+      });
+    });
+  }
 
   if (chapter.closingText) {
     slides.push({ type: "closing", content: chapter.closingText, duration: 4000 });
@@ -629,11 +649,12 @@ function ChapterCarousel({ chapter, onClose }: { chapter: Chapter; onClose: () =
                   {activeSlide.content}
                 </p>
               </div>
+            ) : activeSlide.type === "mosaic" ? (
+              <PostureoMosaic images={activeSlide.images} text={activeSlide.text} />
             ) : activeSlide.type === "image" ? (
               activeSlide.src === "/gallery/6_felicidad/23.jpg" ? (
                 <InteractivePolaroid
                   imageSrc={activeSlide.src}
-                  caption="La última foto de nuestra historia juntos..."
                   secretNote="Busca detrás de la funda de mi móvil"
                 />
               ) : (

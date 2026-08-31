@@ -10,7 +10,7 @@ export function triggerHaptic(pattern: number | number[] = 15): void {
       navigator.vibrate(pattern);
     }
   } catch {
-    // Silencioso si el navegador o el dispositivo no lo permite
+    // Silencioso si el dispositivo o navegador no lo soporta
   }
 }
 
