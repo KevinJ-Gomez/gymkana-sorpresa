@@ -10,12 +10,14 @@ import {
   Copy,
   Check,
   Sparkles,
-  ShoppingBag,
   Heart,
   HelpCircle,
   MessageCircle,
+  Smile,
 } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
+import { ScratchPhotoCard } from "@/components/effects/ScratchPhotoCard";
+import { hapticSuccess, hapticError, hapticTap } from "@/lib/haptics";
 
 // =========================================================================
 // HASHES SHA-256 DE LAS 3 CERRADURAS
@@ -171,7 +173,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <div className="inline-flex items-center gap-2 rounded-full border border-pink-400/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
           <Sparkles className="h-4 w-4" />
           <span>¡Candado 100% Abierto!</span>
-          <ShoppingBag className="h-4 w-4" />
+          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
         </div>
 
         <div className="space-y-1.5">
@@ -183,36 +185,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           </p>
         </div>
 
-        {/* RECUADRO / VENTANA CENTRAL PARA LA FOTO DEL REGALO */}
-        <div className="relative mx-auto w-full max-w-[290px] aspect-[4/3] overflow-hidden rounded-2xl border border-pink-400/35 bg-black/50 shadow-[0_0_30px_rgba(236,72,153,0.25)] backdrop-blur-md flex items-center justify-center">
-          {config.imageSrc && !imageError ? (
-            <img
-              src={config.imageSrc}
-              alt="Foto del Regalo"
-              onError={() => setImageError(true)}
-              className="h-full w-full object-cover rounded-2xl transition-transform duration-500 hover:scale-105"
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center gap-2.5 p-4 text-center text-pink-200/80">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-pink-500/30 to-amber-400/20 border border-pink-400/30 text-2xl shadow-inner">
-                👜
-              </div>
-              <p className="text-xs font-serif italic text-white/95">
-                Tu nuevo bolso te espera
-              </p>
-              <p className="text-[10px] text-pink-300/60 font-mono">
-                [Espacio listo para la foto]
-              </p>
-            </div>
-          )}
-        </div>
+        {/* TARJETA INTERACTIVA DE RASCAR PARA DESVELAR EL BOLSO */}
+        <ScratchPhotoCard
+          imageSrc={config.imageSrc || "/images/day8-bolso.jpg"}
+          altText="Tu nuevo bolso te espera"
+        />
 
         <div className="rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 text-left backdrop-blur-md space-y-2.5">
           <p className="text-xs sm:text-sm leading-relaxed text-white/95 font-serif italic">
             “Has descifrado a los 3 cómplices y has abierto las 3 cerraduras secretas.”
           </p>
           <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
-            Tu suegra, tu cuñada y tu novio han elegido con todo su cariño un <strong>bolso espectacular</strong> para ti. ¡Pregúntales ahora mismo la pista definitiva de dónde lo tienen escondido! 🎁✨
+            Tu suegra, tu cuñada y tu novio han elegido con todo su cariño un <strong>bolso espectacular</strong> para ti. ¡Pregúntales ahora mismo la pista definitiva de dónde lo tienen guardado! ✨
           </p>
         </div>
 

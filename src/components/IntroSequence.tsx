@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Rocket, Sparkles } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 
 /**
  * Intro cinemática. El texto se revela escalonado sobre la nebulosa vista de
@@ -96,7 +96,7 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
             bg-gradient-to-r from-rose-400 via-fuchsia-500 to-violet-500
             px-6 py-5 text-lg font-semibold text-white"
         >
-          <Rocket className="h-5 w-5" />
+          <Heart className="h-5 w-5 fill-current" />
           Comenzar Viaje
         </motion.button>
 

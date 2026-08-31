@@ -364,24 +364,34 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
       {/* Flechas de navegación rápida en modo pausado */}
       {isPaused && (
-        <>
+        <div className="pointer-events-none fixed inset-y-0 inset-x-2 sm:inset-x-4 z-50 flex items-center justify-between">
           <button
-            onClick={goToPrev}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              hapticTap();
+              goToPrev();
+            }}
             disabled={index === 0}
-            className="absolute left-4 top-1/2 z-40 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 disabled:opacity-20 active:scale-95"
+            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/75 border border-white/25 text-white backdrop-blur-md transition hover:bg-black/90 hover:scale-110 disabled:opacity-20 active:scale-95 shadow-2xl"
             title="Foto anterior"
           >
-            <ChevronLeft className="h-6 w-6" />
+            <ChevronLeft className="h-7 w-7" />
           </button>
           <button
-            onClick={goToNext}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              hapticTap();
+              goToNext();
+            }}
             disabled={index === slides.length - 1}
-            className="absolute right-4 top-1/2 z-40 -translate-y-1/2 rounded-full bg-black/60 p-3 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 disabled:opacity-20 active:scale-95"
+            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/75 border border-white/25 text-white backdrop-blur-md transition hover:bg-black/90 hover:scale-110 disabled:opacity-20 active:scale-95 shadow-2xl"
             title="Foto siguiente"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ChevronRight className="h-7 w-7" />
           </button>
-        </>
+        </div>
       )}
 
       {/* Texto superior flotante, grande, sin recuadro y continuo (con suficiente margen bajo la barra superior) */}
@@ -508,12 +518,12 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
           {/* Joystick Controlador de Velocidad */}
           <div className="flex flex-col items-center gap-1">
-            <div className="flex w-52 sm:w-60 items-center justify-between px-2 text-[10px] text-white/60">
-              <span>🐢 Lento</span>
+            <div className="flex w-52 sm:w-60 items-center justify-between px-2 text-[11px] text-white/70 font-medium">
+              <span>Lento</span>
               <span className="font-mono text-pink-300 font-medium">
                 {speedLabel} ({index + 1}/{slides.length})
               </span>
-              <span>Rápido 🐇</span>
+              <span>Rápido</span>
             </div>
             <div className="relative flex h-11 w-52 sm:w-60 items-center rounded-full bg-white/10 backdrop-blur-md shadow-inner border border-white/10 touch-none">
               <div className="absolute left-1/2 h-3.5 w-1 -translate-x-1/2 rounded bg-white/25" />
