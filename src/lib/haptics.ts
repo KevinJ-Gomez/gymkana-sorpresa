@@ -33,3 +33,4 @@ export function hapticScratch(): void {
 export function hapticError(): void {
   triggerHaptic([60, 80, 60]);
 }
+

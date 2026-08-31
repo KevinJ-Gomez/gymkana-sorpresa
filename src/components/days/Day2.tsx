@@ -217,7 +217,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
           type: "mosaic",
           images,
           text: "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
-          duration: 8000,
+          duration: 21500,
         });
       } else {
         const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
@@ -427,7 +427,11 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
             {activeSlide.type === "mosaic" ? (
-              <PostureoMosaic images={activeSlide.images} text={activeSlide.text} />
+              <PostureoMosaic
+                images={activeSlide.images}
+                text={activeSlide.text}
+                isPaused={isPaused}
+              />
             ) : activeSlide.type === "image" ? (
               activeSlide.src === "/gallery/6_felicidad/23.jpg" ? (
                 <InteractivePolaroid

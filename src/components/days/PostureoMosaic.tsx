@@ -1,70 +1,117 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Sparkles, Camera } from "lucide-react";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface PostureoMosaicProps {
   images: string[];
   text: string;
+  isPaused?: boolean;
 }
 
 export function PostureoMosaic({
   images,
   text = "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
+  isPaused = false,
 }: PostureoMosaicProps) {
-  return (
-    <div className="flex flex-col items-center justify-center p-2 max-w-2xl mx-auto w-full select-none">
-      {/* Contenedor del Mosaico */}
-      <div className="relative w-full rounded-2xl border border-pink-500/25 bg-black/50 p-2.5 sm:p-3.5 shadow-2xl backdrop-blur-xl">
-        <div className="mb-2 flex items-center justify-between px-1 text-pink-300/80 text-[11px] font-mono">
-          <span className="flex items-center gap-1">
-            <Camera className="h-3.5 w-3.5 text-pink-400" />
-            Colección de Espejos ({images.length} fotos)
-          </span>
-          <Sparkles className="h-3.5 w-3.5 text-amber-300 animate-pulse" />
-        </div>
+  // Índice de la foto que se está destacando en primer plano
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const isFinished = currentIndex >= images.length;
 
-        {/* Grid rápido de 31 fotos (6 columnas en móvil, 8 en tablet/PC) */}
-        <div className="grid grid-cols-6 sm:grid-cols-8 gap-1 sm:gap-1.5 max-h-[58vh] overflow-y-auto p-1 rounded-xl">
-          {images.map((src, index) => (
+  useEffect(() => {
+    if (isPaused || isFinished) return;
+
+    // Velocidad 2.2x (aprox 500ms por foto para que sea dinámico y no se haga pesado)
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        if (prev < images.length) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, 520);
+
+    return () => clearInterval(interval);
+  }, [isPaused, isFinished, images.length]);
+
+  return (
+    <div className="relative flex h-full w-full max-w-4xl flex-col items-center justify-center p-3 select-none overflow-hidden">
+      {/* 1. MOSAICO DE FONDO: Las fotos que ya han aparecido se van colocando detrás */}
+      <div className="w-full max-w-2xl grid grid-cols-6 sm:grid-cols-8 gap-1.5 sm:gap-2 justify-items-center items-center">
+        {images.map((src, index) => {
+          const isPlaced = index < currentIndex;
+          const isCurrent = index === currentIndex && !isFinished;
+
+          return (
             <motion.div
               key={src}
-              initial={{ scale: 0, opacity: 0, rotate: (index % 5 - 2) * 4 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{
-                delay: index * 0.045, // Cascada ultra rápida: todas en 1.4s
-                duration: 0.22,
-                ease: "easeOut",
+              initial={false}
+              animate={{
+                opacity: isPlaced ? 0.95 : 0.08,
+                scale: isPlaced ? 1 : 0.85,
               }}
-              whileHover={{ scale: 1.15, zIndex: 10 }}
-              className="relative aspect-square overflow-hidden rounded-md border border-white/20 bg-zinc-900 shadow-md cursor-pointer"
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="relative aspect-square w-full overflow-hidden rounded-lg shadow-md"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={src}
-                alt={`Postureo ${index + 1}`}
-                className="h-full w-full object-cover object-center"
+                alt={`Outfit ${index + 1}`}
+                className="h-full w-full object-cover object-center transition-all duration-300"
                 loading="eager"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = "none";
                 }}
               />
+              {/* Resplandor cuando se acaba de colocar */}
+              {isPlaced && (
+                <div className="pointer-events-none absolute inset-0 border border-white/20 rounded-lg" />
+              )}
             </motion.div>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
-      {/* Texto inferior que aparece tras formarse el mosaico completo */}
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.6, duration: 0.8, ease: "easeOut" }}
-        className="mt-3.5 px-4 text-center"
-      >
-        <p className="font-serif text-base sm:text-lg italic leading-relaxed text-pink-200 drop-shadow-md">
-          “{text}”
-        </p>
-      </motion.div>
+      {/* 2. FOTO PRINCIPAL EN PRIMER PLANO (Aparece grande como las demás y luego pasa al fondo) */}
+      <AnimatePresence mode="wait">
+        {!isFinished && images[currentIndex] && (
+          <motion.div
+            key={images[currentIndex]}
+            initial={{ opacity: 0, scale: 0.6, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{
+              opacity: 0,
+              scale: 0.4,
+              transition: { duration: 0.25, ease: "easeIn" },
+            }}
+            transition={{ duration: 0.28, ease: "easeOut" }}
+            className="pointer-events-none absolute z-30 flex items-center justify-center p-4 max-h-[65vh] max-w-[85vw]"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[currentIndex]}
+              alt="Foto Postureo"
+              className="max-h-[55vh] max-w-[80vw] sm:max-w-md rounded-2xl object-contain shadow-[0_15px_40px_rgba(0,0,0,0.9)] border-2 border-pink-400/40 backdrop-blur-sm"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* 3. TEXTO INFERIOR: Aparece cuando el mosaico entero con las 31 fotos está colocado */}
+      <AnimatePresence>
+        {isFinished && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mt-5 px-6 text-center max-w-xl z-20"
+          >
+            <p className="font-serif text-lg sm:text-2xl font-medium italic leading-relaxed text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              “{text}”
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
