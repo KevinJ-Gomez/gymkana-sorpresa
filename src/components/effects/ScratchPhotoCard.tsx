@@ -196,3 +196,4 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
 }
 
 export default ScratchPhotoCard;
+

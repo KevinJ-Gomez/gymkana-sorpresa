@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Heart, X, BookOpen, ChevronRight, Flower2, Check } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
+import { hapticTap, hapticSuccess } from "@/lib/haptics";
 
 interface FlowerData {
   id: number;
@@ -15,185 +16,193 @@ interface FlowerData {
   colorMid: string;
   colorEnd: string;
   glowRgba: string;
-  emoji: string;
   text: string;
 }
 
-// 13 FLORES PRINCIPALES CON SUS TALLOS EXACTOS Y DEDICATORIAS
+// 13 ROSAS PRINCIPALES DEL RAMO CON SUS TALLOS Y DEDICATORIAS
 const FLOWERS: FlowerData[] = [
   {
     id: 1,
     cx: 200,
     cy: 70,
-    stemD: "M200,470 L200,70",
+    stemD: "M200,440 Q200,250 200,70",
     name: "Gran Rosa Eterna",
     colorStart: "#ff2a6d",
     colorMid: "#e11d48",
     colorEnd: "#881337",
     glowRgba: "rgba(255, 42, 109, 0.9)",
-    emoji: "💋",
     text: "Amo todos los besos que me das a diario y todas las veces que me pides que te dé más.",
   },
   {
     id: 2,
     cx: 125,
     cy: 95,
-    stemD: "M200,470 Q160,280 125,95",
-    name: "Peonía Rosa Blush",
+    stemD: "M200,440 Q160,260 125,95",
+    name: "Rosa Blush Romántica",
     colorStart: "#f472b6",
     colorMid: "#db2777",
     colorEnd: "#9d174d",
     glowRgba: "rgba(244, 114, 182, 0.9)",
-    emoji: "🌸",
     text: "Amo cuidarte, mimarte y consentirte cada vez que puedo.",
   },
   {
     id: 3,
     cx: 275,
     cy: 95,
-    stemD: "M200,470 Q240,280 275,95",
-    name: "Orquídea Púrpura",
+    stemD: "M200,440 Q240,260 275,95",
+    name: "Rosa Orquídea Púrpura",
     colorStart: "#c084fc",
     colorMid: "#9333ea",
     colorEnd: "#581c87",
     glowRgba: "rgba(192, 132, 252, 0.9)",
-    emoji: "🌺",
     text: "Amo que tú también me cuides y me mimes cuando puedes.",
   },
   {
     id: 4,
     cx: 65,
     cy: 145,
-    stemD: "M200,470 Q130,310 65,145",
-    name: "Flor de Loto Dorada",
+    stemD: "M200,440 Q130,290 65,145",
+    name: "Rosa Oro Cálido",
     colorStart: "#fde047",
     colorMid: "#f59e0b",
     colorEnd: "#b45309",
     glowRgba: "rgba(253, 224, 71, 0.9)",
-    emoji: "✨",
     text: "Amo la buena persona que eres y que me haces ser.",
   },
   {
     id: 5,
     cx: 335,
     cy: 145,
-    stemD: "M200,470 Q270,310 335,145",
-    name: "Flor de Cerezo Carmesí",
+    stemD: "M200,440 Q270,290 335,145",
+    name: "Rosa Silvestre Carmesí",
     colorStart: "#fb7185",
     colorMid: "#e11d48",
     colorEnd: "#9f1239",
     glowRgba: "rgba(251, 113, 133, 0.9)",
-    emoji: "🍳",
     text: "Amo cada comida que me preparas con esfuerzo y amor.",
   },
   {
     id: 6,
     cx: 140,
     cy: 175,
-    stemD: "M200,470 Q170,320 140,175",
-    name: "Girasol de Fuego",
+    stemD: "M200,440 Q170,300 140,175",
+    name: "Rosa Ámbar Aterciopelada",
     colorStart: "#fbbf24",
     colorMid: "#ea580c",
     colorEnd: "#9a3412",
     glowRgba: "rgba(251, 191, 36, 0.9)",
-    emoji: "👑",
     text: "Amo lo orgulloso que me haces sentir de tenerte y lo bien que me siento al hablar de ti.",
   },
   {
     id: 7,
     cx: 260,
     cy: 175,
-    stemD: "M200,470 Q230,320 260,175",
-    name: "Dalia de Amatista",
+    stemD: "M200,440 Q230,300 260,175",
+    name: "Rosa Amatista Profunda",
     colorStart: "#e879f9",
     colorMid: "#c026d3",
     colorEnd: "#701a75",
     glowRgba: "rgba(232, 121, 249, 0.9)",
-    emoji: "💬",
     text: "Amo lo bien que hablas de mí a otros.",
   },
   {
     id: 8,
     cx: 200,
-    cy: 230,
-    stemD: "M200,470 L200,230",
+    cy: 225,
+    stemD: "M200,440 Q200,320 200,225",
     name: "Rosa Rubí Central",
     colorStart: "#f43f5e",
     colorMid: "#be123c",
     colorEnd: "#4c0519",
     glowRgba: "rgba(244, 63, 94, 0.95)",
-    emoji: "🤝",
     text: "Amo la forma en que me respetas a mí y cuidas nuestra relación.",
   },
   {
     id: 9,
     cx: 85,
-    cy: 255,
-    stemD: "M200,470 Q145,360 85,255",
-    name: "Orquídea Fucsia",
+    cy: 250,
+    stemD: "M200,440 Q145,340 85,250",
+    name: "Rosa Fucsia Radiante",
     colorStart: "#f472b6",
     colorMid: "#be185d",
     colorEnd: "#831843",
     glowRgba: "rgba(244, 114, 182, 0.9)",
-    emoji: "🎁",
     text: "Amo cada vez que te acuerdas de mí y tienes detalles conmigo.",
   },
   {
     id: 10,
     cx: 315,
-    cy: 255,
-    stemD: "M200,470 Q255,360 315,255",
-    name: "Lirio de Cristal",
+    cy: 250,
+    stemD: "M200,440 Q255,340 315,250",
+    name: "Rosa Celeste Etérea",
     colorStart: "#38bdf8",
     colorMid: "#0284c7",
     colorEnd: "#075985",
     glowRgba: "rgba(56, 189, 248, 0.9)",
-    emoji: "💍",
     text: "Amo a mi futura mujer.",
   },
   {
     id: 11,
     cx: 135,
-    cy: 315,
-    stemD: "M200,470 Q170,395 135,315",
-    name: "Peonía Coral",
+    cy: 310,
+    stemD: "M200,440 Q170,370 135,310",
+    name: "Rosa Coral Iluminada",
     colorStart: "#fb923c",
     colorMid: "#e11d48",
     colorEnd: "#9f1239",
     glowRgba: "rgba(251, 146, 60, 0.9)",
-    emoji: "👨‍👩‍👧",
     text: "Amo la forma en la que cuidas a tu familia y sobre todo a tu hermano.",
   },
   {
     id: 12,
     cx: 265,
-    cy: 315,
-    stemD: "M200,470 Q230,395 265,315",
-    name: "Dalia de Fuego",
+    cy: 310,
+    stemD: "M200,440 Q230,370 265,310",
+    name: "Rosa de Fuego Intensa",
     colorStart: "#f87171",
     colorMid: "#dc2626",
     colorEnd: "#7f1d1d",
     glowRgba: "rgba(248, 113, 113, 0.9)",
-    emoji: "🔥",
     text: "Amo cada parte de tu cuerpo.",
   },
   {
     id: 13,
     cx: 200,
-    cy: 365,
-    stemD: "M200,470 L200,365",
-    name: "Capullo del Deseo",
+    cy: 355,
+    stemD: "M200,440 L200,355",
+    name: "Rosa Pasión Secreta",
     colorStart: "#fb7185",
     colorMid: "#f59e0b",
     colorEnd: "#ea580c",
     glowRgba: "rgba(251, 113, 133, 0.95)",
-    emoji: "🍑",
     text: "Amo darte cachetes en el culo y otras cosas... cuando te agachas.",
   },
 ];
 
+// FLORES DECORATIVAS DE RELLENO (Paniculata y jazmines)
+const FILLER_BLOOMS = [
+  { cx: 165, cy: 80, r: 6, color: "#fdf2f8" },
+  { cx: 235, cy: 80, r: 5.5, color: "#fef9c3" },
+  { cx: 90, cy: 110, r: 6, color: "#fce7f3" },
+  { cx: 310, cy: 110, r: 6, color: "#fdf4ff" },
+  { cx: 175, cy: 130, r: 6.5, color: "#fce7f3" },
+  { cx: 225, cy: 130, r: 6.5, color: "#ecfeff" },
+  { cx: 100, cy: 180, r: 6, color: "#fff1f2" },
+  { cx: 300, cy: 180, r: 6, color: "#fdf2f8" },
+  { cx: 160, cy: 230, r: 5.5, color: "#fef3c7" },
+  { cx: 240, cy: 230, r: 5.5, color: "#fce7f3" },
+  { cx: 110, cy: 280, r: 6, color: "#fdf4ff" },
+  { cx: 290, cy: 280, r: 6, color: "#fdf2f8" },
+  { cx: 165, cy: 330, r: 5, color: "#fef9c3" },
+  { cx: 235, cy: 330, r: 5, color: "#fff1f2" },
+  { cx: 50, cy: 180, r: 5.5, color: "#fce7f3" },
+  { cx: 350, cy: 180, r: 5.5, color: "#fdf4ff" },
+  { cx: 60, cy: 220, r: 5, color: "#fdf2f8" },
+  { cx: 340, cy: 220, r: 5, color: "#fff1f2" },
+];
+
 /**
- * Gráfico individual de cada flor en SVG con iluminación y animación de apertura
+ * Gráfico individual de cada Rosa principal botánica que florece y se abre
  */
 function FlowerGraphicNode({
   flower,
@@ -208,139 +217,156 @@ function FlowerGraphicNode({
   isLocked: boolean;
   onClick: () => void;
 }) {
-  const gradId = `fg-${flower.id}`;
-  const glowId = `fgl-${flower.id}`;
+  const gradId = `rose-grad-${flower.id}`;
+  const innerGradId = `rose-inner-${flower.id}`;
+  const glowId = `rose-glow-${flower.id}`;
 
   return (
     <g
       transform={`translate(${flower.cx}, ${flower.cy})`}
       className={`cursor-pointer select-none transition-all ${
-        isLocked ? "opacity-45 hover:opacity-75" : "opacity-100"
+        isLocked ? "opacity-60 hover:opacity-85" : "opacity-100"
       }`}
       onClick={onClick}
     >
       <defs>
-        <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
+        <radialGradient id={gradId} cx="40%" cy="40%" r="60%">
           <stop offset="0%" stopColor={flower.colorStart} />
           <stop offset="60%" stopColor={flower.colorMid} />
           <stop offset="100%" stopColor={flower.colorEnd} />
         </radialGradient>
+        <radialGradient id={innerGradId} cx="35%" cy="35%" r="65%">
+          <stop offset="0%" stopColor="#fff" stopOpacity="0.8" />
+          <stop offset="40%" stopColor={flower.colorStart} />
+          <stop offset="100%" stopColor={flower.colorMid} />
+        </radialGradient>
         <filter id={glowId} x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation={isTarget ? "8" : isBloomed ? "5" : "2"} result="blur" />
+          <feGaussianBlur stdDeviation={isTarget ? "7" : isBloomed ? "4" : "1.5"} result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
 
-      {/* Halo de Guía Activa para la flor a abrir */}
+      {/* Halo de Guía Activa para la rosa que toca abrir */}
       {isTarget && (
         <motion.circle
-          r="26"
+          r="28"
           fill="none"
           stroke="#fbbf24"
           strokeWidth="2.5"
           animate={{
-            r: [18, 30, 18],
-            opacity: [1, 0.2, 1],
+            r: [22, 32, 22],
+            opacity: [1, 0.25, 1],
             strokeWidth: [3, 1, 3],
           }}
           transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
         />
       )}
 
-      {/* Resplandor de color exterior */}
+      {/* Resplandor cálido de la flor */}
       <motion.circle
-        r={isBloomed ? 26 : isTarget ? 20 : 12}
+        r={isBloomed ? 28 : isTarget ? 22 : 14}
         fill={isTarget ? "#fbbf24" : flower.glowRgba}
-        opacity={isTarget ? 0.7 : isBloomed ? 0.5 : 0.2}
+        opacity={isTarget ? 0.6 : isBloomed ? 0.45 : 0.18}
         animate={{
-          r: isTarget ? [18, 24, 18] : isBloomed ? [24, 28, 24] : [11, 14, 11],
-          opacity: isTarget ? [0.6, 0.9, 0.6] : isBloomed ? [0.4, 0.7, 0.4] : [0.15, 0.3, 0.15],
+          r: isTarget ? [20, 26, 20] : isBloomed ? [26, 30, 26] : [13, 16, 13],
+          opacity: isTarget ? [0.5, 0.85, 0.5] : isBloomed ? [0.35, 0.6, 0.35] : [0.12, 0.25, 0.12],
         }}
         transition={{ duration: isTarget ? 1.2 : 2.2, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      {/* Capas de Pétalos Botánicos */}
+      {/* ================= ROSA EN CAPAS BOTÁNICAS ================= */}
       <motion.g
-        initial={{ scale: 0 }}
-        animate={{ scale: isBloomed ? 1.25 : isTarget ? 1.05 : 0.75 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        initial={{ scale: 0.75 }}
+        animate={{ scale: isBloomed ? 1.35 : isTarget ? 1.15 : 0.9 }}
+        transition={{ type: "spring", stiffness: 280, damping: 18 }}
         filter={`url(#${glowId})`}
       >
-        {/* Pétalos exteriores (8 pétalos) */}
-        {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+        {/* CAPA 1: Pétalos exteriores grandes y redondeados */}
+        {[0, 60, 120, 180, 240, 300].map((angle, i) => (
           <motion.path
-            key={i}
-            d="M0,0 C-10,-12 -12,-24 0,-28 C12,-24 10,-12 0,0 Z"
+            key={`outer-petal-${i}`}
+            d="M0,0 C-14,-16 -16,-28 0,-32 C16,-28 14,-16 0,0 Z"
             fill={`url(#${gradId})`}
-            opacity={isBloomed ? 0.95 : isTarget ? 0.85 : 0.6}
+            opacity={isBloomed ? 0.98 : 0.8}
             transform={`rotate(${angle})`}
-            stroke={isTarget ? "#fbbf24" : "#ffffff"}
-            strokeWidth={isBloomed ? "0.8" : isTarget ? "1.2" : "0.3"}
-            strokeOpacity={isTarget ? "0.9" : "0.6"}
+            stroke="#ffffff"
+            strokeWidth={isBloomed ? "0.8" : isTarget ? "1" : "0.3"}
+            strokeOpacity={isTarget ? "0.9" : "0.4"}
           />
         ))}
 
-        {/* Pétalos interiores cuando florece */}
+        {/* CAPA 2: Pétalos intermedios superpuestos (Rosa abierta) */}
+        {[30, 90, 150, 210, 270, 330].map((angle, i) => (
+          <motion.path
+            key={`mid-petal-${i}`}
+            d="M0,0 C-10,-12 -12,-22 0,-25 C12,-22 10,-12 0,0 Z"
+            fill={`url(#${innerGradId})`}
+            opacity={isBloomed ? 0.95 : 0.7}
+            transform={`rotate(${angle})`}
+          />
+        ))}
+
+        {/* CAPA 3: Pétalos interiores de capullo en espiral */}
         {isBloomed &&
-          [22.5, 112.5, 202.5, 292.5].map((angle, i) => (
+          [15, 75, 135, 195, 255, 315].map((angle, i) => (
             <motion.path
-              key={`inner-${i}`}
-              d="M0,0 C-7,-8 -8,-18 0,-21 C8,-18 7,-8 0,0 Z"
+              key={`inner-petal-${i}`}
+              d="M0,0 C-7,-8 -7,-16 0,-18 C7,-16 7,-8 0,0 Z"
               fill={flower.colorStart}
               transform={`rotate(${angle})`}
-              opacity={0.9}
+              opacity={0.92}
             />
           ))}
 
-        {/* Centro del capullo */}
-        <circle r={isBloomed ? 9 : isTarget ? 8 : 5} fill={isTarget ? "#fef08a" : "#ffffff"} opacity={0.95} />
-        <circle r={isBloomed ? 7 : isTarget ? 6 : 3.5} fill={isTarget ? "#ea580c" : flower.colorStart} />
+        {/* Centro de la Rosa: Pistilos dorados y corazón */}
+        <circle r={isBloomed ? 9 : isTarget ? 8 : 5.5} fill="#ffffff" opacity={0.9} />
+        <circle r={isBloomed ? 7 : isTarget ? 6 : 4} fill={isTarget ? "#fbbf24" : flower.colorStart} />
+        {isBloomed && <circle r="3.5" fill="#fef08a" />}
       </motion.g>
 
-      {/* Indicador Numérico o Emoji */}
+      {/* Indicador Numérico o Corazón */}
       {!isBloomed ? (
         <text
           y="3.5"
           textAnchor="middle"
-          fontSize={isTarget ? "10" : "8"}
+          fontSize={isTarget ? "11" : "9"}
           fontWeight="bold"
-          fill={isTarget ? "#ffffff" : "rgba(255,255,255,0.85)"}
+          fill="#ffffff"
           className="pointer-events-none drop-shadow"
         >
           {flower.id}
         </text>
       ) : (
-        <text
-          y="4"
-          textAnchor="middle"
-          fontSize="11"
-          className="pointer-events-none drop-shadow"
-        >
-          {flower.emoji}
-        </text>
+        <Heart
+          x="-5.5"
+          y="-5.5"
+          width="11"
+          height="11"
+          className="fill-white text-white drop-shadow pointer-events-none"
+        />
       )}
 
-      {/* Cartelito flotante indicador '¡Toca #X!' */}
+      {/* Cartelito flotante '¡Toca #X!' para la rosa objetivo */}
       {isTarget && (
         <motion.g
           animate={{ y: [-3, 3, -3] }}
           transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
         >
           <rect
-            x="-24"
-            y="-38"
-            width="48"
-            height="14"
-            rx="7"
+            x="-26"
+            y="-42"
+            width="52"
+            height="15"
+            rx="7.5"
             fill="rgba(0,0,0,0.85)"
             stroke="#fbbf24"
-            strokeWidth="1"
+            strokeWidth="1.2"
           />
           <text
             x="0"
-            y="-28"
+            y="-31"
             textAnchor="middle"
-            fontSize="8"
+            fontSize="8.5"
             fontWeight="bold"
             fill="#fde047"
             className="pointer-events-none"
@@ -354,7 +380,7 @@ function FlowerGraphicNode({
 }
 
 /**
- * Día 7: Ramo Ficticio Espectacular Creciendo con Tallos Ligeros y Visibles en Todas las Flores.
+ * Componente Principal del Día 7: Ramo Frondoso, Grande y Colorido.
  */
 export function Day7({ isUnlocked }: DayComponentProps) {
   const [hasStartedGrowth, setHasStartedGrowth] = useState(false);
@@ -368,13 +394,16 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
   const handleOpenFlower = (flower: FlowerData) => {
     if (revealedIds.includes(flower.id)) {
+      hapticTap();
       setActiveFlower(flower);
     } else if (flower.id === nextTargetId) {
+      hapticSuccess();
       setActiveFlower(flower);
       setRevealedIds((prev) => [...prev, flower.id]);
     } else {
       const target = FLOWERS.find((f) => f.id === nextTargetId);
       if (target) {
+        hapticSuccess();
         setActiveFlower(target);
         setRevealedIds((prev) => [...prev, target.id]);
       }
@@ -400,7 +429,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
         <div className="relative z-10 flex flex-col items-center space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-            <Flower2 className="h-4 w-4" />
+            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
             <span>Un Regalo Especial</span>
             <Sparkles className="h-4 w-4" />
           </div>
@@ -411,22 +440,25 @@ export function Day7({ isUnlocked }: DayComponentProps) {
 
           <div className="rounded-2xl border border-pink-500/20 bg-pink-500/10 p-5 text-left space-y-3">
             <p className="text-sm sm:text-base leading-relaxed text-white/95 font-serif italic">
-              “Hoy no hay un regalo físico... pero te he preparado un ramo con las cosas que más me gustan de ti:”
+              “Hoy no hay un regalo físico... pero te he preparado un ramo frondoso y lleno de vida con las cosas que más me gustan de ti:”
             </p>
             <p className="text-xs sm:text-sm text-pink-200/90 leading-relaxed">
-              Un <strong>ramo mágico creciente</strong> que irá floreciendo ante ti. Sigue la luz dorada y toca cada flor en orden (del 1 al 13) para descubrir qué me hace amarte cada día.
+              Un <strong>ramo de rosas botánicas</strong> que irá floreciendo ante tus ojos. Sigue la luz dorada y toca cada rosa en orden (del 1 al 13) para descubrir qué me hace amarte cada día.
             </p>
           </div>
 
           <motion.button
             type="button"
-            onClick={() => setHasStartedGrowth(true)}
+            onClick={() => {
+              hapticTap();
+              setHasStartedGrowth(true);
+            }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.96 }}
             className="w-full rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-400 px-6 py-4 font-semibold text-white shadow-2xl transition hover:brightness-110 flex items-center justify-center gap-2 text-base"
           >
             <span>Hacer florecer nuestro ramo</span>
-            <Sparkles className="h-5 w-5" />
+            <Heart className="h-5 w-5 fill-current" />
           </motion.button>
         </div>
       </motion.div>
@@ -434,16 +466,16 @@ export function Day7({ isUnlocked }: DayComponentProps) {
   }
 
   // ==========================================
-  // FASE 2: RAMO BOTÁNICO ESPECTACULAR
+  // FASE 2: RAMO FRONDOSO Y GRANDE
   // ==========================================
   return (
     <div className="relative flex flex-col items-center space-y-4 text-center select-none">
       {/* Barra de progreso superior */}
       <div className="w-full max-w-sm space-y-1.5">
         <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-pink-300 px-1">
-          <span>Flores abiertas: {revealedIds.length} / 13</span>
+          <span>Rosas abiertas: {revealedIds.length} / 13</span>
           <span>
-            {isAllRevealed ? "¡Ramo en máximo esplendor! ✨" : `Siguiente flor: #${nextTargetId}`}
+            {isAllRevealed ? "¡Ramo completo! ✨" : `Siguiente rosa: #${nextTargetId}`}
           </span>
         </div>
         <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
@@ -456,52 +488,28 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         </div>
       </div>
 
-      {/* LIENZO SVG: EL RAMO BOTÁNICO CRECIENDO */}
+      {/* LIENZO SVG: EL GRAN RAMO FRONDOSO */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative w-full max-w-[375px] aspect-[4/5] rounded-3xl border border-white/20 bg-gradient-to-b from-[#180624] via-[#100318] to-[#08020c] overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.35)]"
+        className="relative w-full max-w-[390px] aspect-[4/5] rounded-3xl border border-white/20 bg-gradient-to-b from-[#180624] via-[#100318] to-[#08020c] overflow-hidden shadow-[0_0_60px_rgba(236,72,153,0.35)]"
       >
-        {/* Nebulosa de luz de fondo */}
+        {/* Resplandor nebuloso de fondo */}
         <motion.div
           className="pointer-events-none absolute left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.15, 1],
-            opacity: [0.4, 0.7, 0.4],
+            opacity: [0.4, 0.75, 0.4],
           }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            width: `${210 + revealedIds.length * 15}px`,
-            height: `${210 + revealedIds.length * 15}px`,
+            width: `${230 + revealedIds.length * 12}px`,
+            height: `${230 + revealedIds.length * 12}px`,
             background:
-              "radial-gradient(circle, rgba(244,114,182,0.4) 0%, rgba(217,70,239,0.25) 40%, rgba(251,191,36,0.2) 70%, transparent 80%)",
+              "radial-gradient(circle, rgba(244,114,182,0.45) 0%, rgba(217,70,239,0.3) 40%, rgba(251,191,36,0.2) 70%, transparent 80%)",
           }}
         />
-
-        {/* Estrellas blancas y destellos flotantes */}
-        {[
-          { cx: 40, cy: 50, r: 1.5 },
-          { cx: 360, cy: 70, r: 2 },
-          { cx: 80, cy: 280, r: 1.5 },
-          { cx: 320, cy: 300, r: 2 },
-          { cx: 200, cy: 25, r: 2.5 },
-          { cx: 30, cy: 170, r: 1.8 },
-          { cx: 370, cy: 170, r: 1.8 },
-        ].map((star, i) => (
-          <motion.div
-            key={i}
-            animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1.3, 0.8] }}
-            transition={{ duration: 2 + i * 0.4, repeat: Infinity }}
-            className="absolute rounded-full bg-white shadow-[0_0_8px_#ffffff]"
-            style={{
-              left: `${(star.cx / 400) * 100}%`,
-              top: `${(star.cy / 520) * 100}%`,
-              width: `${star.r * 2}px`,
-              height: `${star.r * 2}px`,
-            }}
-          />
-        ))}
 
         <svg viewBox="0 0 400 520" className="absolute inset-0 h-full w-full">
           <defs>
@@ -510,110 +518,178 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               <stop offset="50%" stopColor="#10b981" />
               <stop offset="100%" stopColor="#6ee7b7" />
             </linearGradient>
-            <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#059669" />
+            <linearGradient id="eucalyptusLeaf" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#10b981" />
+              <stop offset="60%" stopColor="#065f46" />
               <stop offset="100%" stopColor="#022c22" />
             </linearGradient>
             <linearGradient id="goldRibbon" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#fbbf24" />
+              <stop offset="0%" stopColor="#fef08a" />
               <stop offset="50%" stopColor="#f59e0b" />
               <stop offset="100%" stopColor="#b45309" />
             </linearGradient>
-            <linearGradient id="wrapGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#3b0764" />
-              <stop offset="100%" stopColor="#1e1b4b" />
+            {/* Papel Kraft floral envolvente del ramo */}
+            <linearGradient id="bouquetPaperFront" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#d4a373" />
+              <stop offset="50%" stopColor="#bc6c25" />
+              <stop offset="100%" stopColor="#6f3a14" />
+            </linearGradient>
+            <linearGradient id="bouquetPaperBack" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#fefae0" />
+              <stop offset="100%" stopColor="#dda15e" />
             </linearGradient>
           </defs>
 
-          {/* 1. ENVOLTORIO BASE */}
-          <motion.path
-            initial={{ scaleY: 0, opacity: 0 }}
-            animate={{ scaleY: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            style={{ transformOrigin: "200px 500px" }}
-            d="M130,390 L200,500 L270,390 Q200,430 130,390 Z"
-            fill="url(#wrapGrad)"
-            stroke="#fbbf24"
-            strokeWidth="1.5"
-            strokeOpacity="0.5"
-          />
+          {/* 1. PAPEL FLORAL TRASERO DESPLEGADO (Da forma de ramo grande y abierto) */}
+          <g opacity="0.85">
+            <path
+              d="M40,320 Q200,420 360,320 L240,490 L160,490 Z"
+              fill="url(#bouquetPaperBack)"
+              stroke="#fbbf24"
+              strokeWidth="1"
+              strokeOpacity="0.4"
+            />
+          </g>
 
-          {/* 2. HOJAS BOTÁNICAS VERDES DE FONDO (SUAVES Y TRASLÚCIDAS PARA NO TAPAR LOS TALLOS) */}
+          {/* 2. HOLLAGE FRONDOSO Y EUCALIPTO (Rodeando todo el contorno del ramo) */}
           {[
-            { d: "M200,420 Q110,350 70,310 Q120,290 200,380", delay: 0.4 },
-            { d: "M200,420 Q290,350 330,310 Q280,290 200,380", delay: 0.5 },
-            { d: "M200,360 Q100,230 50,190 Q110,170 200,300", delay: 0.6 },
-            { d: "M200,360 Q300,230 350,190 Q290,170 200,300", delay: 0.7 },
-            { d: "M200,300 Q140,150 100,120 Q150,110 200,240", delay: 0.8 },
-            { d: "M200,300 Q260,150 300,120 Q250,110 200,240", delay: 0.9 },
+            // Hojas exteriores izquierdas
+            { d: "M100,340 Q30,260 20,200 Q70,220 120,300", delay: 0.2 },
+            { d: "M120,280 Q40,170 30,120 Q90,140 140,240", delay: 0.3 },
+            { d: "M160,200 Q80,90 70,50 Q130,80 180,180", delay: 0.4 },
+            // Hojas exteriores derechas
+            { d: "M300,340 Q370,260 380,200 Q330,220 280,300", delay: 0.25 },
+            { d: "M280,280 Q360,170 370,120 Q310,140 260,240", delay: 0.35 },
+            { d: "M240,200 Q320,90 330,50 Q270,80 220,180", delay: 0.45 },
+            // Hojas de relleno interiores
+            { d: "M200,380 Q130,300 90,260 Q150,240 200,340", delay: 0.5 },
+            { d: "M200,380 Q270,300 310,260 Q250,240 200,340", delay: 0.55 },
+            { d: "M200,320 Q150,200 110,160 Q170,150 200,280", delay: 0.6 },
+            { d: "M200,320 Q250,200 290,160 Q230,150 200,280", delay: 0.65 },
           ].map((leaf, idx) => (
             <motion.path
               key={`leaf-${idx}`}
               d={leaf.d}
-              fill="url(#leafGrad)"
-              opacity="0.5"
+              fill="url(#eucalyptusLeaf)"
+              opacity="0.8"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 0.5 }}
-              transition={{ duration: 1, delay: leaf.delay, ease: "easeOut" }}
-              style={{ transformOrigin: "200px 420px" }}
+              animate={{ scale: 1, opacity: 0.8 }}
+              transition={{ duration: 0.8, delay: leaf.delay, ease: "easeOut" }}
+              style={{ transformOrigin: "200px 440px" }}
             />
           ))}
 
-          {/* 3. LOS 13 TALLOS BOTÁNICOS PRINCIPALES (PINTADOS POR ENCIMA DE LAS HOJAS) */}
+          {/* 3. TALLOS BOTÁNICOS LUMINOSOS QUE CONVERGEN EN EL NUDO DEL RAMO */}
           {FLOWERS.map((flower) => {
             const isBloomed = revealedIds.includes(flower.id);
             const isTarget = flower.id === nextTargetId;
 
             return (
               <g key={`stem-group-${flower.id}`}>
-                {/* Sombra de profundidad del tallo */}
                 <motion.path
                   d={flower.stemD}
                   fill="none"
                   stroke="#022c22"
-                  strokeWidth={isTarget ? "5" : isBloomed ? "4.5" : "3.5"}
+                  strokeWidth={isTarget ? "5" : isBloomed ? "4.5" : "3"}
                   strokeLinecap="round"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.4, delay: flower.id * 0.05, ease: "easeInOut" }}
+                  transition={{ duration: 1.2, delay: flower.id * 0.04, ease: "easeInOut" }}
                 />
-                {/* Trazo verde esmeralda luminoso del tallo */}
                 <motion.path
                   d={flower.stemD}
                   fill="none"
                   stroke="url(#emeraldStem)"
-                  strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2.2"}
+                  strokeWidth={isTarget ? "3.5" : isBloomed ? "3" : "2"}
                   strokeLinecap="round"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.4, delay: flower.id * 0.05, ease: "easeInOut" }}
+                  transition={{ duration: 1.2, delay: flower.id * 0.04, ease: "easeInOut" }}
                 />
               </g>
             );
           })}
 
-          {/* 4. LAZO DE SATÉN DORADO EN LA BASE */}
+          {/* 4. FLORES DECORATIVAS DE RELLENO (Paniculata blanca/rosada para dar frondosidad) */}
+          {FILLER_BLOOMS.map((fb, idx) => (
+            <motion.g
+              key={`filler-${idx}`}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 0.85 }}
+              transition={{ duration: 0.6, delay: 0.3 + (idx % 8) * 0.08 }}
+              transform={`translate(${fb.cx}, ${fb.cy})`}
+            >
+              {/* Pétalos de flor silvestre de relleno */}
+              {[0, 72, 144, 216, 288].map((rot, pIdx) => (
+                <ellipse
+                  key={pIdx}
+                  cx="0"
+                  cy={-fb.r * 0.9}
+                  rx={fb.r * 0.55}
+                  ry={fb.r * 0.8}
+                  fill={fb.color}
+                  transform={`rotate(${rot})`}
+                  opacity="0.9"
+                />
+              ))}
+              <circle r={fb.r * 0.45} fill="#f59e0b" />
+            </motion.g>
+          ))}
+
+          {/* 5. PAPEL KRAFT ENVOLTORIO FRONTAL CON PLIEGUES ENVOLVENTES */}
+          <g>
+            {/* Pliegue izquierdo del papel */}
+            <path
+              d="M110,360 L200,480 L160,495 L90,380 Z"
+              fill="url(#bouquetPaperFront)"
+              stroke="#fbbf24"
+              strokeWidth="0.8"
+              opacity="0.95"
+            />
+            {/* Pliegue derecho del papel */}
+            <path
+              d="M290,360 L200,480 L240,495 L310,380 Z"
+              fill="url(#bouquetPaperFront)"
+              stroke="#fbbf24"
+              strokeWidth="0.8"
+              opacity="0.95"
+            />
+            {/* Cuerpo central del papel de ramo */}
+            <path
+              d="M130,370 Q200,410 270,370 L220,490 L180,490 Z"
+              fill="url(#bouquetPaperBack)"
+              stroke="#fbbf24"
+              strokeWidth="1.2"
+              strokeOpacity="0.6"
+            />
+          </g>
+
+          {/* 6. LAZO DE SATÉN DORADO CON CAÍDA ELEGANTE */}
           <motion.g
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.6, delay: 1 }}
-            transform="translate(200, 475)"
+            transition={{ duration: 0.6, delay: 0.8 }}
+            transform="translate(200, 460)"
           >
+            {/* Caídas de la cinta */}
             <path
-              d="M-30,-5 C-50,-25 -20,-30 0,-10 C20,-30 50,-25 30,-5 Z"
-              fill="url(#goldRibbon)"
-            />
-            <path
-              d="M-8,0 Q-25,35 -35,50 M8,0 Q25,35 35,50"
+              d="M-6,0 Q-25,30 -35,55 M6,0 Q25,30 35,55"
               stroke="#f59e0b"
-              strokeWidth="5"
+              strokeWidth="5.5"
               strokeLinecap="round"
               fill="none"
             />
-            <circle cx="0" cy="-7" r="7" fill="#fbbf24" stroke="#d97706" strokeWidth="1.5" />
+            {/* Lazos laterales */}
+            <path
+              d="M-32,-6 C-54,-28 -20,-32 0,-10 C20,-32 54,-28 32,-6 Z"
+              fill="url(#goldRibbon)"
+              stroke="#d97706"
+              strokeWidth="1.2"
+            />
+            <circle cx="0" cy="-8" r="8" fill="#fef08a" stroke="#d97706" strokeWidth="1.5" />
           </motion.g>
 
-          {/* 5. LAS 13 FLORES BOTÁNICAS PRINCIPALES CON GUÍA SECUENCIAL */}
+          {/* 7. LAS 13 ROSAS PRINCIPALES INTERACTIVAS */}
           {FLOWERS.map((flower) => {
             const isBloomed = revealedIds.includes(flower.id);
             const isTarget = flower.id === nextTargetId;
@@ -633,7 +709,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         </svg>
       </motion.div>
 
-      {/* Cierre cuando todas las flores han sido abiertas */}
+      {/* Cierre cuando todas las 13 rosas han sido abiertas */}
       {isAllRevealed && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
@@ -647,125 +723,145 @@ export function Day7({ isUnlocked }: DayComponentProps) {
           </div>
 
           <p className="text-xs sm:text-sm text-white/90 font-serif italic">
-            “13 flores, 13 verdades y un millón de razones para quererte.”
+            “13 rosas, 13 verdades y un millón de razones para quererte.”
           </p>
 
           <button
             type="button"
             onClick={() => setShowFullLetter(true)}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 px-5 py-3 text-xs sm:text-sm font-semibold text-white shadow-xl hover:scale-[1.02] active:scale-95 transition"
+            className="w-full rounded-full bg-pink-500/30 border border-pink-400/50 py-2.5 text-xs font-semibold text-pink-200 transition hover:bg-pink-500/40 active:scale-95 flex items-center justify-center gap-2"
           >
             <BookOpen className="h-4 w-4" />
-            <span>Leer toda la carta de amor 💌</span>
+            <span>Leer todas las dedicatorias juntas</span>
           </button>
         </motion.div>
       )}
 
-      {/* MODAL 1: FLOR INDIVIDUAL ABIERTA (DEDICATORIA) */}
+      {/* MODAL 1: DETALLE DE CADA FLOR */}
       <AnimatePresence>
-        {activeFlower && !showFullLetter && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+        {activeFlower && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+            onClick={() => setActiveFlower(null)}
+          >
             <motion.div
-              initial={{ scale: 0.85, opacity: 0, y: 25 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.85, opacity: 0, y: 25 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-white/25 bg-gradient-to-b from-[#2f0e38] via-[#1a0a27] to-[#0e0417] p-7 text-center shadow-[0_0_50px_rgba(236,72,153,0.4)]"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-center shadow-2xl space-y-4"
             >
               <button
                 onClick={() => setActiveFlower(null)}
-                className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white/80 transition hover:bg-white/20 active:scale-95"
+                className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white/70 hover:bg-white/20 transition"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
 
               <div
-                className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl shadow-2xl text-3xl"
+                className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg border border-white/20"
                 style={{
                   background: `linear-gradient(135deg, ${activeFlower.colorStart}, ${activeFlower.colorEnd})`,
-                  boxShadow: `0 0 26px ${activeFlower.glowRgba}`,
                 }}
               >
-                {activeFlower.emoji}
+                <Heart className="h-8 w-8 text-white fill-white" />
               </div>
 
-              <p className="text-xs font-mono uppercase tracking-widest text-pink-300/80">
-                Flor #{activeFlower.id} de 13 · {activeFlower.name}
-              </p>
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-widest text-pink-300">
+                  Rosa #{activeFlower.id} de 13
+                </span>
+                <h4 className="font-serif text-xl font-bold text-white mt-0.5">
+                  {activeFlower.name}
+                </h4>
+              </div>
 
-              <p className="mt-4 font-serif text-lg sm:text-xl font-medium leading-relaxed text-white drop-shadow">
-                “{activeFlower.text}”
-              </p>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-left backdrop-blur-sm">
+                <p className="font-serif text-base sm:text-lg italic leading-relaxed text-pink-100">
+                  “{activeFlower.text}”
+                </p>
+              </div>
 
               <button
                 type="button"
                 onClick={() => setActiveFlower(null)}
-                className="mt-6 w-full rounded-full bg-gradient-to-r from-rose-400 via-pink-500 to-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition active:scale-95 flex items-center justify-center gap-1.5"
+                className="w-full rounded-full bg-gradient-to-r from-rose-500 to-pink-500 py-3 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
               >
-                <span>
-                  {nextTargetId && nextTargetId <= 13
-                    ? `Abrir flor #${nextTargetId}`
-                    : "Seguir viendo el ramo"}
-                </span>
-                <ChevronRight className="h-4 w-4" />
+                Guardar en el ramo
               </button>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* MODAL 2: TODA LA CARTA DE AMOR COMPLETA */}
+      {/* MODAL 2: TODAS LAS DEDICATORIAS JUNTAS */}
       <AnimatePresence>
         {showFullLetter && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-lg"
+            onClick={() => setShowFullLetter(false)}
+          >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-md max-h-[85vh] flex flex-col rounded-3xl border border-white/20 bg-gradient-to-b from-[#2a0e36] to-[#12051c] p-6 shadow-2xl"
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-left shadow-2xl"
             >
-              <div className="flex items-center justify-between pb-3 border-b border-white/15 shrink-0">
-                <div className="flex items-center gap-2 text-pink-300 font-serif font-bold text-lg">
-                  <Heart className="h-5 w-5 fill-pink-400 text-pink-400" />
-                  <span>Nuestra Carta de Amor</span>
-                </div>
-                <button
-                  onClick={() => setShowFullLetter(false)}
-                  className="rounded-full bg-white/10 p-2 text-white/80 transition hover:bg-white/20"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+              <button
+                onClick={() => setShowFullLetter(false)}
+                className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white/70 hover:bg-white/20 transition"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              <div className="border-b border-white/10 pb-3">
+                <span className="text-xs font-semibold uppercase tracking-widest text-pink-300">
+                  Ramo Completo
+                </span>
+                <h4 className="font-serif text-2xl font-bold text-white">
+                  13 cosas que amo de ti
+                </h4>
               </div>
 
-              {/* Contenido con scroll */}
-              <div className="flex-1 overflow-y-auto space-y-3 py-4 pr-1 text-left">
+              <div className="flex-1 overflow-y-auto space-y-3 py-4 pr-1">
                 {FLOWERS.map((flower) => (
                   <div
                     key={flower.id}
-                    className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3.5 backdrop-blur-md"
+                    className="rounded-2xl border border-white/10 bg-white/5 p-3.5 space-y-1 backdrop-blur-sm"
                   >
-                    <span className="text-2xl shrink-0">{flower.emoji}</span>
-                    <p className="text-xs sm:text-sm leading-relaxed text-white/95 font-serif">
-                      {flower.text}
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-pink-500/30 text-[10px] font-bold text-pink-200">
+                        {flower.id}
+                      </span>
+                      <span className="text-xs font-semibold text-pink-300">
+                        {flower.name}
+                      </span>
+                    </div>
+                    <p className="font-serif text-sm italic text-white/95 pl-7">
+                      “{flower.text}”
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="pt-3 border-t border-white/15 shrink-0 text-center">
-                <p className="text-xs text-pink-200/90 font-serif italic mb-3">
-                  Te amo con todo mi corazón.
-                </p>
+              <div className="border-t border-white/10 pt-4 text-center">
                 <button
                   type="button"
                   onClick={() => setShowFullLetter(false)}
-                  className="w-full rounded-full bg-pink-500 py-2.5 text-xs font-semibold text-white"
+                  className="rounded-full bg-gradient-to-r from-rose-500 to-pink-500 px-8 py-2.5 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
                 >
-                  Volver al ramo
+                  Cerrar
                 </button>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
