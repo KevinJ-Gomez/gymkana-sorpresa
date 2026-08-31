@@ -78,7 +78,7 @@ export function DayContainer({
       // texto casi ilegible. Este tinte garantiza contraste pase lo que pase.
       className="fixed inset-x-0 bottom-0 z-20 flex h-[92dvh] flex-col
         rounded-t-[2rem] border-t border-white/25
-        bg-[#150c2b]/85 shadow-[0_-8px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl
+        bg-[#0f0722] shadow-[0_-8px_60px_rgba(0,0,0,0.8)]
         before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px
         before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent"
     >
