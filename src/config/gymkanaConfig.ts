@@ -47,6 +47,33 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "Tu primera estrella",
     rewardDescription:
       "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",
+    // 🗺️ BITÁCORA / ITINERARIO DEL DÍA (Personaliza con tus horas y planes reales)
+    dailyPlan: {
+      summary: "Comienza nuestra aventura. Entrega del móvil y preparativos para el viaje.",
+      destination: "Inicio del Viaje",
+      dressCode: "Ropa cómoda de viaje",
+      timeline: [
+        {
+          time: "10:00",
+          title: "Despertar y Primera Sorpresa",
+          description: "Desbloqueo de la primera estrella y entrega del nuevo móvil.",
+          type: "mystery",
+          isHighlight: true,
+        },
+        {
+          time: "14:00",
+          title: "Comida especial de inicio",
+          description: "Brindis por los días inolvidables que están por venir.",
+          type: "food",
+        },
+        {
+          time: "18:00",
+          title: "Preparando maletas y ruta",
+          description: "Ajustando detalles para los próximos días.",
+          type: "activity",
+        },
+      ],
+    },
   },
   {
     id: 2,
@@ -65,6 +92,34 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "El comienzo",
     rewardDescription:
       "¡Correcto! Ahí en El Tuno empezó todo. Como sorpresa por acertar hoy, te he preparado algo muy especial: nuestra pequeña historia resumida en todas esas fotos que he ido guardando con muchísimo cariño durante todo este tiempo.",
+    // 🗺️ BITÁCORA / ITINERARIO DEL DÍA
+    dailyPlan: {
+      summary: "Recordando cómo empezó todo y ruta especial por nuestros rincones favoritos.",
+      destination: "Nuestra Ciudad",
+      dressCode: "Casual con calzado cómodo",
+      timeline: [
+        {
+          time: "11:30",
+          title: "Paseo por los recuerdos",
+          description: "Recorriendo los lugares de nuestras primeras citas.",
+          type: "activity",
+        },
+        {
+          time: "14:30",
+          title: "Parada en nuestro sitio de siempre",
+          description: "Comida con nuestras tapas favoritas.",
+          location: "El Tuno",
+          type: "food",
+          isHighlight: true,
+        },
+        {
+          time: "19:00",
+          title: "Película de Recuerdos y Atardecer",
+          description: "Sesión especial viendo juntos nuestra historia.",
+          type: "relax",
+        },
+      ],
+    },
   },
   {
     id: 3,

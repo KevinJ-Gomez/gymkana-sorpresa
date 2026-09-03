@@ -17,6 +17,7 @@ import { DayContainer } from "@/components/DayContainer";
 import { TouchParticleTrail } from "@/components/effects/TouchParticleTrail";
 import { GiftUnboxModal } from "@/components/effects/GiftUnboxModal";
 import { CountdownTimer } from "@/components/hud/CountdownTimer";
+import { DailyPlanDrawer } from "@/components/common/DailyPlanDrawer";
 import { hapticTap, hapticSuccess } from "@/lib/haptics";
 import type { DayConfig } from "@/types/gymkana";
 import type { SphereState } from "@/components/three/NebulaScene";
@@ -50,6 +51,8 @@ export function GymkanaApp() {
   const [warping, setWarping] = useState(false);
   /** Día que se está desenvolviendo con la caja de regalo */
   const [unboxingDay, setUnboxingDay] = useState<DayConfig | null>(null);
+  /** Estado del cajón de la Bitácora de Viaje / Planning Diario */
+  const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
 
   const tapCount = useRef(0);
   const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -149,6 +152,16 @@ export function GymkanaApp() {
   const todayIndex = todayId
     ? gymkanaConfig.findIndex((d) => d.id === todayId)
     : 0;
+
+  // Día activo del itinerario (el de hoy según fecha real o el último desbloqueado en testing)
+  const currentActiveDayId =
+    todayId ??
+    (testingMode && unlockedDays.length > 0 ? Math.max(...unlockedDays) : null);
+
+  // Fase 1: La pestaña deslizante inferior SOLO debe aparecer si el día actual ya ha sido desbloqueado
+  const isTodayUnlocked =
+    currentActiveDayId !== null && unlockedDays.includes(currentActiveDayId);
+  const showPlanDrawer = isTodayUnlocked && hudVisible;
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
@@ -353,6 +366,20 @@ export function GymkanaApp() {
         giftTitle={unboxingDay?.giftLabel}
         onOpened={() => setUnboxingDay(null)}
       />
+
+      {/* Bitácora de Viaje / Itinerario Diario (Solo visible si el día actual está desbloqueado) */}
+      <AnimatePresence>
+        {showPlanDrawer && currentActiveDayId && (
+          <DailyPlanDrawer
+            isOpen={isPlanDrawerOpen}
+            onToggle={() => setIsPlanDrawerOpen((prev) => !prev)}
+            onClose={() => setIsPlanDrawerOpen(false)}
+            days={gymkanaConfig}
+            unlockedDays={unlockedDays}
+            activeDayId={currentActiveDayId}
+          />
+        )}
+      </AnimatePresence>
 
       {/* La app está diseñada solo para vertical. */}
       <div
