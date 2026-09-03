@@ -153,15 +153,13 @@ export function GymkanaApp() {
     ? gymkanaConfig.findIndex((d) => d.id === todayId)
     : 0;
 
-  // Día activo del calendario (el de hoy según fecha o el último desbloqueado en testing)
+  // El botón deslizante SOLO debe aparecer si el acertijo del día de hoy ya ha sido resuelto
   const currentActiveDayId =
-    todayId ??
-    (testingMode && unlockedDays.length > 0 ? Math.max(...unlockedDays) : null);
+    todayId !== null
+      ? (unlockedDays.includes(todayId) ? todayId : null)
+      : (testingMode && unlockedDays.length > 0 ? Math.max(...unlockedDays) : null);
 
-  // Fase 1: El cajón solo aparece si el día actual ya ha sido desbloqueado con su reto
-  const isTodayUnlocked =
-    currentActiveDayId !== null && unlockedDays.includes(currentActiveDayId);
-  const showPlanDrawer = isTodayUnlocked && hudVisible;
+  const showPlanDrawer = currentActiveDayId !== null && hudVisible;
 
   return (
     <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
@@ -367,7 +365,7 @@ export function GymkanaApp() {
         onOpened={() => setUnboxingDay(null)}
       />
 
-      {/* Cajón Planning del día (Solo visible si el día actual está desbloqueado) */}
+      {/* Cajón Planning del día (Solo visible si el acertijo del día correspondiente ha sido resuelto) */}
       <AnimatePresence>
         {showPlanDrawer && currentActiveDayId && (
           <DailyPlanDrawer

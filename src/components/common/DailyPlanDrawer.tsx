@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { DayConfig } from "@/types/gymkana";
 import { formatUnlockDate } from "@/lib/dates";
@@ -25,7 +25,6 @@ interface CalendarCell {
 
 const WEEKDAYS = ["L", "M", "X", "J", "V", "S", "D"];
 
-// Generamos los días que cubren el periodo del viaje (Semana 1 a Semana 3 de octubre)
 function getCalendarWeeks(): (CalendarCell | null)[][] {
   // 1 de octubre = Jueves (índice 3). Los 3 primeros días de la primera semana están vacíos.
   const allDays: (CalendarCell | null)[] = [
@@ -34,7 +33,7 @@ function getCalendarWeeks(): (CalendarCell | null)[][] {
     null, // Mié
   ];
 
-  // Del 1 al 18 de octubre
+  // Del 1 al 18 de octubre (cubre todos los días del viaje 2..12)
   for (let dayNum = 1; dayNum <= 18; dayNum++) {
     const gymkanaId = dayNum >= 2 && dayNum <= 12 ? dayNum - 1 : undefined;
     allDays.push({
@@ -64,8 +63,13 @@ export function DailyPlanDrawer({
   unlockedDays,
   activeDayId,
 }: DailyPlanDrawerProps) {
-  // Día seleccionado dentro del calendario (por defecto el día activo/hoy)
+  // Inicializamos el día seleccionado en el día activo resuelto
   const [selectedDayId, setSelectedDayId] = useState<number>(activeDayId);
+
+  // Sincronizar si cambia el día activo
+  useEffect(() => {
+    setSelectedDayId(activeDayId);
+  }, [activeDayId]);
 
   const selectedDay = useMemo(() => {
     return days.find((d) => d.id === selectedDayId) ?? days.find((d) => d.id === activeDayId) ?? days[0];
@@ -73,14 +77,15 @@ export function DailyPlanDrawer({
 
   const weeks = useMemo(() => getCalendarWeeks(), []);
 
+  // Comprobar si el día seleccionado ha sido resuelto
+  const isSelectedDayUnlocked = unlockedDays.includes(selectedDay.id);
+
   // Nota del plan para el día seleccionado
   const dayNote =
     selectedDay.dailyPlanNote ||
     selectedDay.dailyPlan?.note ||
     selectedDay.dailyPlan?.summary ||
     "";
-
-  const isSelectedDayUnlocked = unlockedDays.includes(selectedDay.id);
 
   const handleSelectGymkanaDay = (gymkanaId?: number) => {
     if (!gymkanaId) return;
@@ -191,11 +196,30 @@ export function DailyPlanDrawer({
                   const isDayActive = gymkanaId === activeDayId;
                   const isDaySelected = gymkanaId === selectedDayId;
 
+                  // Si es un día del viaje pero NO ha sido resuelto su acertijo, no se ve
+                  if (isTripDay && !isDayUnlocked) {
+                    const isSelectedLocked = isDaySelected;
+                    return (
+                      <div
+                        key={cIdx}
+                        onClick={() => handleSelectGymkanaDay(gymkanaId)}
+                        className={`relative flex flex-col items-center justify-center rounded-xl h-11 transition-all cursor-pointer ${
+                          isSelectedLocked
+                            ? "border border-rose-400/50 bg-rose-950/20 text-white/30"
+                            : "border border-white/5 bg-white/[0.02] text-white/20 hover:bg-white/[0.05]"
+                        }`}
+                      >
+                        <span className="text-xs font-mono">—</span>
+                      </div>
+                    );
+                  }
+
+                  // Día resuelto o día fuera del viaje
                   let cellClasses = "relative flex flex-col items-center justify-center rounded-xl h-11 transition-all ";
 
                   if (!isTripDay) {
                     // Día fuera de la gymkana
-                    cellClasses += "bg-transparent text-white/25";
+                    cellClasses += "bg-transparent text-white/20";
                   } else if (isDayActive && isDaySelected) {
                     // Día actual activo Y seleccionado
                     cellClasses += "border border-cyan-400 bg-cyan-500/25 text-white font-bold shadow-[0_0_15px_rgba(0,191,255,0.35)] cursor-pointer";
@@ -203,14 +227,11 @@ export function DailyPlanDrawer({
                     // Día actual activo
                     cellClasses += "border border-cyan-400/80 bg-cyan-500/15 text-white font-bold cursor-pointer";
                   } else if (isDaySelected) {
-                    // Día seleccionado
+                    // Día seleccionado resuelto
                     cellClasses += "border border-white/80 bg-white/20 text-white font-semibold cursor-pointer";
-                  } else if (isDayUnlocked) {
-                    // Día resuelto anterior
-                    cellClasses += "border border-white/15 bg-white/10 text-white/90 hover:bg-white/15 cursor-pointer";
                   } else {
-                    // Día futuro bloqueado
-                    cellClasses += "border border-white/5 bg-white/[0.02] text-white/30 cursor-pointer hover:bg-white/[0.05]";
+                    // Día resuelto
+                    cellClasses += "border border-white/15 bg-white/10 text-white/90 hover:bg-white/15 cursor-pointer";
                   }
 
                   return (
@@ -234,31 +255,31 @@ export function DailyPlanDrawer({
         </div>
 
         {/* ESPACIO PARA LA NOTA DEL DÍA */}
-        <div className="rounded-2xl border border-white/15 bg-white/5 p-5 text-left backdrop-blur-md space-y-3">
-          <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-            <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block">
-                {selectedDay.id === activeDayId ? "Día de hoy" : `Día ${selectedDay.id}`} · {formatUnlockDate(selectedDay.unlockDate)}
-              </span>
-              <h4 className="font-serif text-base sm:text-lg font-bold text-white">
-                {selectedDay.title}
-              </h4>
+        {isSelectedDayUnlocked ? (
+          <div className="rounded-2xl border border-white/15 bg-white/5 p-5 text-left backdrop-blur-md space-y-3">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block">
+                  {selectedDay.id === activeDayId ? "Día de hoy" : `Día ${selectedDay.id}`} · {formatUnlockDate(selectedDay.unlockDate)}
+                </span>
+                <h4 className="font-serif text-base sm:text-lg font-bold text-white">
+                  {selectedDay.title}
+                </h4>
+              </div>
+
+              {selectedDay.id === activeDayId && (
+                <span className="rounded-full border border-cyan-400/40 bg-cyan-400/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-200">
+                  Hoy
+                </span>
+              )}
             </div>
 
-            {selectedDay.id === activeDayId && (
-              <span className="rounded-full border border-cyan-400/40 bg-cyan-400/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-200">
-                Hoy
+            <div>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block mb-1.5">
+                Plan previsto
               </span>
-            )}
-          </div>
 
-          <div>
-            <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block mb-1.5">
-              Plan previsto
-            </span>
-
-            {isSelectedDayUnlocked ? (
-              dayNote ? (
+              {dayNote ? (
                 <p className="font-serif text-sm sm:text-base text-white/95 leading-relaxed whitespace-pre-line">
                   {dayNote}
                 </p>
@@ -266,14 +287,16 @@ export function DailyPlanDrawer({
                 <p className="text-xs sm:text-sm italic text-white/40 leading-relaxed">
                   No hay ningún plan anotado todavía para este día.
                 </p>
-              )
-            ) : (
-              <p className="text-xs sm:text-sm text-white/40 italic leading-relaxed">
-                Este día se revelará en el calendario cuando resuelvas su reto correspondiente.
-              </p>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
+            <p className="text-sm font-medium text-white/80 leading-relaxed">
+              ¡No puedes ver este día hasta que resuelvas el acertijo del día correspondiente!
+            </p>
+          </div>
+        )}
       </div>
     </motion.div>
   );

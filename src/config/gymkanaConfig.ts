@@ -47,8 +47,6 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "Tu primera estrella",
     rewardDescription:
       "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",
-    dailyPlanNote:
-      "Comienza nuestra aventura. Entrega del móvil nuevo, preparativos y puesta a punto de las maletas para los días increíbles que nos esperan.",
   },
   {
     id: 2,
@@ -67,8 +65,6 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "El comienzo",
     rewardDescription:
       "¡Correcto! Ahí en El Tuno empezó todo. Como sorpresa por acertar hoy, te he preparado algo muy especial: nuestra pequeña historia resumida en todas esas fotos que he ido guardando con muchísimo cariño durante todo este tiempo.",
-    dailyPlanNote:
-      "Paseo por nuestros rincones favoritos, parada a tomar algo en El Tuno y sesión de película para recordar nuestra historia juntos.",
   },
   {
     id: 3,
