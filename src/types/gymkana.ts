@@ -35,30 +35,10 @@ export interface FriendVideo {
   videoSrc?: string;
 }
 
-export interface TimelineEvent {
-  /** Hora del evento/actividad (ej. "09:30", "14:00", "Tarde") */
-  time: string;
-  /** Título de la actividad */
-  title: string;
-  /** Descripción o detalles adicionales */
-  description?: string;
-  /** Ubicación o pista del lugar */
-  location?: string;
-  /** Tipo de evento para icono semántico */
-  type?: "food" | "transport" | "activity" | "mystery" | "relax" | "party";
-  /** Si es un momento o parada sorpresa destacada */
-  isHighlight?: boolean;
-}
-
 export interface DailyPlan {
-  /** Resumen general del día, ej. "Ruta costera, paseo en barco y cena romántica" */
-  summary: string;
-  /** Ciudad, región o destino principal */
-  destination?: string;
-  /** Recomendación de ropa/calzado (ej. "Calzado cómodo y algo de abrigo por la noche") */
-  dressCode?: string;
-  /** Lista cronológica de actividades e hitos del día */
-  timeline: TimelineEvent[];
+  /** Texto o nota con el plan del día */
+  note?: string;
+  summary?: string;
 }
 
 /**
@@ -149,7 +129,8 @@ export interface DayConfig {
   /** Día 11: vídeos/placeholders de amigos para el muro interactivo. */
   friendVideos?: FriendVideo[];
 
-  /** Plan e itinerario del día para la Bitácora de Viaje (DailyPlanDrawer). */
+  /** Planning del día (calendario y notas) */
+  dailyPlanNote?: string;
   dailyPlan?: DailyPlan;
 }
 

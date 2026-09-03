@@ -51,7 +51,7 @@ export function GymkanaApp() {
   const [warping, setWarping] = useState(false);
   /** Día que se está desenvolviendo con la caja de regalo */
   const [unboxingDay, setUnboxingDay] = useState<DayConfig | null>(null);
-  /** Estado del cajón de la Bitácora de Viaje / Planning Diario */
+  /** Estado del cajón del Planning del día */
   const [isPlanDrawerOpen, setIsPlanDrawerOpen] = useState(false);
 
   const tapCount = useRef(0);
@@ -153,12 +153,12 @@ export function GymkanaApp() {
     ? gymkanaConfig.findIndex((d) => d.id === todayId)
     : 0;
 
-  // Día activo del itinerario (el de hoy según fecha real o el último desbloqueado en testing)
+  // Día activo del calendario (el de hoy según fecha o el último desbloqueado en testing)
   const currentActiveDayId =
     todayId ??
     (testingMode && unlockedDays.length > 0 ? Math.max(...unlockedDays) : null);
 
-  // Fase 1: La pestaña deslizante inferior SOLO debe aparecer si el día actual ya ha sido desbloqueado
+  // Fase 1: El cajón solo aparece si el día actual ya ha sido desbloqueado con su reto
   const isTodayUnlocked =
     currentActiveDayId !== null && unlockedDays.includes(currentActiveDayId);
   const showPlanDrawer = isTodayUnlocked && hudVisible;
@@ -367,7 +367,7 @@ export function GymkanaApp() {
         onOpened={() => setUnboxingDay(null)}
       />
 
-      {/* Bitácora de Viaje / Itinerario Diario (Solo visible si el día actual está desbloqueado) */}
+      {/* Cajón Planning del día (Solo visible si el día actual está desbloqueado) */}
       <AnimatePresence>
         {showPlanDrawer && currentActiveDayId && (
           <DailyPlanDrawer
