@@ -13,6 +13,7 @@ import {
 import { formatUnlockDate, isDateReached } from "@/lib/dates";
 import { useIntroSeen, useTestingMode, useUnlockedDays } from "@/lib/storage";
 import { IntroSequence } from "@/components/IntroSequence";
+import { LockedScreen } from "@/components/LockedScreen";
 import { DayContainer } from "@/components/DayContainer";
 import { TouchParticleTrail } from "@/components/effects/TouchParticleTrail";
 import { GiftUnboxModal } from "@/components/effects/GiftUnboxModal";
@@ -165,45 +166,7 @@ export function GymkanaApp() {
   const isAppLocked = !testingMode && !isTripStarted;
 
   if (isAppLocked) {
-    return (
-      <main className="relative flex h-[100dvh] w-full flex-col items-center justify-center bg-[#0b0620] px-6 text-center text-white select-none">
-        <AnimatePresence>
-          {toast && (
-            <motion.aside
-              role="status"
-              aria-live="polite"
-              initial={{ opacity: 0, y: -16, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -16, scale: 0.95 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="fixed top-6 z-50 rounded-full border border-pink-400/40 bg-black/85 px-5 py-2.5 text-xs font-semibold text-pink-200 shadow-2xl backdrop-blur-md"
-            >
-              {toast}
-            </motion.aside>
-          )}
-        </AnimatePresence>
-
-        <div className="pointer-events-none fixed -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-pink-500/15 blur-[90px]" />
-
-        <div className="relative z-10 max-w-xs space-y-4">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-pink-300 shadow-inner backdrop-blur-md">
-            <Lock className="h-8 w-8 text-pink-400 animate-pulse" />
-          </div>
-
-          <div className="space-y-1">
-            <h1
-              onClick={handleSecretTap}
-              className="font-serif text-3xl font-bold tracking-tight text-white cursor-pointer select-none active:scale-95 transition"
-            >
-              Bloqueada
-            </h1>
-            <p className="text-sm font-medium text-pink-200/80">
-              Vuelve el día 2 de octubre
-            </p>
-          </div>
-        </div>
-      </main>
-    );
+    return <LockedScreen onSecretTap={handleSecretTap} toast={toast} />;
   }
 
   return (
