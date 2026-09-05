@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "11 Días de Sorpresas",
-  description: "Una gymkana digital de cumpleaños, día a día",
+  title: "11 Días de Sorpresas ✨",
+  description: "Una sorpresa especial de cumpleaños que durará varios días",
 };
 
 export const viewport: Viewport = {

@@ -388,7 +388,7 @@ export function GymkanaApp() {
         <p className="text-lg font-medium text-white/80">
           Gira el móvil en vertical 📱
           <span className="mt-2 block text-sm text-white/50">
-            Esta gymkana está hecha para verse en vertical.
+            Esta sorpresa está pensada para verse en vertical.
           </span>
         </p>
       </div>
