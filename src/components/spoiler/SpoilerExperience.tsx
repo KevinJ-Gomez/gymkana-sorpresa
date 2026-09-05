@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import {
   Sparkles,
   Eye,
   AlertTriangle,
-  ArrowRight,
   Check,
   Lock,
   Unlock,
@@ -454,14 +452,7 @@ export function SpoilerExperience() {
               Has elegido esperar. Vuelve el <strong>2 de octubre</strong> para empezar tu sorpresa.
             </p>
 
-            <div className="space-y-2 pt-2">
-              <Link
-                href="/"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/10 p-3 text-xs font-medium text-white/90 active:scale-95 transition"
-              >
-                Volver al inicio
-              </Link>
-
+            <div className="pt-2">
               <button
                 type="button"
                 onClick={() => {
@@ -616,14 +607,6 @@ export function SpoilerExperience() {
                 <p className="text-xs text-white/80">
                   Recuerda volver el <strong>2 de octubre</strong> para empezar tu sorpresa.
                 </p>
-
-                <Link
-                  href="/"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 p-3 text-xs font-semibold text-white active:scale-95 transition"
-                >
-                  <span>Volver al inicio</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
               </motion.div>
             )}
           </motion.div>
