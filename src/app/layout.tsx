@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "11 Días de Sorpresas ✨",
-  description: "Una sorpresa especial de cumpleaños que durará varios días",
+  description: "Una sorpresa especial de cumpleaños",
 };
 
 export const viewport: Viewport = {

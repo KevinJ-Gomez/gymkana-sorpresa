@@ -324,7 +324,7 @@ export function SpoilerExperience() {
         {/* ================================================================= */}
         <div className="rounded-2xl border border-white/15 bg-white/5 p-4 text-left backdrop-blur-md shadow-md">
           <p className="text-xs leading-relaxed text-white/90">
-            Esto es un pequeño preview de la sorpresa que te espera para tu cumpleaños. Una vez hayas terminado aquí, <strong>vuelve el día 2 de octubre</strong> para comenzar a descubrir esta sorpresa que durará varios días.
+            Esto es un pequeño preview de la sorpresa que te espera para tu cumpleaños. Una vez hayas terminado aquí, <strong>vuelve el día 2 de octubre</strong> para empezar tu sorpresa.
           </p>
         </div>
 
@@ -451,7 +451,7 @@ export function SpoilerExperience() {
             className="rounded-2xl border border-white/20 bg-black/40 p-5 text-center space-y-4 backdrop-blur-md"
           >
             <p className="text-xs text-white/90">
-              Has elegido esperar. Vuelve el <strong>2 de octubre</strong> para comenzar a descubrir esta sorpresa que durará varios días.
+              Has elegido esperar. Vuelve el <strong>2 de octubre</strong> para empezar tu sorpresa.
             </p>
 
             <div className="space-y-2 pt-2">
@@ -614,7 +614,7 @@ export function SpoilerExperience() {
                 </div>
 
                 <p className="text-xs text-white/80">
-                  Recuerda volver el <strong>2 de octubre</strong> para comenzar a descubrir esta sorpresa que durará varios días.
+                  Recuerda volver el <strong>2 de octubre</strong> para empezar tu sorpresa.
                 </p>
 
                 <Link

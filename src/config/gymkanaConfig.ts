@@ -22,7 +22,7 @@ import type { DayConfig } from "@/types/gymkana";
  */
 
 export const GYMKANA_TITLE = "11 Días de Sorpresas";
-export const GYMKANA_SUBTITLE = "Una sorpresa que durará varios días 💌";
+export const GYMKANA_SUBTITLE = "Una sorpresa para ti 💌";
 
 /** Bandera de entorno para forzar el Modo Testing por defecto (ver .env.local.example). */
 export const DEFAULT_TESTING_MODE =
