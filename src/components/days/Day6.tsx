@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 function shuffle<T>(items: T[]): T[] {
@@ -30,7 +29,6 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="space-y-3 text-center"
       >
-        <MapPin className="mx-auto h-8 w-8 text-emerald-300" />
         <h3 className="text-lg font-semibold text-white">{config.rewardTitle}</h3>
         {config.excursionHint && (
           <p className="rounded-xl border border-dashed border-white/30 bg-white/5 p-4 text-white/90">

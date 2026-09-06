@@ -277,42 +277,42 @@ export function SpoilerExperience() {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-y-auto overscroll-contain touch-pan-y bg-[#0b0620] px-4 py-5 text-white">
+    <div className="relative h-[100dvh] w-full overflow-y-auto overscroll-contain touch-pan-y bg-[#141919] px-4 py-5 text-white">
       {/* Fondo sutil */}
-      <div className="pointer-events-none fixed -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-pink-500/15 blur-[80px]" />
+      <div className="pointer-events-none fixed -top-20 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-petal-500/15 blur-[80px]" />
 
       <div className="relative z-10 mx-auto max-w-sm space-y-4">
         {/* ================================================================= */}
         {/* CONTADOR DE DÍAS HASTA EL CUMPLEAÑOS (12 DE OCTUBRE)              */}
         {/* ================================================================= */}
-        <div className="rounded-2xl border border-pink-500/25 bg-black/40 p-3.5 text-center shadow-lg backdrop-blur-md">
-          <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-pink-300">
-            <Clock className="h-3 w-3 text-pink-400" />
+        <div className="rounded-2xl border border-petal-500/25 bg-black/40 p-3.5 text-center shadow-lg backdrop-blur-md">
+          <div className="flex items-center justify-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-petal-300">
+            <Clock className="h-3 w-3 text-petal-400" />
             <span>Cuenta atrás para tu cumpleaños</span>
           </div>
 
           <div className="mt-2 grid grid-cols-4 gap-2">
             <div className="flex flex-col items-center rounded-xl bg-white/5 py-1.5 border border-white/10">
               <span className="font-mono text-xl font-bold text-white">{timeLeft.days}</span>
-              <span className="text-[9px] uppercase text-pink-200/70">Días</span>
+              <span className="text-[9px] uppercase text-petal-200/70">Días</span>
             </div>
             <div className="flex flex-col items-center rounded-xl bg-white/5 py-1.5 border border-white/10">
               <span className="font-mono text-xl font-bold text-white">
                 {String(timeLeft.hours).padStart(2, "0")}
               </span>
-              <span className="text-[9px] uppercase text-pink-200/70">Horas</span>
+              <span className="text-[9px] uppercase text-petal-200/70">Horas</span>
             </div>
             <div className="flex flex-col items-center rounded-xl bg-white/5 py-1.5 border border-white/10">
               <span className="font-mono text-xl font-bold text-white">
                 {String(timeLeft.minutes).padStart(2, "0")}
               </span>
-              <span className="text-[9px] uppercase text-pink-200/70">Min</span>
+              <span className="text-[9px] uppercase text-petal-200/70">Min</span>
             </div>
-            <div className="flex flex-col items-center rounded-xl bg-pink-500/20 py-1.5 border border-pink-400/30">
-              <span className="font-mono text-xl font-bold text-pink-400 animate-pulse">
+            <div className="flex flex-col items-center rounded-xl bg-petal-500/20 py-1.5 border border-petal-400/30">
+              <span className="font-mono text-xl font-bold text-petal-400 animate-pulse">
                 {String(timeLeft.seconds).padStart(2, "0")}
               </span>
-              <span className="text-[9px] uppercase text-pink-300">Seg</span>
+              <span className="text-[9px] uppercase text-petal-300">Seg</span>
             </div>
           </div>
         </div>
@@ -360,14 +360,14 @@ export function SpoilerExperience() {
                 <button
                   type="button"
                   onClick={handleVerifyRiddle}
-                  className="shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 px-4 py-2.5 text-xs font-semibold text-white active:scale-95 transition"
+                  className="shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-petal-500 px-4 py-2.5 text-xs font-semibold text-white active:scale-95 transition"
                 >
                   Probar
                 </button>
               </div>
 
               {riddleError && (
-                <p className="text-[11px] text-rose-400 flex items-center justify-center gap-1">
+                <p className="text-[11px] text-petal-400 flex items-center justify-center gap-1">
                   <AlertTriangle className="h-3 w-3" />
                   <span>Respuesta incorrecta. Prueba otra vez.</span>
                 </p>
@@ -419,7 +419,7 @@ export function SpoilerExperience() {
                   hapticTap();
                   setStep("scratch1");
                 }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 p-3 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-petal-500 to-petal-500 p-3 text-xs font-semibold text-white shadow-md active:scale-95 transition"
               >
                 <Sparkles className="h-4 w-4" />
                 <span>Ver la sorpresa del bolso</span>
@@ -459,7 +459,7 @@ export function SpoilerExperience() {
                   hapticTap();
                   setStep("scratch1");
                 }}
-                className="text-[11px] text-pink-300 underline"
+                className="text-[11px] text-petal-300 underline"
               >
                 Cambiar de opinión y ver la foto
               </button>
@@ -476,11 +476,11 @@ export function SpoilerExperience() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-3 text-center"
           >
-            <p className="text-xs font-medium text-pink-300">
+            <p className="text-xs font-medium text-petal-300">
               {isPhotoScratched ? "Foto descubierta" : "Rasca con tu dedo para ver la foto"}
             </p>
 
-            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-pink-400/30 bg-black/50 shadow-xl">
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-petal-400/30 bg-black/50 shadow-xl">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/spoiler-censored.jpg"
@@ -533,7 +533,7 @@ export function SpoilerExperience() {
                     hapticTap();
                     setShowConfirmModal(true);
                   }}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 p-3 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-petal-500 to-petal-500 p-3 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                 >
                   <Eye className="h-4 w-4" />
                   <span>Destapar bolso</span>
@@ -552,11 +552,11 @@ export function SpoilerExperience() {
             animate={{ opacity: 1, scale: 1 }}
             className="space-y-3 text-center"
           >
-            <p className="text-xs font-medium text-pink-300">
+            <p className="text-xs font-medium text-petal-300">
               {isHandbagRevealed ? "Bolso al descubierto" : "Rasca sobre la zona negra para quitar la censura"}
             </p>
 
-            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-pink-400/40 bg-black/50 shadow-xl">
+            <div className="relative mx-auto aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-petal-400/40 bg-black/50 shadow-xl">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/spoiler-original.jpg"
@@ -628,7 +628,7 @@ export function SpoilerExperience() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-xs rounded-2xl border border-pink-400/30 bg-[#160728] p-5 text-center shadow-2xl space-y-3"
+              className="w-full max-w-xs rounded-2xl border border-petal-400/30 bg-[#202827] p-5 text-center shadow-2xl space-y-3"
             >
               <AlertTriangle className="mx-auto h-8 w-8 text-amber-300" />
 
@@ -649,7 +649,7 @@ export function SpoilerExperience() {
                     setShowConfirmModal(false);
                     setStep("scratch2");
                   }}
-                  className="w-full rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 p-2.5 text-xs font-semibold text-white active:scale-95 transition"
+                  className="w-full rounded-xl bg-gradient-to-r from-petal-500 to-petal-500 p-2.5 text-xs font-semibold text-white active:scale-95 transition"
                 >
                   Sí, destapar bolso
                 </button>

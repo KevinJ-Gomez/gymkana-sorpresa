@@ -58,16 +58,16 @@ export function NebulaClouds({ centerY = 0 }: { centerY?: number }) {
   const layers = useMemo<Layer[]>(
     () => [
       // Masa principal magenta detrás del corazón.
-      { color: "#e0409f", position: [-1.5, centerY + 1.5, -18], scale: 44, rotation: 0.3, spin: 0.006, opacity: 0.6, seed: 7 },
+      { color: "#966d65", position: [-1.5, centerY + 1.5, -18], scale: 44, rotation: 0.3, spin: 0.006, opacity: 0.6, seed: 7 },
       // Violeta profundo, más grande y más lento: da volumen.
-      { color: "#7c3aed", position: [3.5, centerY - 3, -23], scale: 52, rotation: 1.9, spin: -0.004, opacity: 0.5, seed: 13 },
+      { color: "#49635f", position: [3.5, centerY - 3, -23], scale: 52, rotation: 1.9, spin: -0.004, opacity: 0.5, seed: 13 },
       // Rosa cálido arriba.
-      { color: "#fb7185", position: [-4, centerY + 9, -16], scale: 32, rotation: 2.7, spin: 0.008, opacity: 0.4, seed: 21 },
+      { color: "#b38a70", position: [-4, centerY + 9, -16], scale: 32, rotation: 2.7, spin: 0.008, opacity: 0.4, seed: 21 },
       // Azul frío abajo: el contraste cálido/frío es lo que da riqueza.
-      { color: "#3b82f6", position: [4, centerY - 10, -20], scale: 36, rotation: 0.9, spin: -0.007, opacity: 0.34, seed: 33 },
+      { color: "#496967", position: [4, centerY - 10, -20], scale: 36, rotation: 0.9, spin: -0.007, opacity: 0.34, seed: 33 },
       // Capa por delante del corazón: muy tenue y bastante retrasada. Antes
       // estaba casi pegada a la cámara y lavaba toda la escena de morado.
-      { color: "#f0abfc", position: [0, centerY, -10], scale: 30, rotation: 4.1, spin: 0.01, opacity: 0.08, seed: 41 },
+      { color: "#d5c5a3", position: [0, centerY, -10], scale: 30, rotation: 4.1, spin: 0.01, opacity: 0.08, seed: 41 },
     ],
     [centerY],
   );

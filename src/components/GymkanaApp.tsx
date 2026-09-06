@@ -170,7 +170,7 @@ export function GymkanaApp() {
   }
 
   return (
-    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#07031a]">
+    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#101616]">
       {/* Estela mágica táctil de chispas en pantalla */}
       <TouchParticleTrail />
 
@@ -204,7 +204,7 @@ export function GymkanaApp() {
               pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
           >
             {/* Cabecera */}
-            <header className="px-6 text-center">
+            <header className="journey-header px-6 text-center">
               <button
                 onClick={handleSecretTap}
                 className="pointer-events-auto rounded-lg px-3 py-1 text-2xl font-bold text-white
@@ -235,7 +235,7 @@ export function GymkanaApp() {
                         showToast("¡Todos los retos se han bloqueado!");
                       }}
                       className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                        bg-rose-500/20 border border-rose-500/40 px-3 py-1.5 text-xs font-medium text-rose-200 active:bg-rose-500/30 shadow-md"
+                        bg-petal-500/20 border border-petal-500/40 px-3 py-1.5 text-xs font-medium text-petal-200 active:bg-petal-500/30 shadow-md"
                     >
                       <Lock className="h-3 w-3" />
                       Bloquear todos los retos
@@ -285,10 +285,10 @@ export function GymkanaApp() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className="pointer-events-auto mx-auto block w-full max-w-sm rounded-2xl
+                className="journey-day-link pointer-events-auto mx-auto block w-full max-w-sm rounded-2xl
                   border border-white/15 bg-white/[0.07] px-5 py-4 text-center backdrop-blur-md"
               >
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-pink-200/70">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
                   Día {centeredDay.id} · {formatUnlockDate(centeredDay.unlockDate)}
                 </p>
                 <p className="mt-1 text-lg font-semibold text-white">
@@ -305,7 +305,7 @@ export function GymkanaApp() {
                     </>
                   ) : (
                     <>
-                      <Heart className="h-3 w-3 fill-pink-400 text-pink-400" /> Toca para abrir
+                      <Heart className="h-3 w-3 fill-petal-400 text-petal-400" /> Toca para abrir
                     </>
                   )}
                 </p>
@@ -390,11 +390,11 @@ export function GymkanaApp() {
       {/* La app está diseñada solo para vertical. */}
       <div
         className="pointer-events-none fixed inset-0 z-40 hidden items-center justify-center
-          bg-[#0b0620] px-10 text-center
+          bg-[#141919] px-10 text-center
           [@media(orientation:landscape)_and_(max-height:520px)]:flex"
       >
         <p className="text-lg font-medium text-white/80">
-          Gira el móvil en vertical 📱
+          Gira el móvil en vertical
           <span className="mt-2 block text-sm text-white/50">
             Esta sorpresa está pensada para verse en vertical.
           </span>

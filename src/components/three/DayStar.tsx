@@ -29,8 +29,8 @@ const STYLE: Record<
   // Apagada: translúcida y clara. Si fuese oscura y opaca taparía el gas de
   // detrás y se leería como un agujero recortado en la nebulosa.
   locked: {
-    core: "#c9c2e4",
-    glow: "#9d90d8",
+    core: "#b8c1bb",
+    glow: "#799087",
     coreScale: 0.62,
     glowScale: 2.1,
     glowOpacity: 0.42,
@@ -39,8 +39,8 @@ const STYLE: Record<
     pulseAmount: 0.05,
   },
   available: {
-    core: "#ddd6fe",
-    glow: "#a855f7",
+    core: "#e6ded0",
+    glow: "#b89a78",
     coreScale: 0.85,
     glowScale: 3.1,
     glowOpacity: 0.75,
@@ -50,7 +50,7 @@ const STYLE: Record<
   },
   today: {
     core: "#ffffff",
-    glow: "#ff5ba7",
+    glow: "#d79d8c",
     coreScale: 1.25,
     glowScale: 5,
     glowOpacity: 1,
@@ -60,7 +60,7 @@ const STYLE: Record<
   },
   solved: {
     core: "#fff3cd",
-    glow: "#fbbf24",
+    glow: "#c5a56d",
     coreScale: 1,
     glowScale: 3.8,
     glowOpacity: 0.9,
