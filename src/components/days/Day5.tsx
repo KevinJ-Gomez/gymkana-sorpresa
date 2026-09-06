@@ -268,9 +268,9 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
               let buttonStyles = "border-white/15 bg-white/5 text-white/90 hover:bg-white/15 active:bg-white/20";
               if (isSelected) {
                 if (isCorrect) {
-                  buttonStyles = "border-emerald-400 bg-emerald-500/30 text-white ring-2 ring-emerald-400";
+                  buttonStyles = "border-petal-400 bg-petal-500/30 text-white ring-2 ring-petal-400 shadow-[0_0_15px_rgba(244,114,182,0.4)]";
                 } else {
-                  buttonStyles = "border-petal-400 bg-petal-500/30 text-white ring-2 ring-petal-400";
+                  buttonStyles = "border-red-400/80 bg-red-950/40 text-red-200 ring-2 ring-red-400/50";
                 }
               }
 
@@ -287,9 +287,9 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
                   {isSelected && (
                     <span>
                       {isCorrect ? (
-                        <CheckCircle className="h-5 w-5 text-emerald-300" />
+                        <CheckCircle className="h-5 w-5 text-petal-300" />
                       ) : (
-                        <AlertCircle className="h-5 w-5 text-petal-300" />
+                        <AlertCircle className="h-5 w-5 text-red-300" />
                       )}
                     </span>
                   )}

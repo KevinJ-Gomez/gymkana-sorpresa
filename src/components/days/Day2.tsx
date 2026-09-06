@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Image as ImageIcon, Play, Pause } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 import { InteractivePolaroid } from "@/components/effects/InteractivePolaroid";
+import { PostureoMosaic } from "./PostureoMosaic";
 import { hapticTap } from "@/lib/haptics";
 
 // ==========================================
@@ -129,68 +130,6 @@ function getChapterImageOrder(chapterId: string, imageCount: number): number[] {
 }
 
 // ==========================================
-// MOTOR DE AGRUPACIÓN (BENTO GRID CHUNKER)
-// ==========================================
-function chunkChapterImages(chapterId: string, imageOrder: number[]): number[][] {
-  const chunks: number[][] = [];
-  const remaining = [...imageOrder];
-
-  if (chapterId === "inicios") {
-    // 2 imágenes -> 1 escena dividida
-    return [remaining];
-  }
-
-  if (chapterId === "duros") {
-    // 8 imágenes: [2, 3, 4, 5, 6, 7, 8, 1]
-    // Dividimos en: 3 fotos, 4 fotos, y 1 foto final (la 1.jpg)
-    return [
-      remaining.slice(0, 3),
-      remaining.slice(3, 7),
-      remaining.slice(7, 8),
-    ];
-  }
-
-  if (chapterId === "felicidad") {
-    // La última foto (23.jpg) debe ser solitaria (Layout 1) para la Polaroid 3D interactiva
-    const lastItem = remaining.pop()!;
-    const pattern = [3, 4, 2, 4, 3, 2, 4, 4, 4];
-    let pIdx = 0;
-    while (remaining.length > 0) {
-      let chunkSize = pattern[pIdx % pattern.length];
-      if (remaining.length < chunkSize) {
-        chunkSize = remaining.length;
-      }
-      chunks.push(remaining.splice(0, chunkSize));
-      pIdx++;
-    }
-    chunks.push([lastItem]);
-    return chunks;
-  }
-
-  // Capítulos generales (postureos, viajes, cara_b): ritmo dinámico asimétrico
-  const pattern = [3, 4, 2, 4, 3, 2, 4, 3, 4];
-  let pIdx = 0;
-  while (remaining.length > 0) {
-    let chunkSize = pattern[pIdx % pattern.length];
-    if (remaining.length === 1 && chunks.length > 0) {
-      const prev = chunks[chunks.length - 1];
-      if (prev.length > 2) {
-        const borrowed = prev.pop()!;
-        chunks.push([borrowed, remaining.pop()!]);
-        break;
-      }
-    }
-    if (remaining.length < chunkSize) {
-      chunkSize = remaining.length;
-    }
-    chunks.push(remaining.splice(0, chunkSize));
-    pIdx++;
-  }
-
-  return chunks;
-}
-
-// ==========================================
 // TIPOS DE ESCENA (MEMORIES EDITORIAL)
 // ==========================================
 export type Scene =
@@ -205,13 +144,32 @@ export type Scene =
       duration: number;
     }
   | {
-      type: "mosaic";
+      type: "postureo_mosaic";
       id: string;
       chapterId: string;
       chapterIndex: number;
       chapterTitle: string;
       images: string[];
-      layout: 1 | 2 | 3 | 4;
+      text?: string;
+      duration: number;
+    }
+  | {
+      type: "mosaic_text";
+      id: string;
+      chapterId: string;
+      chapterIndex: number;
+      chapterTitle: string;
+      images: string[];
+      caption: string;
+      duration: number;
+    }
+  | {
+      type: "image";
+      id: string;
+      chapterId: string;
+      chapterIndex: number;
+      chapterTitle: string;
+      src: string;
       caption?: string;
       duration: number;
     }
@@ -222,76 +180,136 @@ export type Scene =
       duration: number;
     };
 
+// Construye las escenas de un capítulo individual
+function buildChapterScenes(ch: Chapter): Scene[] {
+  const sceneList: Scene[] = [];
+  const chIdx = chapters.findIndex((c) => c.id === ch.id);
+
+  // 1. Diapositiva Intersticial de Entrada
+  if (ch.connectorText) {
+    const duration = Math.max(4800, ch.connectorText.length * 32 + 1600);
+    sceneList.push({
+      type: "interstitial",
+      id: `intro-${ch.id}`,
+      chapterId: ch.id,
+      chapterIndex: chIdx,
+      chapterTitle: ch.title,
+      subtitle: `Capítulo ${chIdx + 1}`,
+      text: ch.connectorText,
+      duration,
+    });
+  }
+
+  // 2. SECCIÓN 2: POSTUREOS (>25 fotos) -> Mosaico dinámico de selfies frente al espejo
+  if (ch.id === "postureos") {
+    const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+    const images = imageOrder.map((num) => `${ch.folder}/${num}.jpg`);
+    sceneList.push({
+      type: "postureo_mosaic",
+      id: `postureo-mosaic-${ch.id}`,
+      chapterId: ch.id,
+      chapterIndex: chIdx,
+      chapterTitle: ch.title,
+      images,
+      text: ch.closingText || "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
+      duration: 20000,
+    });
+    return sceneList;
+  }
+
+  // 3. SECCIÓN 3: VIAJES -> Mosaicos SOLO donde haya fotos con el mismo texto
+  if (ch.id === "viajes") {
+    const sameTextGroups: { nums: number[]; caption: string }[] = [
+      { nums: [3, 4], caption: "Nuestra primera escapada juntos..." },
+      { nums: [5, 6, 7], caption: "Nuestra primera escapada juntos..." },
+      { nums: [15, 16, 17], caption: "Valencia y nuestro segundo Voltereta..." },
+      { nums: [18, 19, 20], caption: "Valencia y nuestro segundo Voltereta..." },
+      { nums: [32, 33], caption: "Primer eclipse juntos ❤️" },
+      { nums: [34, 35, 36], caption: "Nuestra primera vez en la playa juntos 🥰" },
+    ];
+
+    const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+    let i = 0;
+    while (i < imageOrder.length) {
+      const num = imageOrder[i];
+      const group = sameTextGroups.find(
+        (g) => g.nums[0] === num && g.nums.every((gn, gIdx) => imageOrder[i + gIdx] === gn)
+      );
+
+      if (group) {
+        // Fotos emparejadas con el mismo texto (sin recortes)
+        sceneList.push({
+          type: "mosaic_text",
+          id: `mosaic-${ch.id}-${num}`,
+          chapterId: ch.id,
+          chapterIndex: chIdx,
+          chapterTitle: ch.title,
+          images: group.nums.map((n) => `${ch.folder}/${n}.jpg`),
+          caption: group.caption,
+          duration: group.nums.length === 2 ? 3400 : 4000,
+        });
+        i += group.nums.length;
+      } else {
+        // Foto original individual (sin mosaico)
+        const src = `${ch.folder}/${num}.jpg`;
+        sceneList.push({
+          type: "image",
+          id: `img-${ch.id}-${num}`,
+          chapterId: ch.id,
+          chapterIndex: chIdx,
+          chapterTitle: ch.title,
+          src,
+          caption: PHOTO_CAPTIONS[src],
+          duration: 1050, // Velocidad 1.7x
+        });
+        i++;
+      }
+    }
+  } else {
+    // 4. DEMÁS SECCIONES (inicios, cara_b, duros, felicidad): FOTOS ORIGINALES SIN MOSAICOS
+    const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
+    const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+
+    imageOrder.forEach((num) => {
+      const src = `${ch.folder}/${num}.jpg`;
+      const duration = ch.id === "felicidad" && num === 23 ? 6500 : imgDuration;
+      sceneList.push({
+        type: "image",
+        id: `img-${ch.id}-${num}`,
+        chapterId: ch.id,
+        chapterIndex: chIdx,
+        chapterTitle: ch.title,
+        src,
+        caption: PHOTO_CAPTIONS[src],
+        duration,
+      });
+    });
+  }
+
+  // Diapositiva Intersticial de Cierre del Capítulo
+  if (ch.closingText) {
+    const duration = Math.max(4800, ch.closingText.length * 32 + 1600);
+    sceneList.push({
+      type: "interstitial",
+      id: `closing-${ch.id}`,
+      chapterId: ch.id,
+      chapterIndex: chIdx,
+      chapterTitle: ch.title,
+      subtitle: "Reflexión",
+      text: ch.closingText,
+      duration,
+    });
+  }
+
+  return sceneList;
+}
+
 // Construye la lista completa de escenas de todos los capítulos
 function buildEditorialScenes(): Scene[] {
   const sceneList: Scene[] = [];
 
-  chapters.forEach((ch, chIdx) => {
-    // Fase 1: Diapositiva Intersticial de Entrada (Respiro visual antes de las fotos)
-    if (ch.connectorText) {
-      const duration = Math.max(4800, ch.connectorText.length * 34 + 1800);
-      sceneList.push({
-        type: "interstitial",
-        id: `intro-${ch.id}`,
-        chapterId: ch.id,
-        chapterIndex: chIdx,
-        chapterTitle: ch.title,
-        subtitle: `Capítulo ${chIdx + 1}`,
-        text: ch.connectorText,
-        duration,
-      });
-    }
-
-    // Fase 2: Mosaicos Bento de Fotos
-    const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
-    const chunks = chunkChapterImages(ch.id, imageOrder);
-
-    chunks.forEach((chunk, chunkIdx) => {
-      const images = chunk.map((num) => `${ch.folder}/${num}.jpg`);
-      const layout = chunk.length as 1 | 2 | 3 | 4;
-
-      // Buscar subtítulo especial para el grupo si aplica
-      const firstWithCaption = images.find((src) => PHOTO_CAPTIONS[src]);
-      const caption = firstWithCaption ? PHOTO_CAPTIONS[firstWithCaption] : undefined;
-
-      // Duraciones rítmicas según cantidad de fotos en pantalla
-      let duration = 3200;
-      if (layout === 2) duration = 3800;
-      else if (layout === 3) duration = 4600;
-      else if (layout === 4) duration = 5200;
-
-      // Si es la Polaroid 23 de felicidad, darle más tiempo para interactuar
-      if (images.includes("/gallery/6_felicidad/23.jpg")) {
-        duration = 6500;
-      }
-
-      sceneList.push({
-        type: "mosaic",
-        id: `mosaic-${ch.id}-${chunkIdx}`,
-        chapterId: ch.id,
-        chapterIndex: chIdx,
-        chapterTitle: ch.title,
-        images,
-        layout,
-        caption,
-        duration,
-      });
-    });
-
-    // Diapositiva Intersticial de Cierre del Capítulo (si tiene)
-    if (ch.closingText) {
-      const duration = Math.max(4800, ch.closingText.length * 34 + 1800);
-      sceneList.push({
-        type: "interstitial",
-        id: `closing-${ch.id}`,
-        chapterId: ch.id,
-        chapterIndex: chIdx,
-        chapterTitle: ch.title,
-        subtitle: "Reflexión",
-        text: ch.closingText,
-        duration,
-      });
-    }
+  chapters.forEach((ch) => {
+    sceneList.push(...buildChapterScenes(ch));
   });
 
   // Escena final con premio
@@ -336,173 +354,155 @@ function SubtleTypewriterText({
 }
 
 // ==========================================
-// COMPONENTE: RENDERIZADOR BENTO GRID
+// COMPONENTE: RENDERIZADOR UNIVERSAL DE ESCENA
 // ==========================================
-function BentoGridRenderer({
-  images,
-  layout,
-  caption,
+function SceneContentRenderer({
+  scene,
+  isPaused,
+  speed,
+  onFinish,
+  onPostureoComplete,
 }: {
-  images: string[];
-  layout: 1 | 2 | 3 | 4;
-  caption?: string;
+  scene: Scene;
+  isPaused: boolean;
+  speed: number;
+  onFinish: () => void;
+  onPostureoComplete?: () => void;
 }) {
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-full max-h-[74vh] max-w-md mx-auto p-2">
-      {/* Subtítulo flotante editorial si existe para este momento */}
-      {caption && (
-        <motion.div
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-2.5 text-center shrink-0"
-        >
-          <span className="inline-block px-3.5 py-1 rounded-full bg-black/60 border border-white/20 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
-            {caption}
+  if (scene.type === "interstitial") {
+    return (
+      <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-xl mx-auto rounded-3xl border border-petal-400/30 bg-gradient-to-b from-[#1b0a2a]/95 to-[#0d0317]/98 p-8 shadow-2xl backdrop-blur-xl">
+        {scene.subtitle && (
+          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-petal-300 mb-3 px-3.5 py-1 rounded-full border border-petal-400/30 bg-petal-500/15">
+            {scene.subtitle}
           </span>
-        </motion.div>
-      )}
+        )}
+        <SubtleTypewriterText key={scene.text} text={scene.text} isPaused={isPaused} />
+      </div>
+    );
+  }
 
-      {/* ================= LAYOUT 1 FOTO ================= */}
-      {layout === 1 && (
-        images[0] === "/gallery/6_felicidad/23.jpg" ? (
+  if (scene.type === "postureo_mosaic") {
+    return (
+      <PostureoMosaic
+        images={scene.images}
+        text={scene.text}
+        isPaused={isPaused}
+        speed={speed}
+        onComplete={onPostureoComplete}
+      />
+    );
+  }
+
+  if (scene.type === "mosaic_text") {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full max-h-[75vh] max-w-md mx-auto p-2">
+        {scene.caption && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-2.5 text-center shrink-0 z-20"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-black/75 border border-petal-400/40 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
+              {scene.caption}
+            </span>
+          </motion.div>
+        )}
+
+        <div
+          className={`grid ${
+            scene.images.length === 2 ? "grid-cols-2" : "grid-cols-3"
+          } gap-2 w-full h-full max-h-[66vh] items-center justify-center`}
+        >
+          {scene.images.map((img, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-center p-1.5 bg-white/5 border border-white/10 rounded-2xl shadow-xl overflow-hidden h-full max-h-[64vh]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img}
+                alt={`Recuerdo ${i + 1}`}
+                style={
+                  IMAGE_ROTATIONS[img]
+                    ? { transform: `rotate(${IMAGE_ROTATIONS[img]}deg)` }
+                    : undefined
+                }
+                className="max-h-[60vh] max-w-full w-auto h-auto object-contain rounded-xl"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (scene.type === "image") {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full max-h-[75vh] max-w-md mx-auto p-2">
+        {scene.caption && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-2.5 text-center shrink-0 z-20"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-black/75 border border-petal-400/40 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
+              {scene.caption}
+            </span>
+          </motion.div>
+        )}
+
+        {scene.src === "/gallery/6_felicidad/23.jpg" ? (
           <InteractivePolaroid
-            imageSrc={images[0]}
+            imageSrc={scene.src}
             secretNote="Busca detrás de la funda de mi móvil"
           />
         ) : (
-          <div className="w-full h-full max-h-[66vh] p-2 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col items-center justify-center">
+          <div className="relative flex items-center justify-center w-full h-full max-h-[66vh] overflow-hidden rounded-2xl bg-white/5 border border-white/10 p-2 shadow-2xl backdrop-blur-sm">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={images[0]}
+              src={scene.src}
               alt="Recuerdo"
               style={
-                IMAGE_ROTATIONS[images[0]]
-                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+                IMAGE_ROTATIONS[scene.src]
+                  ? { transform: `rotate(${IMAGE_ROTATIONS[scene.src]}deg)` }
                   : undefined
               }
-              className="w-full h-full object-cover rounded-xl"
+              className="max-h-[62vh] max-w-full w-auto h-auto object-contain rounded-xl"
               onError={(e) => {
                 e.currentTarget.style.display = "none";
               }}
             />
           </div>
-        )
-      )}
+        )}
+      </div>
+    );
+  }
 
-      {/* ================= LAYOUT 2 FOTOS ================= */}
-      {layout === 2 && (
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-3 w-full h-full max-h-[66vh]">
-          {images.map((img, i) => (
-            <div
-              key={i}
-              className="p-1.5 sm:p-2 bg-white rounded-xl shadow-xl overflow-hidden flex flex-col"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={img}
-                alt={`Recuerdo ${i + 1}`}
-                style={
-                  IMAGE_ROTATIONS[img]
-                    ? { transform: `rotate(${IMAGE_ROTATIONS[img]}deg)` }
-                    : undefined
-                }
-                className="w-full h-full object-cover rounded-lg"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      )}
+  if (scene.type === "end") {
+    return (
+      <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-md mx-auto rounded-3xl border border-petal-400/40 bg-gradient-to-b from-[#2a0e36] to-[#0c0312] p-8 shadow-2xl">
+        <SubtleTypewriterText key={scene.text} text={scene.text} isPaused={isPaused} />
+        <motion.button
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onFinish();
+          }}
+          className="mt-6 rounded-full bg-gradient-to-r from-petal-500 to-petal-600 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 active:scale-95"
+        >
+          Ir a la Galería
+        </motion.button>
+      </div>
+    );
+  }
 
-      {/* ================= LAYOUT 3 FOTOS (ASIMÉTRICO BENTO) ================= */}
-      {layout === 3 && (
-        <div className="grid grid-cols-2 grid-rows-2 gap-2.5 sm:gap-3 w-full h-full max-h-[66vh]">
-          {/* Foto 1: Columna vertical alta a la izquierda (ocupa 2 filas) */}
-          <div className="row-span-2 col-span-1 p-1.5 sm:p-2 bg-white rounded-xl shadow-xl overflow-hidden flex flex-col">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={images[0]}
-              alt="Recuerdo principal"
-              style={
-                IMAGE_ROTATIONS[images[0]]
-                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
-                  : undefined
-              }
-              className="w-full h-full object-cover rounded-lg"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
-
-          {/* Foto 2: Arriba a la derecha */}
-          <div className="row-span-1 col-span-1 p-1.5 sm:p-2 bg-white rounded-xl shadow-xl overflow-hidden flex flex-col">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={images[1]}
-              alt="Recuerdo 2"
-              style={
-                IMAGE_ROTATIONS[images[1]]
-                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
-                  : undefined
-              }
-              className="w-full h-full object-cover rounded-lg"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
-
-          {/* Foto 3: Abajo a la derecha */}
-          <div className="row-span-1 col-span-1 p-1.5 sm:p-2 bg-white rounded-xl shadow-xl overflow-hidden flex flex-col">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={images[2]}
-              alt="Recuerdo 3"
-              style={
-                IMAGE_ROTATIONS[images[2]]
-                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[2]]}deg)` }
-                  : undefined
-              }
-              className="w-full h-full object-cover rounded-lg"
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* ================= LAYOUT 4 FOTOS (GRID 2x2) ================= */}
-      {layout === 4 && (
-        <div className="grid grid-cols-2 grid-rows-2 gap-2.5 sm:gap-3 w-full h-full max-h-[66vh]">
-          {images.map((img, i) => (
-            <div
-              key={i}
-              className="p-1.5 sm:p-2 bg-white rounded-xl shadow-xl overflow-hidden flex flex-col"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={img}
-                alt={`Recuerdo ${i + 1}`}
-                style={
-                  IMAGE_ROTATIONS[img]
-                    ? { transform: `rotate(${IMAGE_ROTATIONS[img]}deg)` }
-                    : undefined
-                }
-                className="w-full h-full object-cover rounded-lg"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return null;
 }
 
 // ==========================================
@@ -748,61 +748,34 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             transition={{ duration: 0.35, ease: "easeInOut" }}
             className="flex h-full w-full items-center justify-center"
           >
-            {/* FASE 1: DIAPOSITIVA INTERSTICIAL DE TEXTO (Respiro visual centrado) */}
-            {activeScene.type === "interstitial" && (
-              <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-xl mx-auto rounded-3xl border border-white/15 bg-gradient-to-b from-[#1b0a2a]/90 to-[#0d0317]/95 p-8 shadow-2xl backdrop-blur-xl">
-                {activeScene.subtitle && (
-                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-petal-300/85 mb-3 px-3 py-1 rounded-full border border-petal-400/20 bg-petal-500/10">
-                    {activeScene.subtitle}
-                  </span>
-                )}
-                <SubtleTypewriterText key={activeScene.text} text={activeScene.text} isPaused={isPaused} />
-              </div>
-            )}
-
-            {/* FASE 2: MOTOR DE MOSAICOS BENTO (1, 2, 3 o 4 fotos con marco editorial blanco) */}
-            {activeScene.type === "mosaic" && (
-              <BentoGridRenderer
-                images={activeScene.images}
-                layout={activeScene.layout}
-                caption={activeScene.caption}
-              />
-            )}
-
-            {/* ESCENA FINAL */}
-            {activeScene.type === "end" && (
-              <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-md mx-auto rounded-3xl border border-petal-400/30 bg-gradient-to-b from-[#2a0e36] to-[#0c0312] p-8 shadow-2xl">
-                <SubtleTypewriterText key={activeScene.text} text={activeScene.text} isPaused={isPaused} />
-                <motion.button
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onFinish();
-                  }}
-                  className="mt-6 rounded-full bg-gradient-to-r from-petal-500 to-petal-500 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 active:scale-95"
-                >
-                  Ir a la Galería
-                </motion.button>
-              </div>
-            )}
+            {/* RENDERIZADO UNIVERSAL DE ESCENA */}
+            <SceneContentRenderer
+              scene={activeScene}
+              isPaused={isPaused}
+              speed={speed}
+              onFinish={onFinish}
+              onPostureoComplete={goToNext}
+            />
           </motion.div>
         </AnimatePresence>
 
         {/* DOUBLE BUFFERING: Pre-carga en memoria invisible de las imágenes de la siguiente escena */}
-        {nextScene && nextScene.type === "mosaic" && (
+        {nextScene && (
           <div className="hidden" aria-hidden="true">
-            {nextScene.images.map((img) => (
+            {nextScene.type === "image" && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={img}
-                src={img}
-                alt="preload"
-                loading="eager"
-                decoding="async"
-              />
-            ))}
+              <img src={nextScene.src} alt="preload" loading="eager" />
+            )}
+            {nextScene.type === "mosaic_text" &&
+              nextScene.images.map((img) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={img} src={img} alt="preload" loading="eager" />
+              ))}
+            {nextScene.type === "postureo_mosaic" &&
+              nextScene.images.slice(0, 8).map((img) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={img} src={img} alt="preload" loading="eager" />
+              ))}
           </div>
         )}
       </div>
@@ -887,61 +860,7 @@ function ChapterCarousel({
   chapter: Chapter;
   onClose: () => void;
 }) {
-  const scenes = useMemo(() => {
-    const list: Scene[] = [];
-    const chIdx = chapters.findIndex((c) => c.id === chapter.id);
-
-    if (chapter.connectorText) {
-      list.push({
-        type: "interstitial",
-        id: `c-intro-${chapter.id}`,
-        chapterId: chapter.id,
-        chapterIndex: chIdx,
-        chapterTitle: chapter.title,
-        subtitle: `Capítulo ${chIdx + 1}`,
-        text: chapter.connectorText,
-        duration: 4000,
-      });
-    }
-
-    const imageOrder = getChapterImageOrder(chapter.id, chapter.imageCount);
-    const chunks = chunkChapterImages(chapter.id, imageOrder);
-
-    chunks.forEach((chunk, chunkIdx) => {
-      const images = chunk.map((num) => `${chapter.folder}/${num}.jpg`);
-      const layout = chunk.length as 1 | 2 | 3 | 4;
-      const firstWithCaption = images.find((src) => PHOTO_CAPTIONS[src]);
-      const caption = firstWithCaption ? PHOTO_CAPTIONS[firstWithCaption] : undefined;
-
-      list.push({
-        type: "mosaic",
-        id: `c-mosaic-${chapter.id}-${chunkIdx}`,
-        chapterId: chapter.id,
-        chapterIndex: chIdx,
-        chapterTitle: chapter.title,
-        images,
-        layout,
-        caption,
-        duration: 4000,
-      });
-    });
-
-    if (chapter.closingText) {
-      list.push({
-        type: "interstitial",
-        id: `c-closing-${chapter.id}`,
-        chapterId: chapter.id,
-        chapterIndex: chIdx,
-        chapterTitle: chapter.title,
-        subtitle: "Reflexión",
-        text: chapter.closingText,
-        duration: 4000,
-      });
-    }
-
-    return list;
-  }, [chapter]);
-
+  const scenes = useMemo(() => buildChapterScenes(chapter), [chapter]);
   const [page, setPage] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -979,24 +898,12 @@ function ChapterCarousel({
             transition={{ duration: 0.3 }}
             className="flex h-full w-full items-center justify-center"
           >
-            {activeScene.type === "interstitial" ? (
-              <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-lg mx-auto rounded-3xl border border-white/15 bg-gradient-to-b from-[#1b0a2a]/90 to-[#0d0317]/95 p-8 shadow-2xl backdrop-blur-xl">
-                {activeScene.subtitle && (
-                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-petal-300/85 mb-3 px-3 py-1 rounded-full border border-petal-400/20 bg-petal-500/10">
-                    {activeScene.subtitle}
-                  </span>
-                )}
-                <p className="font-serif text-xl sm:text-2xl leading-relaxed text-white/95">
-                  “{activeScene.text}”
-                </p>
-              </div>
-            ) : activeScene.type === "mosaic" ? (
-              <BentoGridRenderer
-                images={activeScene.images}
-                layout={activeScene.layout}
-                caption={activeScene.caption}
-              />
-            ) : null}
+            <SceneContentRenderer
+              scene={activeScene}
+              isPaused={false}
+              speed={1.0}
+              onFinish={onClose}
+            />
           </motion.div>
         </AnimatePresence>
       </div>

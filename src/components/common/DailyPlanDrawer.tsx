@@ -217,10 +217,10 @@ export function DailyPlanDrawer({
                     cellClasses += "bg-transparent text-white/20";
                   } else if (isDayActive && isDaySelected) {
                     // Día actual activo Y seleccionado
-                    cellClasses += "border border-cyan-400 bg-cyan-500/25 text-white font-bold shadow-[0_0_15px_rgba(0,191,255,0.35)] cursor-pointer";
+                    cellClasses += "border border-pink-400 bg-pink-500/25 text-white font-bold shadow-[0_0_15px_rgba(244,114,182,0.4)] cursor-pointer";
                   } else if (isDayActive) {
                     // Día actual activo
-                    cellClasses += "border border-cyan-400/80 bg-cyan-500/15 text-white font-bold cursor-pointer";
+                    cellClasses += "border border-pink-400/80 bg-pink-500/15 text-white font-bold cursor-pointer";
                   } else if (isDaySelected) {
                     // Día seleccionado resuelto
                     cellClasses += "border border-white/80 bg-white/20 text-white font-semibold cursor-pointer";

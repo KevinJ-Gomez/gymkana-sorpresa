@@ -401,9 +401,9 @@ export function SpoilerExperience() {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-2xl border border-emerald-400/30 bg-black/40 p-5 text-center space-y-4 backdrop-blur-md"
+            className="rounded-2xl border border-petal-400/40 bg-black/40 p-5 text-center space-y-4 backdrop-blur-md"
           >
-            <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-400">
+            <div className="flex items-center justify-center gap-1.5 text-xs font-semibold text-petal-300">
               <Unlock className="h-4 w-4" />
               <span>Acertijo correcto</span>
             </div>
@@ -599,7 +599,7 @@ export function SpoilerExperience() {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-3 pt-1"
               >
-                <div className="flex items-center justify-center gap-1 text-xs font-semibold text-emerald-400">
+                <div className="flex items-center justify-center gap-1 text-xs font-semibold text-petal-300">
                   <Check className="h-4 w-4" />
                   <span>Sorpresa completada</span>
                 </div>

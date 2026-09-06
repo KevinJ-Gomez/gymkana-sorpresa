@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Users, CheckCircle2, RotateCcw, Image as ImageIcon } from "lucide-react";
+import { Heart, CheckCircle2, RotateCcw, Image as ImageIcon } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 // 9 fragmentos que forman una frase completa y con sentido al ordenarse (cuadrícula 3x3)
@@ -189,7 +189,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
                   isSelected
                     ? "border-petal-400 bg-petal-500/40 shadow-[0_0_20px_rgba(244,114,182,0.7)] ring-2 ring-petal-400 scale-105 z-10"
                     : isInCorrectPlace
-                    ? "border-emerald-400/80 bg-emerald-500/25 text-emerald-100 shadow-[0_0_12px_rgba(52,211,153,0.35)] ring-1 ring-emerald-400/40"
+                    ? "border-petal-300/80 bg-petal-500/25 text-petal-100 shadow-[0_0_12px_rgba(244,114,182,0.35)] ring-1 ring-petal-400/40"
                     : "border-white/15 bg-white/10 text-white/90 hover:bg-white/15 active:bg-white/20 backdrop-blur-md"
                 }`}
               >
@@ -197,7 +197,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
                   {piece.text}
                 </span>
                 {isInCorrectPlace && (
-                  <CheckCircle2 className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-emerald-300 drop-shadow" />
+                  <CheckCircle2 className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-petal-300 drop-shadow" />
                 )}
               </motion.button>
             );

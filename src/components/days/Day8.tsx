@@ -233,17 +233,17 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <div className="grid grid-cols-3 gap-2 pt-2">
           <div
             className={`h-2 rounded-full transition-all duration-500 ${
-              unlocked1 ? "bg-emerald-400 shadow-[0_0_12px_#34d399]" : "bg-white/15"
+              unlocked1 ? "bg-petal-400 shadow-[0_0_12px_rgba(244,114,182,0.6)]" : "bg-white/15"
             }`}
           />
           <div
             className={`h-2 rounded-full transition-all duration-500 ${
-              unlocked2 ? "bg-emerald-400 shadow-[0_0_12px_#34d399]" : "bg-white/15"
+              unlocked2 ? "bg-petal-400 shadow-[0_0_12px_rgba(244,114,182,0.6)]" : "bg-white/15"
             }`}
           />
           <div
             className={`h-2 rounded-full transition-all duration-500 ${
-              unlocked3 ? "bg-emerald-400 shadow-[0_0_12px_#34d399]" : "bg-white/15"
+              unlocked3 ? "bg-petal-400 shadow-[0_0_12px_rgba(244,114,182,0.6)]" : "bg-white/15"
             }`}
           />
         </div>
@@ -274,8 +274,8 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           >
             {copiedPhrase ? (
               <>
-                <Check className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="text-emerald-400">Copiado</span>
+                <Check className="h-3.5 w-3.5 text-petal-300" />
+                <span className="text-petal-300">Copiado</span>
               </>
             ) : (
               <>
@@ -295,7 +295,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked1
-              ? "border-emerald-400/40 bg-emerald-950/30 shadow-[0_0_20px_rgba(52,211,153,0.15)]"
+              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
               : "border-white/15 bg-white/5"
           }`}
         >
@@ -309,7 +309,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </h4>
             </div>
             {unlocked1 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
+              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Abierta</span>
               </span>
@@ -362,7 +362,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-emerald-300 font-medium">
+            <p className="text-xs text-petal-300 font-medium">
               ✨ ¡1ª Cerradura superada con éxito!
             </p>
           )}
@@ -374,7 +374,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked2
-              ? "border-emerald-400/40 bg-emerald-950/30 shadow-[0_0_20px_rgba(52,211,153,0.15)]"
+              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
               : "border-white/15 bg-white/5"
           }`}
         >
@@ -388,7 +388,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </h4>
             </div>
             {unlocked2 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
+              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Abierta</span>
               </span>
@@ -441,7 +441,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-emerald-300 font-medium">
+            <p className="text-xs text-petal-300 font-medium">
               ✨ ¡2ª Cerradura superada con éxito!
             </p>
           )}
@@ -453,7 +453,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked3
-              ? "border-emerald-400/40 bg-emerald-950/30 shadow-[0_0_20px_rgba(52,211,153,0.15)]"
+              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
               : "border-white/15 bg-white/5"
           }`}
         >
@@ -467,7 +467,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </h4>
             </div>
             {unlocked3 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400">
+              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Abierta</span>
               </span>
@@ -520,7 +520,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-emerald-300 font-medium">
+            <p className="text-xs text-petal-300 font-medium">
               ✨ ¡3ª Cerradura superada con éxito!
             </p>
           )}

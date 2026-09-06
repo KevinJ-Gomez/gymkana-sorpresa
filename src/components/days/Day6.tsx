@@ -67,7 +67,7 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
               animate={wrongTile === tile ? { x: [0, -6, 6, -6, 0] } : {}}
               className={`flex aspect-square items-center justify-center rounded-xl border text-xl font-semibold transition ${
                 isDone
-                  ? "border-emerald-300/60 bg-emerald-400/20 text-emerald-200"
+                  ? "border-petal-400/60 bg-petal-500/20 text-petal-200"
                   : "border-white/20 bg-white/10 text-white active:bg-white/20 sm:hover:bg-white/20"
               }`}
             >

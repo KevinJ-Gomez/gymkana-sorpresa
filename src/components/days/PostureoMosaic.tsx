@@ -5,14 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface PostureoMosaicProps {
   images: string[];
-  text: string;
+  text?: string;
   isPaused?: boolean;
+  speed?: number;
+  onComplete?: () => void;
 }
 
 export function PostureoMosaic({
   images,
   text = "muchos outfits y espejos , tantos que no me cabían todas las fotos...",
   isPaused = false,
+  speed = 1.0,
+  onComplete,
 }: PostureoMosaicProps) {
   // Índice de la foto que se está destacando en primer plano
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,7 +25,8 @@ export function PostureoMosaic({
   useEffect(() => {
     if (isPaused || isFinished) return;
 
-    // Velocidad 2.2x (aprox 500ms por foto para que sea dinámico y no se haga pesado)
+    // Ritmo ágil para transmitir sin palabras la multitud de fotos en el espejo
+    const intervalTime = Math.max(220, Math.round(480 / speed));
     const interval = setInterval(() => {
       setCurrentIndex((prev) => {
         if (prev < images.length) {
@@ -29,18 +34,26 @@ export function PostureoMosaic({
         }
         return prev;
       });
-    }, 520);
+    }, intervalTime);
 
     return () => clearInterval(interval);
-  }, [isPaused, isFinished, images.length]);
+  }, [isPaused, isFinished, images.length, speed]);
+
+  useEffect(() => {
+    if (isFinished && onComplete) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [isFinished, onComplete]);
 
   return (
     <div className="relative flex h-full w-full max-w-4xl flex-col items-center justify-center p-3 select-none overflow-hidden">
       {/* 1. MOSAICO DE FONDO: Las fotos que ya han aparecido se van colocando detrás */}
-      <div className="w-full max-w-2xl grid grid-cols-6 sm:grid-cols-8 gap-1.5 sm:gap-2 justify-items-center items-center">
+      <div className="w-full max-w-sm sm:max-w-xl grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-1 sm:gap-1.5 justify-items-center items-center">
         {images.map((src, index) => {
           const isPlaced = index < currentIndex;
-          const isCurrent = index === currentIndex && !isFinished;
 
           return (
             <motion.div
