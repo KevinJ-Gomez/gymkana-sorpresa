@@ -43,3 +43,6 @@ next-env.d.ts
 
 # IDE
 .vscode/
+
+# private source media - never commit
+/fotos_originales/
