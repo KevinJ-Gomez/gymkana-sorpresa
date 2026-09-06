@@ -318,18 +318,12 @@ function SubtleTypewriterText({
   const [charCount, setCharCount] = useState(0);
 
   useEffect(() => {
-    setCharCount(0);
-    let count = 0;
-    const interval = setInterval(() => {
-      if (isPaused) return;
-      count += 1;
-      setCharCount(count);
-      if (count >= text.length) {
-        clearInterval(interval);
-      }
+    if (isPaused || charCount >= text.length) return;
+    const timeout = setTimeout(() => {
+      setCharCount((count) => count + 1);
     }, 32);
-    return () => clearInterval(interval);
-  }, [text, isPaused]);
+    return () => clearTimeout(timeout);
+  }, [text.length, isPaused, charCount]);
 
   return (
     <p className="font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed sm:leading-loose text-white/95 drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
@@ -762,7 +756,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
                     {activeScene.subtitle}
                   </span>
                 )}
-                <SubtleTypewriterText text={activeScene.text} isPaused={isPaused} />
+                <SubtleTypewriterText key={activeScene.text} text={activeScene.text} isPaused={isPaused} />
               </div>
             )}
 
@@ -778,7 +772,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             {/* ESCENA FINAL */}
             {activeScene.type === "end" && (
               <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-md mx-auto rounded-3xl border border-petal-400/30 bg-gradient-to-b from-[#2a0e36] to-[#0c0312] p-8 shadow-2xl">
-                <SubtleTypewriterText text={activeScene.text} isPaused={isPaused} />
+                <SubtleTypewriterText key={activeScene.text} text={activeScene.text} isPaused={isPaused} />
                 <motion.button
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
