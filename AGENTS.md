@@ -14,6 +14,32 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Inspect the current code and recent relevant changes before assuming how an interaction works.
 - Preserve approved behavior unless the task explicitly changes it.
 - Do not claim a visual fix is complete without inspecting a real rendered result when appearance matters.
+- GitHub `main`, Issues, active PRs/branches and canonical repository docs are the durable operational memory. Old chats and local plans are secondary context.
+
+## Git rules
+- Work from latest `main` on a task branch; do not push directly to `main`.
+- For an owner-assigned Issue/task, non-destructive branch creation, commits, pushes and PR creation/update are pre-authorized. Do not ask Kevin to repeat permission for those routine operations.
+- Do not use destructive Git operations to discard unknown work. Preserve unrelated local changes.
+- Do not merge until required validation/review is complete. Release/freeze and privacy-sensitive changes require the corresponding gates.
+
+## Session handoff protocol — mandatory and automatic
+At the start of every substantive task:
+1. review current `main`, this file, the target Issue and any relevant active PR/branch;
+2. read the relevant skills and inspect the real affected implementation;
+3. prefer current GitHub evidence over memory or an old transcript.
+
+During work:
+- do not post minute-by-minute notes;
+- persist a material decision when it changes scope, navigation/release behavior, privacy/spoiler behavior, architecture, canonical paths, performance strategy or the accepted implementation route;
+- if repository structure or a canonical route changes, update the Issue/PR/docs. Local machine paths are never canonical.
+
+Before ending a substantive session, without waiting for Kevin to request it:
+1. push safe code/docs changes to the working branch;
+2. create or update the PR when appropriate;
+3. leave a concise Issue/PR handoff with objective, final decisions, changed files/areas or commits, validation evidence, unresolved risks/blockers, explicit status, and exact next action;
+4. reconcile the Issue state if scope/completion changed.
+
+A future ChatGPT/Codex/Antigravity session must be able to reconstruct the task from GitHub without the prior VS Code conversation. Kevin should never need to copy a long plan or summary between agents.
 
 ## Agent orchestration
 - This repository supports both Codex (including GPT-6 Astra) and Google Antigravity.
