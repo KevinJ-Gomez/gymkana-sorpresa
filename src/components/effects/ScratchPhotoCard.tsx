@@ -59,7 +59,7 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
     ctx.fillText("Desliza para desvelar la foto", canvas.width / 2, canvas.height / 2 + 15);
   }, [isFullyRevealed]);
 
-  function scratch(clientX: number, clientY: number) {
+  function scratch(clientX: number, clientY: number, now: number) {
     const canvas = canvasRef.current;
     if (!canvas || isFullyRevealed) return;
     const ctx = canvas.getContext("2d");
@@ -67,7 +67,6 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
 
     if (!hasStarted) setHasStarted(true);
 
-    const now = Date.now();
     if (now - lastHaptic.current > 80) {
       hapticScratch();
       lastHaptic.current = now;
@@ -114,12 +113,12 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
 
   function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
     isDrawing.current = true;
-    scratch(e.clientX, e.clientY);
+    scratch(e.clientX, e.clientY, e.timeStamp);
   }
 
   function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
     if (!isDrawing.current) return;
-    scratch(e.clientX, e.clientY);
+    scratch(e.clientX, e.clientY, e.timeStamp);
   }
 
   function handlePointerUp() {

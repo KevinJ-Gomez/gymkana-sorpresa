@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { DayConfig } from "@/types/gymkana";
 import { formatUnlockDate } from "@/lib/dates";
@@ -65,11 +65,6 @@ export function DailyPlanDrawer({
 }: DailyPlanDrawerProps) {
   // Inicializamos el día seleccionado en el día activo resuelto
   const [selectedDayId, setSelectedDayId] = useState<number>(activeDayId);
-
-  // Sincronizar si cambia el día activo
-  useEffect(() => {
-    setSelectedDayId(activeDayId);
-  }, [activeDayId]);
 
   const selectedDay = useMemo(() => {
     return days.find((d) => d.id === selectedDayId) ?? days.find((d) => d.id === activeDayId) ?? days[0];

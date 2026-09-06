@@ -377,6 +377,7 @@ export function GymkanaApp() {
       <AnimatePresence>
         {showPlanDrawer && currentActiveDayId && (
           <DailyPlanDrawer
+            key={currentActiveDayId}
             isOpen={isPlanDrawerOpen}
             onToggle={() => setIsPlanDrawerOpen((prev) => !prev)}
             onClose={() => setIsPlanDrawerOpen(false)}

@@ -33,12 +33,15 @@ export function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
 
   useEffect(() => {
-    setTimeLeft(calculateTimeLeft());
+    const initialTick = setTimeout(() => setTimeLeft(calculateTimeLeft()), 0);
     const interval = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(initialTick);
+      clearInterval(interval);
+    };
   }, []);
 
   if (!timeLeft) return null;
