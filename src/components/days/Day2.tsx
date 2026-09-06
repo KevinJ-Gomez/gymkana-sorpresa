@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight, Image as ImageIcon, Play, Pause } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Image as ImageIcon, Play } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 import { InteractivePolaroid } from "@/components/effects/InteractivePolaroid";
 import { PostureoMosaic } from "./PostureoMosaic";
@@ -910,15 +910,21 @@ const transitionVariants = {
   }),
 };
 
-function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
-  const scenes = useMemo(() => buildEditorialScenes(), []);
+// ==========================================
+// VISOR MANUAL INTERACTIVO DE HISTORIA
+// (Sin avance automático, con arrastre táctil / swipe y botones)
+// ==========================================
+interface StoryViewerProps {
+  scenes: Scene[];
+  title?: string;
+  onClose: () => void;
+}
+
+function StoryViewer({ scenes, title, onClose }: StoryViewerProps) {
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [isPaused, setIsPaused] = useState(false);
-  const [speed, setSpeed] = useState(1.0);
+  const [direction, setDirection] = useState(0);
 
   const activeScene = scenes[index];
-  const nextScene = index + 1 < scenes.length ? scenes[index + 1] : null;
 
   // Calcular las escenas del capítulo activo para la barra segmentada
   const currentChapterScenes = useMemo(() => {
@@ -933,22 +939,10 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     return currentChapterScenes.findIndex((s) => s.id === activeScene.id);
   }, [currentChapterScenes, activeScene]);
 
-  // Barra de progreso de la escena activa
-  const [progressPercent, setProgressPercent] = useState(0);
-  const elapsedRef = useRef(0);
-  const speedRef = useRef(speed);
-
-  // Sincronizar speedRef si cambia speed
-  useEffect(() => {
-    speedRef.current = speed;
-  }, [speed]);
-
   const goToPrev = useCallback(() => {
     if (index > 0) {
       hapticTap();
       setDirection(-1);
-      elapsedRef.current = 0;
-      setProgressPercent(0);
       setIndex((prev) => prev - 1);
     }
   }, [index]);
@@ -957,106 +951,34 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     if (index < scenes.length - 1) {
       hapticTap();
       setDirection(1);
-      elapsedRef.current = 0;
-      setProgressPercent(0);
       setIndex((prev) => prev + 1);
     } else {
-      onFinish();
+      onClose();
     }
-  }, [index, scenes.length, onFinish]);
+  }, [index, scenes.length, onClose]);
 
-  // Timer de Autoplay (no depende de speed para no reiniciar la foto al cambiar de velocidad)
-  useEffect(() => {
-    if (isPaused) return;
-
-    let lastTime = performance.now();
-    let rafId: number;
-
-    const tick = (now: number) => {
-      const delta = now - lastTime;
-      lastTime = now;
-
-      elapsedRef.current += delta * speedRef.current;
-      const targetDuration = activeScene.duration;
-      const pct = Math.min(100, (elapsedRef.current / targetDuration) * 100);
-      setProgressPercent(pct);
-
-      if (elapsedRef.current >= targetDuration) {
-        goToNext();
-      } else {
-        rafId = requestAnimationFrame(tick);
-      }
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [index, activeScene.duration, isPaused, goToNext]);
-
-  // Gestos táctiles estilo Instagram Stories (Mantener pulsado para pausar, toque en extremos para avanzar/retroceder)
+  // Gestos táctiles rápidos de tap (lado izquierdo 28% -> anterior, lado derecho 72% -> siguiente)
   const pointerStartTime = useRef(0);
   const pointerStartX = useRef(0);
-  const isHolding = useRef(false);
-  const holdTimer = useRef<NodeJS.Timeout | null>(null);
 
   const handlePointerDown = (e: React.PointerEvent) => {
     pointerStartTime.current = Date.now();
     pointerStartX.current = e.clientX;
-    isHolding.current = false;
-
-    // A los 220ms de mantener pulsado, se pausa
-    holdTimer.current = setTimeout(() => {
-      isHolding.current = true;
-      setIsPaused(true);
-    }, 220);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
-    if (holdTimer.current) clearTimeout(holdTimer.current);
-
     const elapsed = Date.now() - pointerStartTime.current;
     const moveDist = Math.abs(e.clientX - pointerStartX.current);
 
-    if (isHolding.current) {
-      // Estaba manteniendo presionado: al levantar el dedo reanuda
-      isHolding.current = false;
-      setIsPaused(false);
-      return;
-    }
-
-    // Fue un toque corto (tap)
-    if (elapsed < 300 && moveDist < 18) {
+    // Si fue un toque rápido y sin arrastre prolongado
+    if (elapsed < 260 && moveDist < 14) {
       const screenWidth = window.innerWidth;
-      // 30% izquierdo -> retroceder, 70% derecho -> avanzar
-      if (e.clientX < screenWidth * 0.35) {
+      if (e.clientX < screenWidth * 0.28) {
         goToPrev();
-      } else {
+      } else if (e.clientX > screenWidth * 0.72) {
         goToNext();
       }
     }
-  };
-
-  const handlePointerCancel = () => {
-    if (holdTimer.current) clearTimeout(holdTimer.current);
-    if (isHolding.current) {
-      isHolding.current = false;
-      setIsPaused(false);
-    }
-  };
-
-  const togglePause = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    hapticTap();
-    setIsPaused((prev) => !prev);
-  };
-
-  const cycleSpeed = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    hapticTap();
-    setSpeed((prev) => {
-      const next = prev === 1.0 ? 1.5 : prev === 1.5 ? 2.0 : prev === 2.0 ? 0.6 : 1.0;
-      speedRef.current = next;
-      return next;
-    });
   };
 
   return (
@@ -1067,34 +989,36 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
       className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-black select-none overflow-hidden touch-none"
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerCancel}
     >
-      {/* ================= BARRA SUPERIOR ESTILO STORIES ================= */}
-      <div className="relative z-50 w-full px-4 pt-3 pb-2 space-y-2 bg-gradient-to-b from-black/90 via-black/40 to-transparent pointer-events-none">
-        {/* Segmentos de progreso del capítulo */}
-        <div className="flex items-center gap-1.5 w-full">
-          {currentChapterScenes.map((sc, scIdx) => {
-            let widthPct = 0;
-            if (scIdx < sceneIndexInChapter) {
-              widthPct = 100;
-            } else if (scIdx === sceneIndexInChapter) {
-              widthPct = progressPercent;
-            }
-            return (
-              <div
-                key={sc.id}
-                className="h-1 flex-1 rounded-full bg-white/25 overflow-hidden backdrop-blur-sm"
-              >
+      {/* ================= BARRA SUPERIOR ================= */}
+      <div className="relative z-50 w-full px-4 pt-3 pb-2 space-y-2 bg-gradient-to-b from-black/95 via-black/50 to-transparent pointer-events-none">
+        {/* Segmentos de progreso del capítulo actual */}
+        {currentChapterScenes.length > 0 && (
+          <div className="flex items-center gap-1.5 w-full">
+            {currentChapterScenes.map((sc, scIdx) => {
+              const isFilled = scIdx <= sceneIndexInChapter;
+              const isCurrent = scIdx === sceneIndexInChapter;
+              return (
                 <div
-                  className="h-full bg-petal-400 transition-none"
-                  style={{ width: `${widthPct}%` }}
-                />
-              </div>
-            );
-          })}
-        </div>
+                  key={sc.id}
+                  className="h-1 flex-1 rounded-full bg-white/20 overflow-hidden backdrop-blur-sm"
+                >
+                  <div
+                    className={`h-full transition-all duration-300 ${
+                      isFilled
+                        ? isCurrent
+                          ? "bg-petal-300 shadow-[0_0_8px_rgba(244,114,182,0.9)]"
+                          : "bg-petal-400"
+                        : "bg-transparent"
+                    }`}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Cabecera con título del capítulo y botón saltar */}
+        {/* Cabecera con título del capítulo y botón de salir a capítulos */}
         <div className="flex items-center justify-between pt-1">
           <div className="flex flex-col">
             <span className="text-[11px] uppercase tracking-wider text-petal-300/80 font-medium">
@@ -1102,32 +1026,62 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
                 ? `Capítulo ${activeScene.chapterIndex + 1} de 6`
                 : "Recuerdos"}
             </span>
-            <span className="text-sm font-semibold text-white truncate max-w-[200px]">
-              {activeScene.type !== "end" ? activeScene.chapterTitle : "Nuestra Historia"}
+            <span className="text-sm font-semibold text-white truncate max-w-[220px]">
+              {activeScene.type !== "end"
+                ? activeScene.chapterTitle
+                : title || "Nuestra Historia"}
             </span>
           </div>
 
           <div className="flex items-center gap-2 pointer-events-auto">
-            {isPaused && (
-              <span className="rounded-full border border-petal-500/40 bg-petal-500/20 px-2.5 py-0.5 text-[11px] font-medium text-petal-300 animate-pulse">
-                Pausado
-              </span>
-            )}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onFinish();
+                onClose();
               }}
-              className="rounded-full bg-black/60 border border-white/20 px-3.5 py-1 text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/80 active:scale-95 shadow-md"
+              className="flex items-center gap-1.5 rounded-full bg-black/60 border border-white/20 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-105 active:scale-95 shadow-md"
+              title="Volver a los capítulos"
             >
-              Saltar
+              <X className="h-3.5 w-3.5" />
+              <span>Capítulos</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ================= CONTENIDO DE LA ESCENA (VIRTUALIZADO CON DOUBLE BUFFERING) ================= */}
-      <div className="relative flex-1 w-full flex items-center justify-center p-3 sm:p-4">
+      {/* ================= CONTENIDO DE LA ESCENA CON ARRASTRE TÁCTIL (DRAG) ================= */}
+      <div className="relative flex-1 w-full flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+        {/* Flecha Flotante Izquierda */}
+        {index > 0 && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              goToPrev();
+            }}
+            className="pointer-events-auto absolute left-2 sm:left-4 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 border border-white/20 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 active:scale-95 shadow-2xl"
+            title="Foto anterior"
+            aria-label="Foto anterior"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+        )}
+
+        {/* Flecha Flotante Derecha */}
+        {index < scenes.length - 1 && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              goToNext();
+            }}
+            className="pointer-events-auto absolute right-2 sm:right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-black/60 border border-white/20 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-110 active:scale-95 shadow-2xl"
+            title="Foto siguiente"
+            aria-label="Foto siguiente"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
+        )}
+
+        {/* Diapositiva arrastrable con Framer Motion */}
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={activeScene.id}
@@ -1136,290 +1090,167 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="flex h-full w-full items-center justify-center"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.35}
+            onDragEnd={(e, { offset, velocity }) => {
+              if (offset.x < -45 || velocity.x < -250) {
+                goToNext();
+              } else if (offset.x > 45 || velocity.x > 250) {
+                goToPrev();
+              }
+            }}
+            transition={{ duration: 0.32, ease: "easeOut" }}
+            className="flex h-full w-full items-center justify-center cursor-grab active:cursor-grabbing"
           >
-            {/* RENDERIZADO UNIVERSAL DE ESCENA */}
             <SceneContentRenderer
               scene={activeScene}
-              isPaused={isPaused}
-              speed={speed}
-              onFinish={onFinish}
+              isPaused={false}
+              speed={1.0}
+              onFinish={goToNext}
               onPostureoComplete={goToNext}
             />
           </motion.div>
         </AnimatePresence>
-
-        {/* DOUBLE BUFFERING: Pre-carga en memoria invisible de las imágenes de la siguiente escena */}
-        {nextScene && (
-          <div className="hidden" aria-hidden="true">
-            {nextScene.type === "image" && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={nextScene.src} alt="preload" loading="eager" />
-            )}
-            {nextScene.type === "mosaic_text" &&
-              nextScene.images.map((img) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={img} src={img} alt="preload" loading="eager" />
-              ))}
-            {nextScene.type === "postureo_mosaic" &&
-              nextScene.images.slice(0, 8).map((img) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={img} src={img} alt="preload" loading="eager" />
-              ))}
-          </div>
-        )}
       </div>
 
-      {/* Flechas de ayuda visual cuando está pausado */}
-      {isPaused && (
-        <div className="pointer-events-none fixed inset-y-0 inset-x-2 sm:inset-x-4 z-50 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              goToPrev();
-            }}
-            disabled={index === 0}
-            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/80 border border-white/25 text-white backdrop-blur-md transition hover:scale-110 disabled:opacity-20 active:scale-95 shadow-2xl"
-          >
-            <ChevronLeft className="h-7 w-7" />
-          </button>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              goToNext();
-            }}
-            disabled={index === scenes.length - 1}
-            className="pointer-events-auto flex h-12 w-12 items-center justify-center rounded-full bg-black/80 border border-white/25 text-white backdrop-blur-md transition hover:scale-110 disabled:opacity-20 active:scale-95 shadow-2xl"
-          >
-            <ChevronRight className="h-7 w-7" />
-          </button>
-        </div>
-      )}
-
       {/* ================= CONTROLES INFERIORES ================= */}
-      <div className="relative z-50 w-full px-6 pb-6 pt-2 flex items-center justify-between bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-auto">
-        <div className="flex items-center gap-3">
-          {/* Botón Pausar / Reanudar */}
-          <button
-            onClick={togglePause}
-            className={`flex h-11 w-11 items-center justify-center rounded-full shadow-lg backdrop-blur-md transition-all active:scale-95 ${
-              isPaused
-                ? "bg-petal-500 text-white ring-4 ring-petal-500/30"
-                : "bg-white/15 text-white hover:bg-white/25 border border-white/20"
-            }`}
-            title={isPaused ? "Reanudar" : "Pausar"}
-          >
-            {isPaused ? (
-              <Play className="h-5 w-5 fill-white ml-0.5" />
-            ) : (
-              <Pause className="h-5 w-5 fill-white" />
-            )}
-          </button>
+      <div className="relative z-50 w-full px-5 pb-5 pt-2 flex items-center justify-between bg-gradient-to-t from-black/95 via-black/50 to-transparent pointer-events-auto">
+        {/* Botón Anterior */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            goToPrev();
+          }}
+          disabled={index === 0}
+          className="flex items-center gap-1 h-9 px-3.5 rounded-full bg-white/10 border border-white/20 text-xs font-medium text-white/90 backdrop-blur-md transition hover:bg-white/20 disabled:opacity-20 active:scale-95"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          <span>Anterior</span>
+        </button>
 
-          {/* Botón Selector de Velocidad */}
-          <button
-            onClick={cycleSpeed}
-            className="flex h-9 px-3.5 items-center justify-center rounded-full bg-white/10 border border-white/20 text-xs font-mono font-medium text-petal-300 backdrop-blur-md active:scale-95 shadow-md"
-            title="Cambiar velocidad"
-          >
-            {speed}x
-          </button>
+        {/* Indicador de posición y guía */}
+        <div className="flex flex-col items-center">
+          <span className="font-mono text-xs text-petal-200 font-semibold tracking-wide">
+            {index + 1} / {scenes.length}
+          </span>
+          <p className="text-[10px] text-white/40 tracking-tight">
+            Arrastra o pulsa las flechas
+          </p>
         </div>
 
-        <p className="text-[11px] text-white/50 tracking-wide">
-          {isPaused ? "Pulsa flechas para moverte" : "Mantén para pausar · Toca lados"}
-        </p>
-
-        <span className="font-mono text-xs text-white/60">
-          {index + 1}/{scenes.length}
-        </span>
+        {/* Botón Siguiente */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            goToNext();
+          }}
+          className="flex items-center gap-1 h-9 px-4 rounded-full bg-gradient-to-r from-petal-500 to-petal-600 border border-petal-400/40 text-xs font-semibold text-white backdrop-blur-md transition hover:brightness-110 active:scale-95 shadow-lg"
+        >
+          <span>{index === scenes.length - 1 ? "Cerrar" : "Siguiente"}</span>
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
     </motion.div>
   );
 }
 
 // ==========================================
-// CARRUSEL MANUAL DE CAPÍTULO (FASE 3)
-// ==========================================
-function ChapterCarousel({
-  chapter,
-  onClose,
-}: {
-  chapter: Chapter;
-  onClose: () => void;
-}) {
-  const scenes = useMemo(() => buildChapterScenes(chapter), [chapter]);
-  const [page, setPage] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  const paginate = (newDirection: number) => {
-    const next = page + newDirection;
-    if (next >= 0 && next < scenes.length) {
-      hapticTap();
-      setDirection(newDirection);
-      setPage(next);
-    }
-  };
-
-  const activeScene = scenes[page];
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md select-none">
-      {/* Botón cerrar */}
-      <button
-        onClick={onClose}
-        className="absolute right-5 top-5 z-50 rounded-full bg-black/60 border border-white/20 p-2.5 text-white backdrop-blur-md transition hover:bg-black/80 hover:scale-105 active:scale-95 shadow-lg"
-      >
-        <X className="h-5 w-5" />
-      </button>
-
-      {/* Contenedor central */}
-      <div className="relative flex h-full w-full max-w-4xl items-center justify-center overflow-hidden px-4 sm:px-12 py-16">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
-          <motion.div
-            key={page}
-            custom={direction}
-            variants={transitionVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-            className="flex h-full w-full items-center justify-center"
-          >
-            <SceneContentRenderer
-              scene={activeScene}
-              isPaused={false}
-              speed={1.0}
-              onFinish={onClose}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Controles inferiores de paginación */}
-      <div className="pointer-events-none absolute bottom-6 left-0 right-0 flex items-center justify-center gap-6">
-        <button
-          onClick={() => paginate(-1)}
-          disabled={page === 0}
-          className="pointer-events-auto rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 disabled:opacity-20 active:scale-95"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-        <span className="font-mono text-sm text-white/70">
-          {page + 1} / {scenes.length}
-        </span>
-        <button
-          onClick={() => paginate(1)}
-          disabled={page === scenes.length - 1}
-          className="pointer-events-auto rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition hover:bg-white/20 disabled:opacity-20 active:scale-95"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ==========================================
 // COMPONENTE PRINCIPAL (DAY 2)
 // ==========================================
-type Phase = "intro" | "slideshow" | "gallery";
-
 export function Day2({ config, isUnlocked }: DayComponentProps) {
-  const [phase, setPhase] = useState<Phase>("intro");
   const [activeChapter, setActiveChapter] = useState<Chapter | null>(null);
+  const [viewingAll, setViewingAll] = useState(false);
 
   if (!isUnlocked) return null;
 
   return (
     <div className="space-y-6">
-      {/* Fase 1: Intro (Mensaje de Éxito) */}
-      {phase === "intro" && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center space-y-6 rounded-2xl border border-white/20 bg-white/10 p-8 text-center shadow-2xl backdrop-blur-md"
-        >
-          <h3 className="text-2xl font-semibold text-white">{config.rewardTitle}</h3>
-          {config.rewardDescription && (
-            <p className="text-sm leading-relaxed text-white/80 md:text-base">
-              {config.rewardDescription}
-            </p>
-          )}
-          <button
-            onClick={() => setPhase("slideshow")}
-            className="flex items-center gap-2 rounded-full bg-petal-500 px-6 py-3 font-semibold text-white transition hover:scale-105 hover:bg-petal-600 active:scale-95 shadow-lg"
-          >
-            <Play className="h-5 w-5 fill-white" />
-            Ver nuestra historia
-          </button>
-        </motion.div>
-      )}
-
-      {/* Fase 2: Slideshow Bento Editorial */}
-      <AnimatePresence>
-        {phase === "slideshow" && (
-          <SlideshowPlayer onFinish={() => setPhase("gallery")} />
+      {/* Cabecera / Introducción */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center space-y-4 rounded-2xl border border-petal-400/30 bg-gradient-to-b from-[#1b0a2a]/80 to-[#0d0317]/90 p-6 sm:p-8 text-center shadow-2xl backdrop-blur-md"
+      >
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-petal-500/15 border border-petal-400/30 text-xs font-medium text-petal-300">
+          <span>Capítulos de Nuestra Historia</span>
+        </div>
+        <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-white">
+          {config.rewardTitle}
+        </h3>
+        {config.rewardDescription && (
+          <p className="text-sm leading-relaxed text-white/80 max-w-lg mx-auto">
+            {config.rewardDescription}
+          </p>
         )}
-      </AnimatePresence>
 
-      {/* Fase 3: Grid de Capítulos */}
-      {phase === "gallery" && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="space-y-6"
+        {/* Botón para ver toda la historia completa */}
+        <button
+          onClick={() => setViewingAll(true)}
+          className="mt-2 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-petal-500 to-petal-600 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 hover:scale-105 active:scale-95"
         >
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-white">Nuestra Historia</h3>
-            <p className="text-sm text-white/70">Tómate tu tiempo para revivirla por capítulos.</p>
-          </div>
+          <Play className="h-5 w-5 fill-white" />
+          <span>Ver toda la historia completa</span>
+        </button>
+      </motion.div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {chapters.map((chapter, i) => (
-              <motion.div
-                key={chapter.id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() => setActiveChapter(chapter)}
-                className="group relative cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 shadow-lg backdrop-blur-md transition-all hover:bg-white/10 hover:shadow-xl active:scale-95"
-              >
-                <div className="absolute -right-4 -top-4 opacity-10 transition-transform group-hover:scale-110 group-hover:opacity-20">
-                  <ImageIcon className="h-24 w-24 text-white" />
-                </div>
-                <div className="relative z-10 flex flex-col gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-petal-300">
-                    Capítulo {i + 1}
-                  </span>
-                  <h4 className="text-lg font-medium text-white">{chapter.title}</h4>
-                  <p className="mt-2 text-xs text-white/50">
-                    {chapter.imageCount} recuerdos
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+      {/* Grid de Capítulos */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h4 className="text-base font-medium text-white/90">O elige un capítulo</h4>
+          <span className="text-xs text-petal-300/80">6 capítulos</span>
+        </div>
 
-      {/* Visor de Carrusel Manual Bento */}
+        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+          {chapters.map((chapter, i) => (
+            <motion.div
+              key={chapter.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.06 }}
+              onClick={() => setActiveChapter(chapter)}
+              className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-md transition-all hover:bg-white/10 hover:border-petal-400/30 hover:shadow-petal-500/10 active:scale-98"
+            >
+              <div className="absolute -right-3 -top-3 opacity-10 transition-transform group-hover:scale-110 group-hover:opacity-20 text-petal-400">
+                <ImageIcon className="h-20 w-20" />
+              </div>
+              <div className="relative z-10 flex flex-col gap-1.5">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-petal-300">
+                  Capítulo {i + 1}
+                </span>
+                <h5 className="text-lg font-medium text-white">{chapter.title}</h5>
+                <p className="mt-1 text-xs text-white/60">
+                  {chapter.imageCount} recuerdos
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Modal del Visor Manual de Recuerdos */}
       <AnimatePresence>
-        {activeChapter && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50"
-          >
-            <ChapterCarousel
-              chapter={activeChapter}
-              onClose={() => setActiveChapter(null)}
-            />
-          </motion.div>
+        {(viewingAll || activeChapter) && (
+          <StoryViewer
+            scenes={
+              viewingAll
+                ? buildEditorialScenes()
+                : activeChapter
+                ? buildChapterScenes(activeChapter)
+                : []
+            }
+            title={
+              viewingAll
+                ? "Toda la Historia"
+                : activeChapter
+                ? activeChapter.title
+                : ""
+            }
+            onClose={() => {
+              setViewingAll(false);
+              setActiveChapter(null);
+            }}
+          />
         )}
       </AnimatePresence>
     </div>
