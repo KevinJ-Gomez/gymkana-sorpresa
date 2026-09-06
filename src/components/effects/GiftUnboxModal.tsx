@@ -146,10 +146,10 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
         >
           <h3 className="text-2xl font-bold text-white drop-shadow flex items-center justify-center gap-2">
             <Smile className="h-6 w-6 text-petal-300" />
-            {opened ? "¡Sorpresa Desbloqueada!" : "¡Has resuelto el reto!"}
+            {opened ? "¡Estrella Encendida!" : "¡Has resuelto el reto!"}
           </h3>
           <p className="text-sm text-petal-200/80">
-            {opened ? "Revelando tu recompensa..." : "Toca para abrir tu sorpresa"}
+            {opened ? "¡Tu estrella ya brilla en la constelación!" : "Toca para abrir tu sorpresa y encender la estrella"}
           </p>
           {giftTitle && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-petal-400/40 bg-petal-400/15 px-4 py-1 text-xs font-semibold text-petal-300">

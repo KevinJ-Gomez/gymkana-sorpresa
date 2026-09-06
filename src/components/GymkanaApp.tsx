@@ -301,11 +301,11 @@ export function GymkanaApp() {
                     </>
                   ) : centeredState === "solved" ? (
                     <>
-                      <Heart className="h-3 w-3 fill-amber-300 text-amber-300" /> Completado
+                      <Heart className="h-3 w-3 fill-petal-400 text-petal-400" /> Estrella encendida · ¡Completado!
                     </>
                   ) : (
                     <>
-                      <Heart className="h-3 w-3 fill-petal-400 text-petal-400" /> Toca para abrir
+                      <Heart className="h-3 w-3 fill-petal-400/40 text-petal-400" /> Estrella apagada · Toca para abrir
                     </>
                   )}
                 </p>

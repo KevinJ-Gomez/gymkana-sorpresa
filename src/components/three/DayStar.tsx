@@ -26,47 +26,49 @@ const STYLE: Record<
     pulseAmount: number;
   }
 > = {
-  // Apagada: translúcida y clara. Si fuese oscura y opaca taparía el gas de
-  // detrás y se leería como un agujero recortado en la nebulosa.
+  // Apagada (bloqueada): totalmente apagada, núcleo tenue y sin brillo ni destello
   locked: {
-    core: "#b8c1bb",
-    glow: "#799087",
-    coreScale: 0.62,
-    glowScale: 2.1,
-    glowOpacity: 0.42,
+    core: "#475569",
+    glow: "#334155",
+    coreScale: 0.42,
+    glowScale: 1.0,
+    glowOpacity: 0,
     flare: 0,
-    pulseSpeed: 1.1,
+    pulseSpeed: 0.5,
+    pulseAmount: 0.01,
+  },
+  // Apagada (disponible pero reto no completado): apagada, sin brillo ni destello
+  available: {
+    core: "#64748b",
+    glow: "#475569",
+    coreScale: 0.5,
+    glowScale: 1.2,
+    glowOpacity: 0,
+    flare: 0,
+    pulseSpeed: 0.8,
+    pulseAmount: 0.02,
+  },
+  // Apagada (día activo/hoy, pero reto no completado): indicador sutil para saber dónde tocar, pero APAGADA (sin destello ni brillo cegador)
+  today: {
+    core: "#cbd5e1",
+    glow: "#f472b6",
+    coreScale: 0.65,
+    glowScale: 1.8,
+    glowOpacity: 0.08,
+    flare: 0,
+    pulseSpeed: 1.2,
     pulseAmount: 0.05,
   },
-  available: {
-    core: "#e6ded0",
-    glow: "#b89a78",
-    coreScale: 0.85,
-    glowScale: 3.1,
-    glowOpacity: 0.75,
-    flare: 0,
-    pulseSpeed: 1.6,
-    pulseAmount: 0.07,
-  },
-  today: {
-    core: "#ffffff",
-    glow: "#d79d8c",
-    coreScale: 1.25,
-    glowScale: 5,
-    glowOpacity: 1,
-    flare: 1,
-    pulseSpeed: 2.3,
-    pulseAmount: 0.12,
-  },
+  // ¡BRILLANDO! (Acertijo completado con éxito): resplandor radiante rosado y destello horizontal anamórfico completo
   solved: {
-    core: "#fff3cd",
-    glow: "#c5a56d",
-    coreScale: 1,
-    glowScale: 3.8,
-    glowOpacity: 0.9,
-    flare: 0.55,
-    pulseSpeed: 1.4,
-    pulseAmount: 0.06,
+    core: "#ffffff",
+    glow: "#f472b6",
+    coreScale: 1.25,
+    glowScale: 4.8,
+    glowOpacity: 1.0,
+    flare: 1.0,
+    pulseSpeed: 2.2,
+    pulseAmount: 0.12,
   },
 };
 
@@ -109,23 +111,33 @@ export function DayStar({
         <meshBasicMaterial
           color={style.core}
           transparent
-          opacity={state === "locked" ? 0.5 : 1}
+          opacity={
+            state === "solved"
+              ? 1
+              : state === "today"
+              ? 0.75
+              : state === "available"
+              ? 0.5
+              : 0.35
+          }
           toneMapped={false}
         />
       </mesh>
 
-      {/* Halo/corona */}
-      <sprite ref={corona} scale={style.glowScale}>
-        <spriteMaterial
-          map={getStarTexture()}
-          color={style.glow}
-          transparent
-          opacity={style.glowOpacity}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-          toneMapped={false}
-        />
-      </sprite>
+      {/* Halo/corona (solo presente si la estrella tiene resplandor) */}
+      {style.glowOpacity > 0 && (
+        <sprite ref={corona} scale={style.glowScale}>
+          <spriteMaterial
+            map={getStarTexture()}
+            color={style.glow}
+            transparent
+            opacity={style.glowOpacity}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+            toneMapped={false}
+          />
+        </sprite>
+      )}
 
       {/* Destello anamórfico horizontal (solo hoy y completadas) */}
       {style.flare > 0 && (

@@ -62,20 +62,20 @@ export function ConstellationPath({
     <>
       <Line
         points={outline}
-        color="#a8b8ad"
+        color="#fda4af"
         lineWidth={1}
         transparent
-        opacity={0.2}
+        opacity={0.16}
         raycast={() => null}
       />
 
       {solved && (
         <Line
           points={solved}
-          color="#c5a56d"
-          lineWidth={2}
+          color="#f472b6"
+          lineWidth={2.2}
           transparent
-          opacity={0.75}
+          opacity={0.85}
           raycast={() => null}
         />
       )}
@@ -83,7 +83,7 @@ export function ConstellationPath({
       <sprite ref={pulse} scale={0.9}>
         <spriteMaterial
           map={getStarTexture()}
-          color="#ffe9a8"
+          color="#fbcfe8"
           transparent
           opacity={0}
           depthWrite={false}

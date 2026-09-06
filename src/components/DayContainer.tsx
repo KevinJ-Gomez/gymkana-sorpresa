@@ -21,7 +21,6 @@ import { dayComponents } from "@/components/days";
 export function DayContainer({
   config,
   isUnlocked,
-  testingMode,
   onUnlock,
   onRelock,
   onClose,
@@ -90,9 +89,18 @@ export function DayContainer({
         <div className="flex min-w-0 items-start gap-3">
           <span className="chapter-number" aria-hidden="true">{String(config.id).padStart(2, "0")}</span>
           <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
-              Día {config.id}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
+                Día {config.id}
+              </p>
+              <span
+                className={`inline-flex items-center gap-1 text-[11px] font-medium ${
+                  isUnlocked ? "text-petal-300" : "text-white/40"
+                }`}
+              >
+                · {isUnlocked ? "Estrella encendida ✨" : "Estrella apagada"}
+              </span>
+            </div>
             <h2 className="mt-1 text-2xl font-semibold leading-tight text-white">{config.title}</h2>
           </div>
         </div>
