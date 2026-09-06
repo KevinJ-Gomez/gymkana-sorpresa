@@ -850,12 +850,13 @@ function SceneContentRenderer({
             <img
               src={scene.src}
               alt="Recuerdo"
+              draggable={false}
               style={
                 IMAGE_ROTATIONS[scene.src]
                   ? { transform: `rotate(${IMAGE_ROTATIONS[scene.src]}deg)` }
                   : undefined
               }
-              className="max-h-[62vh] max-w-full w-auto h-auto object-contain rounded-xl"
+              className="max-h-[62vh] max-w-full w-auto h-auto object-contain rounded-xl pointer-events-none select-none"
               onError={(e) => {
                 e.currentTarget.style.display = "none";
               }}
@@ -939,47 +940,55 @@ function StoryViewer({ scenes, title, onClose }: StoryViewerProps) {
     return currentChapterScenes.findIndex((s) => s.id === activeScene.id);
   }, [currentChapterScenes, activeScene]);
 
+  const lastNavTimeRef = useRef(0);
+  const NAV_COOLDOWN_MS = 380;
+
   const goToPrev = useCallback(() => {
-    if (index > 0) {
-      hapticTap();
-      setDirection(-1);
-      setIndex((prev) => prev - 1);
-    }
-  }, [index]);
+    const now = Date.now();
+    if (now - lastNavTimeRef.current < NAV_COOLDOWN_MS) return;
+    lastNavTimeRef.current = now;
+
+    setIndex((prev) => {
+      if (prev > 0) {
+        hapticTap();
+        setDirection(-1);
+        return prev - 1;
+      }
+      return prev;
+    });
+  }, []);
 
   const goToNext = useCallback(() => {
-    if (index < scenes.length - 1) {
-      hapticTap();
-      setDirection(1);
-      setIndex((prev) => prev + 1);
-    } else {
-      onClose();
-    }
-  }, [index, scenes.length, onClose]);
+    const now = Date.now();
+    if (now - lastNavTimeRef.current < NAV_COOLDOWN_MS) return;
+    lastNavTimeRef.current = now;
 
-  // Gestos táctiles rápidos de tap (lado izquierdo 28% -> anterior, lado derecho 72% -> siguiente)
-  const pointerStartTime = useRef(0);
-  const pointerStartX = useRef(0);
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    pointerStartTime.current = Date.now();
-    pointerStartX.current = e.clientX;
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    const elapsed = Date.now() - pointerStartTime.current;
-    const moveDist = Math.abs(e.clientX - pointerStartX.current);
-
-    // Si fue un toque rápido y sin arrastre prolongado
-    if (elapsed < 260 && moveDist < 14) {
-      const screenWidth = window.innerWidth;
-      if (e.clientX < screenWidth * 0.28) {
-        goToPrev();
-      } else if (e.clientX > screenWidth * 0.72) {
-        goToNext();
+    setIndex((prev) => {
+      if (prev < scenes.length - 1) {
+        hapticTap();
+        setDirection(1);
+        return prev + 1;
+      } else {
+        onClose();
+        return prev;
       }
-    }
-  };
+    });
+  }, [scenes.length, onClose]);
+
+  // Soporte para navegación con teclado (flechas y Escape)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        goToNext();
+      } else if (e.key === "ArrowLeft") {
+        goToPrev();
+      } else if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [goToNext, goToPrev, onClose]);
 
   return (
     <motion.div
@@ -987,8 +996,6 @@ function StoryViewer({ scenes, title, onClose }: StoryViewerProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-black select-none overflow-hidden touch-none"
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
     >
       {/* ================= BARRA SUPERIOR ================= */}
       <div className="relative z-50 w-full px-4 pt-3 pb-2 space-y-2 bg-gradient-to-b from-black/95 via-black/50 to-transparent pointer-events-none">
