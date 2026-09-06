@@ -41,6 +41,14 @@ Before ending a substantive session, without waiting for Kevin to request it:
 
 A future ChatGPT/Codex/Antigravity session must be able to reconstruct the task from GitHub without the prior VS Code conversation. Kevin should never need to copy a long plan or summary between agents.
 
+## Visual design gate — distinctive but lightweight
+- `docs/VISUAL-DNA.md` is the canonical art direction and `.agents/skills/art-direction/SKILL.md` is the anti-generic workflow.
+- Gymkana is temporary and low-priority: do not create redesign work merely because these files exist.
+- When the owner explicitly requests a **material** visual change, read the DNA/skill first and use the read-only `art-director` for lightweight preflight/review when it materially improves the result.
+- Preserve the correspondence/keepsake identity, narrative pacing and spoiler/timer behavior. Do not let an implementation agent turn the experience into generic app/SaaS UI while coding.
+- Small visual fixes only need to preserve existing DNA and be checked in the real rendered state.
+- Material visual work should pass the logo-off, brand-swap and AI-smell gates, but visual polish never justifies extra 3D, performance cost or busywork that does not improve the surprise.
+
 ## Agent orchestration
 - This repository supports both Codex (including GPT-6 Astra) and Google Antigravity.
 - Shared procedures live in `.agents/skills/`; use them instead of duplicating long workflows in prompts.
