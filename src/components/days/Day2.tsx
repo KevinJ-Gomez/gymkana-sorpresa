@@ -132,6 +132,14 @@ function getChapterImageOrder(chapterId: string, imageCount: number): number[] {
 // ==========================================
 // TIPOS DE ESCENA (MEMORIES EDITORIAL)
 // ==========================================
+export type MosaicVariant =
+  | "polaroid"
+  | "offset"
+  | "stack"
+  | "hero"
+  | "scrapbook"
+  | "duo_top";
+
 export type Scene =
   | {
       type: "interstitial";
@@ -160,7 +168,8 @@ export type Scene =
       chapterIndex: number;
       chapterTitle: string;
       images: string[];
-      caption: string;
+      caption?: string;
+      variant?: MosaicVariant;
       duration: number;
     }
   | {
@@ -217,40 +226,82 @@ function buildChapterScenes(ch: Chapter): Scene[] {
     return sceneList;
   }
 
-  // 3. SECCIÓN 3: VIAJES -> Mosaicos SOLO donde haya fotos con el mismo texto
+  // 3. SECCIÓN 3: VIAJES -> Mosaicos pequeños y dinámicos con fotos del mismo texto (sin barras alargadas ni recortes)
   if (ch.id === "viajes") {
-    const sameTextGroups: { nums: number[]; caption: string }[] = [
-      { nums: [3, 4], caption: "Nuestra primera escapada juntos..." },
-      { nums: [5, 6, 7], caption: "Nuestra primera escapada juntos..." },
-      { nums: [15, 16, 17], caption: "Valencia y nuestro segundo Voltereta..." },
-      { nums: [18, 19, 20], caption: "Valencia y nuestro segundo Voltereta..." },
-      { nums: [32, 33], caption: "Primer eclipse juntos ❤️" },
-      { nums: [34, 35, 36], caption: "Nuestra primera vez en la playa juntos 🥰" },
+    const mosaicConfigs: {
+      nums: number[];
+      caption?: string;
+      variant: MosaicVariant;
+      duration: number;
+    }[] = [
+      {
+        nums: [3, 4],
+        caption: "Nuestra primera escapada juntos...",
+        variant: "polaroid",
+        duration: 3000,
+      },
+      {
+        nums: [5, 6, 7],
+        caption: "Nuestra primera escapada juntos...",
+        variant: "hero",
+        duration: 3600,
+      },
+      {
+        nums: [15, 16],
+        caption: "Valencia y nuestro segundo Voltereta...",
+        variant: "offset",
+        duration: 3000,
+      },
+      {
+        nums: [17, 18],
+        caption: "Valencia y nuestro segundo Voltereta...",
+        variant: "polaroid",
+        duration: 3000,
+      },
+      {
+        nums: [19, 20],
+        caption: "Valencia y nuestro segundo Voltereta...",
+        variant: "offset",
+        duration: 3000,
+      },
+      {
+        nums: [32, 33],
+        caption: "Primer eclipse juntos ❤️",
+        variant: "stack",
+        duration: 3200,
+      },
+      {
+        nums: [34, 35, 36],
+        caption: "Nuestra primera vez en la playa juntos 🥰",
+        variant: "hero",
+        duration: 3600,
+      },
     ];
 
     const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
     let i = 0;
     while (i < imageOrder.length) {
       const num = imageOrder[i];
-      const group = sameTextGroups.find(
-        (g) => g.nums[0] === num && g.nums.every((gn, gIdx) => imageOrder[i + gIdx] === gn)
+      const cfg = mosaicConfigs.find(
+        (c) =>
+          c.nums[0] === num &&
+          c.nums.every((cn, cIdx) => imageOrder[i + cIdx] === cn)
       );
 
-      if (group) {
-        // Fotos emparejadas con el mismo texto (sin recortes)
+      if (cfg) {
         sceneList.push({
           type: "mosaic_text",
           id: `mosaic-${ch.id}-${num}`,
           chapterId: ch.id,
           chapterIndex: chIdx,
           chapterTitle: ch.title,
-          images: group.nums.map((n) => `${ch.folder}/${n}.jpg`),
-          caption: group.caption,
-          duration: group.nums.length === 2 ? 3400 : 4000,
+          images: cfg.nums.map((n) => `${ch.folder}/${n}.jpg`),
+          caption: cfg.caption,
+          variant: cfg.variant,
+          duration: cfg.duration,
         });
-        i += group.nums.length;
+        i += cfg.nums.length;
       } else {
-        // Foto original individual (sin mosaico)
         const src = `${ch.folder}/${num}.jpg`;
         sceneList.push({
           type: "image",
@@ -260,14 +311,71 @@ function buildChapterScenes(ch: Chapter): Scene[] {
           chapterTitle: ch.title,
           src,
           caption: PHOTO_CAPTIONS[src],
-          duration: 1050, // Velocidad 1.7x
+          duration: 950, // Velocidad 1.9x
+        });
+        i++;
+      }
+    }
+  } else if (ch.id === "cara_b") {
+    // 4. SECCIÓN 4: CARA B -> Mosaicos pequeños variados de mismo contexto (máximo 3 fotos)
+    const mosaicConfigs: {
+      nums: number[];
+      variant: MosaicVariant;
+      duration: number;
+    }[] = [
+      { nums: [5, 6], variant: "polaroid", duration: 2800 },
+      { nums: [10, 11], variant: "offset", duration: 2800 },
+      { nums: [15, 16], variant: "stack", duration: 2800 },
+      { nums: [17, 18, 19], variant: "scrapbook", duration: 3500 },
+      { nums: [21, 22], variant: "polaroid", duration: 2800 },
+      { nums: [27, 28], variant: "offset", duration: 2800 },
+      { nums: [29, 30, 31], variant: "hero", duration: 3500 },
+      { nums: [34, 35], variant: "polaroid", duration: 2800 },
+      { nums: [43, 44], variant: "offset", duration: 2800 },
+      { nums: [46, 47], variant: "polaroid", duration: 2800 },
+      { nums: [50, 51], variant: "offset", duration: 2800 },
+    ];
+
+    const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
+    let i = 0;
+    while (i < imageOrder.length) {
+      const num = imageOrder[i];
+      const cfg = mosaicConfigs.find(
+        (c) =>
+          c.nums[0] === num &&
+          c.nums.every((cn, cIdx) => imageOrder[i + cIdx] === cn)
+      );
+
+      if (cfg) {
+        sceneList.push({
+          type: "mosaic_text",
+          id: `mosaic-${ch.id}-${num}`,
+          chapterId: ch.id,
+          chapterIndex: chIdx,
+          chapterTitle: ch.title,
+          images: cfg.nums.map((n) => `${ch.folder}/${n}.jpg`),
+          variant: cfg.variant,
+          duration: cfg.duration,
+        });
+        i += cfg.nums.length;
+      } else {
+        const src = `${ch.folder}/${num}.jpg`;
+        sceneList.push({
+          type: "image",
+          id: `img-${ch.id}-${num}`,
+          chapterId: ch.id,
+          chapterIndex: chIdx,
+          chapterTitle: ch.title,
+          src,
+          caption: PHOTO_CAPTIONS[src],
+          duration: 950, // Velocidad 1.9x
         });
         i++;
       }
     }
   } else {
-    // 4. DEMÁS SECCIONES (inicios, cara_b, duros, felicidad): FOTOS ORIGINALES SIN MOSAICOS
-    const imgDuration = ch.imageCount > 15 ? 1050 : 2200;
+    // 5. DEMÁS SECCIONES (inicios, duros, felicidad): Fotos originales individuales
+    const imgDuration = ch.imageCount > 15 ? 950 : 2200;
     const imageOrder = getChapterImageOrder(ch.id, ch.imageCount);
 
     imageOrder.forEach((num) => {
@@ -354,6 +462,308 @@ function SubtleTypewriterText({
 }
 
 // ==========================================
+// COMPONENTE: MOSAICOS PEQUEÑOS DINÁMICOS
+// (Sin barras alargadas, sin recortes de personas)
+// ==========================================
+function SmallMosaicLayout({
+  images,
+  variant,
+}: {
+  images: string[];
+  variant?: MosaicVariant;
+}) {
+  const chosenVariant: MosaicVariant =
+    variant || (images.length === 3 ? "hero" : "polaroid");
+
+  if (images.length === 2) {
+    if (chosenVariant === "stack") {
+      return (
+        <div className="flex flex-col items-center justify-center gap-3 w-full max-w-sm h-full max-h-[64vh] px-3">
+          {images.map((img, idx) => (
+            <div
+              key={idx}
+              className="relative flex items-center justify-center p-1.5 bg-white/10 border border-petal-400/30 rounded-2xl shadow-xl backdrop-blur-sm max-h-[29vh] w-auto max-w-full"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={img}
+                alt={`Recuerdo ${idx + 1}`}
+                style={
+                  IMAGE_ROTATIONS[img]
+                    ? { transform: `rotate(${IMAGE_ROTATIONS[img]}deg)` }
+                    : undefined
+                }
+                className="max-h-[26vh] max-w-full w-auto h-auto object-contain rounded-xl"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (chosenVariant === "offset") {
+      return (
+        <div className="relative flex flex-col justify-between w-full max-w-sm h-[62vh] px-3 py-1">
+          {/* Foto 1: alineada arriba a la izquierda */}
+          <div className="self-start max-w-[66vw] max-h-[31vh] p-1.5 bg-white/10 border border-petal-400/30 rounded-2xl shadow-2xl backdrop-blur-sm z-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[0]}
+              alt="Recuerdo 1"
+              style={
+                IMAGE_ROTATIONS[images[0]]
+                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+                  : undefined
+              }
+              className="max-h-[28vh] max-w-full w-auto h-auto object-contain rounded-xl"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+          {/* Foto 2: alineada abajo a la derecha */}
+          <div className="self-end max-w-[66vw] max-h-[31vh] p-1.5 bg-white/10 border border-petal-400/30 rounded-2xl shadow-2xl backdrop-blur-sm -mt-4 z-20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[1]}
+              alt="Recuerdo 2"
+              style={
+                IMAGE_ROTATIONS[images[1]]
+                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
+                  : undefined
+              }
+              className="max-h-[28vh] max-w-full w-auto h-auto object-contain rounded-xl"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // Default 2 fotos: "polaroid" (superpuestas e inclinadas de forma orgánica)
+    return (
+      <div className="relative flex items-center justify-center w-full max-w-sm h-[62vh] px-2">
+        {/* Foto 1: inclinada -3 grados */}
+        <div className="absolute left-2 top-4 z-10 max-w-[64vw] max-h-[36vh] p-2 bg-gradient-to-br from-white/95 to-rose-50/95 rounded-2xl shadow-2xl border border-white/50 -rotate-3 transition-transform">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[0]}
+            alt="Recuerdo 1"
+            style={
+              IMAGE_ROTATIONS[images[0]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+                : undefined
+            }
+            className="max-h-[31vh] max-w-full w-auto h-auto object-contain rounded-xl"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+        {/* Foto 2: inclinada +3 grados, solapando suavemente */}
+        <div className="absolute right-2 bottom-4 z-20 max-w-[64vw] max-h-[36vh] p-2 bg-gradient-to-br from-white/95 to-rose-50/95 rounded-2xl shadow-2xl border border-white/50 rotate-3 transition-transform">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[1]}
+            alt="Recuerdo 2"
+            style={
+              IMAGE_ROTATIONS[images[1]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
+                : undefined
+            }
+            className="max-h-[31vh] max-w-full w-auto h-auto object-contain rounded-xl"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // 3 fotos
+  if (chosenVariant === "duo_top") {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2.5 w-full max-w-sm h-full max-h-[66vh] px-2">
+        <div className="flex items-center justify-center gap-2 w-full max-h-[28vh]">
+          <div className="flex-1 flex items-center justify-center p-1 bg-white/10 border border-petal-400/30 rounded-xl shadow-lg backdrop-blur-sm max-h-[27vh]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[0]}
+              alt="Recuerdo 1"
+              style={
+                IMAGE_ROTATIONS[images[0]]
+                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+                  : undefined
+              }
+              className="max-h-[25vh] max-w-full w-auto h-auto object-contain rounded-lg"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+          <div className="flex-1 flex items-center justify-center p-1 bg-white/10 border border-petal-400/30 rounded-xl shadow-lg backdrop-blur-sm max-h-[27vh]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[1]}
+              alt="Recuerdo 2"
+              style={
+                IMAGE_ROTATIONS[images[1]]
+                  ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
+                  : undefined
+              }
+              className="max-h-[25vh] max-w-full w-auto h-auto object-contain rounded-lg"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
+        </div>
+        {/* Hero inferior */}
+        <div className="flex items-center justify-center p-1.5 bg-white/10 border border-petal-400/30 rounded-2xl shadow-xl backdrop-blur-sm max-h-[33vh] w-auto max-w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[2]}
+            alt="Recuerdo 3"
+            style={
+              IMAGE_ROTATIONS[images[2]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[2]]}deg)` }
+                : undefined
+            }
+            className="max-h-[30vh] max-w-full w-auto h-auto object-contain rounded-xl"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (chosenVariant === "scrapbook") {
+    return (
+      <div className="relative flex items-center justify-center w-full max-w-sm h-[64vh] px-2">
+        {/* Foto 1: superior izquierda con inclinación -4 */}
+        <div className="absolute top-2 left-1 z-10 max-w-[50vw] max-h-[28vh] p-1.5 bg-white/95 rounded-xl shadow-xl -rotate-4 border border-rose-200/70">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[0]}
+            alt="Recuerdo 1"
+            style={
+              IMAGE_ROTATIONS[images[0]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+                : undefined
+            }
+            className="max-h-[24vh] max-w-full w-auto h-auto object-contain rounded-lg"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+        {/* Foto 2: superior derecha con inclinación +3 */}
+        <div className="absolute top-6 right-1 z-20 max-w-[48vw] max-h-[26vh] p-1.5 bg-white/95 rounded-xl shadow-xl rotate-3 border border-rose-200/70">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[1]}
+            alt="Recuerdo 2"
+            style={
+              IMAGE_ROTATIONS[images[1]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
+                : undefined
+            }
+            className="max-h-[22vh] max-w-full w-auto h-auto object-contain rounded-lg"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+        {/* Foto 3: inferior centro solapada */}
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-30 max-w-[56vw] max-h-[30vh] p-1.5 bg-white/95 rounded-xl shadow-2xl -rotate-1 border border-petal-300">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[2]}
+            alt="Recuerdo 3"
+            style={
+              IMAGE_ROTATIONS[images[2]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[2]]}deg)` }
+                : undefined
+            }
+            className="max-h-[26vh] max-w-full w-auto h-auto object-contain rounded-lg"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Default 3 fotos: "hero" (1 hero arriba + 2 dúo abajo)
+  return (
+    <div className="flex flex-col items-center justify-center gap-2.5 w-full max-w-sm h-full max-h-[66vh] px-2">
+      {/* Hero superior */}
+      <div className="flex items-center justify-center p-1.5 bg-white/10 border border-petal-400/30 rounded-2xl shadow-xl backdrop-blur-sm max-h-[33vh] w-auto max-w-full">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={images[0]}
+          alt="Recuerdo 1"
+          style={
+            IMAGE_ROTATIONS[images[0]]
+              ? { transform: `rotate(${IMAGE_ROTATIONS[images[0]]}deg)` }
+              : undefined
+          }
+          className="max-h-[30vh] max-w-full w-auto h-auto object-contain rounded-xl"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+      </div>
+
+      {/* Dúo inferior */}
+      <div className="flex items-center justify-center gap-2 w-full max-h-[28vh]">
+        <div className="flex-1 flex items-center justify-center p-1 bg-white/10 border border-petal-400/30 rounded-xl shadow-lg backdrop-blur-sm max-h-[27vh]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[1]}
+            alt="Recuerdo 2"
+            style={
+              IMAGE_ROTATIONS[images[1]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[1]]}deg)` }
+                : undefined
+            }
+            className="max-h-[25vh] max-w-full w-auto h-auto object-contain rounded-lg"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+        <div className="flex-1 flex items-center justify-center p-1 bg-white/10 border border-petal-400/30 rounded-xl shadow-lg backdrop-blur-sm max-h-[27vh]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={images[2]}
+            alt="Recuerdo 3"
+            style={
+              IMAGE_ROTATIONS[images[2]]
+                ? { transform: `rotate(${IMAGE_ROTATIONS[images[2]]}deg)` }
+                : undefined
+            }
+            className="max-h-[25vh] max-w-full w-auto h-auto object-contain rounded-lg"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
 // COMPONENTE: RENDERIZADOR UNIVERSAL DE ESCENA
 // ==========================================
 function SceneContentRenderer({
@@ -401,41 +811,15 @@ function SceneContentRenderer({
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-2.5 text-center shrink-0 z-20"
+            className="mb-2.5 text-center shrink-0 z-30"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-black/75 border border-petal-400/40 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-black/80 border border-petal-400/40 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
               {scene.caption}
             </span>
           </motion.div>
         )}
 
-        <div
-          className={`grid ${
-            scene.images.length === 2 ? "grid-cols-2" : "grid-cols-3"
-          } gap-2 w-full h-full max-h-[66vh] items-center justify-center`}
-        >
-          {scene.images.map((img, i) => (
-            <div
-              key={i}
-              className="flex items-center justify-center p-1.5 bg-white/5 border border-white/10 rounded-2xl shadow-xl overflow-hidden h-full max-h-[64vh]"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={img}
-                alt={`Recuerdo ${i + 1}`}
-                style={
-                  IMAGE_ROTATIONS[img]
-                    ? { transform: `rotate(${IMAGE_ROTATIONS[img]}deg)` }
-                    : undefined
-                }
-                className="max-h-[60vh] max-w-full w-auto h-auto object-contain rounded-xl"
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        <SmallMosaicLayout images={scene.images} variant={scene.variant} />
       </div>
     );
   }
@@ -551,11 +935,19 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
   // Barra de progreso de la escena activa
   const [progressPercent, setProgressPercent] = useState(0);
+  const elapsedRef = useRef(0);
+  const speedRef = useRef(speed);
+
+  // Sincronizar speedRef si cambia speed
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   const goToPrev = useCallback(() => {
     if (index > 0) {
       hapticTap();
       setDirection(-1);
+      elapsedRef.current = 0;
       setProgressPercent(0);
       setIndex((prev) => prev - 1);
     }
@@ -565,6 +957,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     if (index < scenes.length - 1) {
       hapticTap();
       setDirection(1);
+      elapsedRef.current = 0;
       setProgressPercent(0);
       setIndex((prev) => prev + 1);
     } else {
@@ -572,24 +965,23 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     }
   }, [index, scenes.length, onFinish]);
 
-  // Timer de Autoplay
+  // Timer de Autoplay (no depende de speed para no reiniciar la foto al cambiar de velocidad)
   useEffect(() => {
     if (isPaused) return;
 
     let lastTime = performance.now();
-    let elapsed = 0;
     let rafId: number;
 
     const tick = (now: number) => {
       const delta = now - lastTime;
       lastTime = now;
 
-      elapsed += delta * speed;
+      elapsedRef.current += delta * speedRef.current;
       const targetDuration = activeScene.duration;
-      const pct = Math.min(100, (elapsed / targetDuration) * 100);
+      const pct = Math.min(100, (elapsedRef.current / targetDuration) * 100);
       setProgressPercent(pct);
 
-      if (elapsed >= targetDuration) {
+      if (elapsedRef.current >= targetDuration) {
         goToNext();
       } else {
         rafId = requestAnimationFrame(tick);
@@ -598,7 +990,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [index, activeScene.duration, isPaused, speed, goToNext]);
+  }, [index, activeScene.duration, isPaused, goToNext]);
 
   // Gestos táctiles estilo Instagram Stories (Mantener pulsado para pausar, toque en extremos para avanzar/retroceder)
   const pointerStartTime = useRef(0);
@@ -661,10 +1053,9 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
     e.stopPropagation();
     hapticTap();
     setSpeed((prev) => {
-      if (prev === 1.0) return 1.5;
-      if (prev === 1.5) return 2.0;
-      if (prev === 2.0) return 0.6;
-      return 1.0;
+      const next = prev === 1.0 ? 1.5 : prev === 1.5 ? 2.0 : prev === 2.0 ? 0.6 : 1.0;
+      speedRef.current = next;
+      return next;
     });
   };
 
