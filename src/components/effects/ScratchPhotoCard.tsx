@@ -127,7 +127,7 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
   }
 
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-pink-400/30 bg-black/40 shadow-2xl">
+    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-petal-400/30 bg-black/40 shadow-2xl">
       {/* 1. Foto real del regalo */}
       <div className="relative aspect-square w-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -140,10 +140,10 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
           }}
         />
         {/* Fallback de reserva */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-rose-950/80 to-purple-950/80 p-6 text-center text-white">
-          <Heart className="mb-2 h-10 w-10 text-pink-400 fill-pink-400 animate-pulse" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-petal-950/80 to-petal-950/80 p-6 text-center text-white">
+          <Heart className="mb-2 h-10 w-10 text-petal-400 fill-petal-400 animate-pulse" />
           <p className="text-base font-semibold">{altText}</p>
-          <p className="mt-1 text-xs text-pink-200/70">Foto del regalo preparada</p>
+          <p className="mt-1 text-xs text-petal-200/70">Foto del regalo preparada</p>
         </div>
       </div>
 
@@ -170,7 +170,7 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
                 transition={{ duration: 2.2, repeat: Infinity }}
                 className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 text-xs font-medium text-white backdrop-blur-md"
               >
-                <Heart className="h-3.5 w-3.5 fill-pink-400 text-pink-400" />
+                <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
                 Rasca con el dedo
               </motion.div>
             )}
@@ -185,8 +185,8 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
           animate={{ opacity: 1, y: 0 }}
           className="bg-black/80 px-4 py-2.5 text-center border-t border-white/10"
         >
-          <p className="text-xs font-semibold text-pink-300 flex items-center justify-center gap-1">
-            <Heart className="h-3.5 w-3.5 fill-pink-400 text-pink-400" />
+          <p className="text-xs font-semibold text-petal-300 flex items-center justify-center gap-1">
+            <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
             ¡Regalo al descubierto!
           </p>
         </motion.div>

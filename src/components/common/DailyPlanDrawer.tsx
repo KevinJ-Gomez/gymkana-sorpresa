@@ -110,7 +110,7 @@ export function DailyPlanDrawer({
           onClose();
         }
       }}
-      className="fixed inset-x-0 bottom-0 z-30 flex h-[88dvh] flex-col rounded-t-[2rem]
+      className="plan-sheet fixed inset-x-0 bottom-0 z-30 flex h-[88dvh] flex-col rounded-t-[2rem]
         border-t border-white/15 bg-slate-950/95 shadow-[0_-12px_45px_rgba(0,0,0,0.9)]
         backdrop-blur-2xl select-none"
     >
@@ -205,7 +205,7 @@ export function DailyPlanDrawer({
                         onClick={() => handleSelectGymkanaDay(gymkanaId)}
                         className={`relative flex flex-col items-center justify-center rounded-xl h-11 transition-all cursor-pointer ${
                           isSelectedLocked
-                            ? "border border-rose-400/50 bg-rose-950/20 text-white/30"
+                            ? "border border-petal-400/50 bg-petal-950/20 text-white/30"
                             : "border border-white/5 bg-white/[0.02] text-white/20 hover:bg-white/[0.05]"
                         }`}
                       >

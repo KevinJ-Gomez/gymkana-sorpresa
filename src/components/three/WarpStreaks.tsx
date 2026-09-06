@@ -42,8 +42,8 @@ export function WarpStreaks({ active }: { active: boolean }) {
     const palette = [
       new THREE.Color("#ffffff"),
       new THREE.Color("#ffd9ec"),
-      new THREE.Color("#c4b5fd"),
-      new THREE.Color("#fbbf24"),
+      new THREE.Color("#a8b8ad"),
+      new THREE.Color("#c5a56d"),
     ];
 
     for (let i = 0; i < COUNT; i++) {

@@ -30,7 +30,7 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
     hapticSuccess();
 
     // Generar partículas de corazones y chispas festivas
-    const colors = ["#f43f5e", "#ec4899", "#fbbf24", "#a855f7", "#38bdf8", "#ffffff"];
+    const colors = ["#d9b19d", "#a66056", "#c5a56d", "#a5b5a5", "#e5c8b9", "#f3eee4"];
     const pts = Array.from({ length: 45 }, (_, i) => {
       const angle = (i / 45) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
       const dist = 90 + Math.random() * 160;
@@ -94,7 +94,7 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
                   opacity: [0.4, 0.8, 0.4],
                 }}
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -inset-8 rounded-full bg-gradient-to-r from-rose-500/30 via-fuchsia-500/30 to-pink-500/30 blur-2xl"
+                className="absolute -inset-8 rounded-full bg-gradient-to-r from-petal-500/30 via-petal-500/30 to-petal-500/30 blur-2xl"
               />
 
               {/* Tapa de la caja */}
@@ -111,11 +111,11 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
                 }
                 className="relative z-10 flex items-center justify-center"
               >
-                <div className="flex h-16 w-36 items-center justify-center rounded-2xl bg-gradient-to-b from-rose-500 to-rose-600 shadow-xl border-t border-rose-300">
+                <div className="flex h-16 w-36 items-center justify-center rounded-2xl bg-gradient-to-b from-petal-500 to-petal-600 shadow-xl border-t border-petal-300">
                   <div className="absolute -top-4 flex items-center justify-center">
-                    <Heart className="h-7 w-7 text-pink-200 fill-pink-300 drop-shadow" />
+                    <Heart className="h-7 w-7 text-petal-200 fill-petal-300 drop-shadow" />
                   </div>
-                  <div className="h-full w-5 bg-pink-300 border-x border-pink-200" />
+                  <div className="h-full w-5 bg-petal-300 border-x border-petal-200" />
                 </div>
               </motion.div>
 
@@ -123,10 +123,10 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
               <motion.div
                 animate={opened ? { scale: [1, 1.15, 0.9, 0], opacity: [1, 1, 0] } : {}}
                 transition={{ duration: 0.9, ease: "easeOut" }}
-                className="relative -mt-2 flex h-28 w-32 items-center justify-center rounded-2xl bg-gradient-to-b from-rose-600 to-rose-700 shadow-2xl border border-rose-400"
+                className="relative -mt-2 flex h-28 w-32 items-center justify-center rounded-2xl bg-gradient-to-b from-petal-600 to-petal-700 shadow-2xl border border-petal-400"
               >
-                <div className="h-full w-5 bg-pink-300 border-x border-pink-200" />
-                <div className="absolute inset-x-0 h-5 bg-pink-300 border-y border-pink-200" />
+                <div className="h-full w-5 bg-petal-300 border-x border-petal-200" />
+                <div className="absolute inset-x-0 h-5 bg-petal-300 border-y border-petal-200" />
               </motion.div>
             </motion.div>
 
@@ -138,15 +138,15 @@ export function GiftUnboxModal({ isOpen, onOpened, giftTitle }: GiftUnboxModalPr
               className="mt-6 space-y-2"
             >
               <h3 className="text-2xl font-bold text-white drop-shadow flex items-center justify-center gap-2">
-                <Smile className="h-6 w-6 text-pink-300" />
+                <Smile className="h-6 w-6 text-petal-300" />
                 {opened ? "¡Sorpresa Desbloqueada!" : "¡Has resuelto el reto!"}
               </h3>
-              <p className="text-sm text-fuchsia-200/80">
+              <p className="text-sm text-petal-200/80">
                 {opened ? "Revelando tu recompensa..." : "Toca para abrir tu sorpresa"}
               </p>
               {giftTitle && (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-pink-400/40 bg-pink-400/15 px-4 py-1 text-xs font-semibold text-pink-300">
-                  <Heart className="h-3.5 w-3.5 fill-pink-400 text-pink-400" />
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-petal-400/40 bg-petal-400/15 px-4 py-1 text-xs font-semibold text-petal-300">
+                  <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
                   {giftTitle}
                 </span>
               )}

@@ -103,15 +103,15 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
         className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 text-center shadow-2xl backdrop-blur-xl"
       >
         {/* Glows decorativos */}
-        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-pink-500/20 blur-2xl" />
-        <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-fuchsia-500/20 blur-2xl" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-petal-500/20 blur-2xl" />
+        <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-petal-500/20 blur-2xl" />
 
         <div className="relative z-10 flex flex-col items-center space-y-4">
           {/* Badge de complicidad familiar */}
-          <div className="flex items-center justify-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+          <div className="flex items-center justify-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
+            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
             <span>Misión Familiar Desbloqueada</span>
-            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
           </div>
 
           {/* Título de la recompensa */}
@@ -131,8 +131,8 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
               />
             ) : (
               // Placeholder elegante en caso de que la foto aún no se haya copiado
-              <div className="flex flex-col items-center justify-center p-8 text-center text-pink-200">
-                <ImageIcon className="h-12 w-12 text-pink-400/70 mb-3 animate-pulse" />
+              <div className="flex flex-col items-center justify-center p-8 text-center text-petal-200">
+                <ImageIcon className="h-12 w-12 text-petal-400/70 mb-3 animate-pulse" />
                 <p className="font-medium text-base text-white">
                   Foto de mamá y hermana con tu regalo
                 </p>
@@ -142,14 +142,14 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             )}
             {config.imageCaption && (
-              <div className="bg-black/60 px-4 py-2 text-center text-xs font-medium text-pink-200 backdrop-blur-md">
+              <div className="bg-black/60 px-4 py-2 text-center text-xs font-medium text-petal-200 backdrop-blur-md">
                 {config.imageCaption}
               </div>
             )}
           </div>
 
           {/* Mensaje de la Misión para pedir la pista */}
-          <div className="rounded-xl border border-pink-500/20 bg-pink-500/10 p-4 text-center">
+          <div className="rounded-xl border border-petal-500/20 bg-petal-500/10 p-4 text-center">
             <p className="text-sm sm:text-base leading-relaxed text-white/95 drop-shadow">
               {config.rewardDescription ||
                 "Hay dos personas muy especiales que te han preparado algo. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido el regalo que con tanto amor han elegido para ti."}
@@ -187,7 +187,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 whileTap={{ scale: 0.95 }}
                 className={`relative flex aspect-[4/3] flex-col items-center justify-center p-2 rounded-xl border text-center transition-all select-none ${
                   isSelected
-                    ? "border-pink-400 bg-pink-500/40 shadow-[0_0_20px_rgba(244,114,182,0.7)] ring-2 ring-pink-400 scale-105 z-10"
+                    ? "border-petal-400 bg-petal-500/40 shadow-[0_0_20px_rgba(244,114,182,0.7)] ring-2 ring-petal-400 scale-105 z-10"
                     : isInCorrectPlace
                     ? "border-emerald-400/80 bg-emerald-500/25 text-emerald-100 shadow-[0_0_12px_rgba(52,211,153,0.35)] ring-1 ring-emerald-400/40"
                     : "border-white/15 bg-white/10 text-white/90 hover:bg-white/15 active:bg-white/20 backdrop-blur-md"

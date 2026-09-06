@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import confetti from "canvas-confetti";
 import { motion } from "framer-motion";
-import { Cake, Video } from "lucide-react";
+import { Video } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 /**
@@ -60,7 +60,6 @@ export function Day11({ config, isUnlocked, onUnlock }: DayComponentProps) {
       transition={{ duration: 0.5 }}
       className="space-y-6 text-center"
     >
-      <Cake className="mx-auto h-10 w-10 text-fuchsia-300" />
       <div>
         <h3 className="text-xl font-semibold text-white">{config.rewardTitle}</h3>
         {config.rewardDescription && (

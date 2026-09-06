@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPinned } from "lucide-react";
 import type { DayComponentProps } from "@/types/gymkana";
 
 const GRID_SIZE = 12;
@@ -25,7 +24,6 @@ export function Day10({ config, isUnlocked, onUnlock }: DayComponentProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="space-y-3 text-center"
       >
-        <MapPinned className="mx-auto h-8 w-8 text-rose-300" />
         <h3 className="text-lg font-semibold text-white">{config.rewardTitle}</h3>
         {config.physicalHint && (
           <p className="rounded-xl border border-dashed border-white/30 bg-white/5 p-4 text-white/90">

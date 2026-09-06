@@ -62,7 +62,7 @@ export function ConstellationPath({
     <>
       <Line
         points={outline}
-        color="#c4b5fd"
+        color="#a8b8ad"
         lineWidth={1}
         transparent
         opacity={0.2}
@@ -72,7 +72,7 @@ export function ConstellationPath({
       {solved && (
         <Line
           points={solved}
-          color="#fbbf24"
+          color="#c5a56d"
           lineWidth={2}
           transparent
           opacity={0.75}

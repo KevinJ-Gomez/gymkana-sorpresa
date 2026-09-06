@@ -6,7 +6,6 @@ import { ChevronDown, Lock, LockOpen } from "lucide-react";
 import type { DayConfig } from "@/types/gymkana";
 import { verifyPassword } from "@/lib/hash";
 import { dayComponents } from "@/components/days";
-import { DAY_ICONS } from "@/components/ui/dayIcons";
 
 /**
  * Tarjeta del día: hoja de cristal esmerilado que sube sobre el canvas 3D
@@ -40,7 +39,6 @@ export function DayContainer({
   const [shakeKey, setShakeKey] = useState(0);
 
   const DaySpecificComponent = dayComponents[config.id];
-  const DayIcon = config.lucideIcon ? DAY_ICONS[config.lucideIcon] : null;
   const showPasswordGate = config.requiresPassword && !isUnlocked;
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
@@ -76,9 +74,9 @@ export function DayContainer({
       // Cristal OSCURO, no blanco translúcido: detrás está la esfera a la que
       // acaba de volar la cámara, y su resplandor lavaba el panel dejando el
       // texto casi ilegible. Este tinte garantiza contraste pase lo que pase.
-      className="fixed inset-x-0 bottom-0 z-20 flex h-[92dvh] flex-col
+      className="day-sheet fixed inset-x-0 bottom-0 z-20 flex h-[92dvh] flex-col
         rounded-t-[2rem] border-t border-white/25
-        bg-[#0f0722] shadow-[0_-8px_60px_rgba(0,0,0,0.8)]
+        bg-[#1b2221] shadow-[0_-8px_60px_rgba(0,0,0,0.8)]
         before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px
         before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent"
     >
@@ -90,16 +88,9 @@ export function DayContainer({
       {/* Cabecera */}
       <header className="flex shrink-0 items-start justify-between gap-3 px-6 pt-2 pb-4">
         <div className="flex min-w-0 items-start gap-3">
-          {DayIcon && (
-            <span
-              className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-                bg-fuchsia-400/15 text-fuchsia-200"
-            >
-              <DayIcon className="h-5 w-5" />
-            </span>
-          )}
+          <span className="chapter-number" aria-hidden="true">{String(config.id).padStart(2, "0")}</span>
           <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-fuchsia-200/70">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
               Día {config.id}
             </p>
             <h2 className="mt-1 text-2xl font-semibold leading-tight text-white">{config.title}</h2>
@@ -108,7 +99,7 @@ export function DayContainer({
         <div className="flex shrink-0 items-center gap-2">
           {config.giftLabel && (
             <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90">
-              🎁 {config.giftLabel}
+              {config.giftLabel}
             </span>
           )}
           {isUnlocked && onRelock && (
@@ -194,13 +185,13 @@ export function DayContainer({
                 // 16px exactos: por debajo, iOS Safari hace zoom al enfocar.
                 style={{ fontSize: 16 }}
                 className="w-full rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-white
-                  placeholder-white/40 outline-none transition focus:border-fuchsia-300/60 focus:bg-white/15"
+                  placeholder-white/40 outline-none transition focus:border-petal-300/60 focus:bg-white/15"
               />
               <motion.button
                 type="submit"
                 whileTap={checking || passwordInput.length === 0 ? undefined : { scale: 0.97 }}
                 disabled={checking || passwordInput.length === 0}
-                className="w-full rounded-2xl bg-gradient-to-r from-rose-400 via-fuchsia-500 to-violet-500
+                className="primary-action w-full rounded-2xl bg-gradient-to-r from-petal-400 via-petal-500 to-petal-500
                   px-5 py-4 text-base font-semibold text-white shadow-lg
                   disabled:cursor-not-allowed disabled:opacity-40"
               >
@@ -214,7 +205,7 @@ export function DayContainer({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="text-center text-sm font-medium text-rose-300"
+                  className="text-center text-sm font-medium text-petal-300"
                 >
                   Clave incorrecta. ¡Inténtalo de nuevo!
                 </motion.p>

@@ -91,7 +91,7 @@ export function PostureoMosaic({
             <img
               src={images[currentIndex]}
               alt="Foto Postureo"
-              className="max-h-[55vh] max-w-[80vw] sm:max-w-md rounded-2xl object-contain shadow-[0_15px_40px_rgba(0,0,0,0.9)] border-2 border-pink-400/40 backdrop-blur-sm"
+              className="max-h-[55vh] max-w-[80vw] sm:max-w-md rounded-2xl object-contain shadow-[0_15px_40px_rgba(0,0,0,0.9)] border-2 border-petal-400/40 backdrop-blur-sm"
             />
           </motion.div>
         )}
@@ -106,7 +106,7 @@ export function PostureoMosaic({
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="mt-5 px-6 text-center max-w-xl z-20"
           >
-            <p className="font-serif text-lg sm:text-2xl font-medium italic leading-relaxed text-pink-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+            <p className="font-serif text-lg sm:text-2xl font-medium italic leading-relaxed text-petal-200 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
               “{text}”
             </p>
           </motion.div>

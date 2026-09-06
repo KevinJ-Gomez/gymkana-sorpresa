@@ -30,16 +30,16 @@ export function TouchParticleTrail() {
       }
     };
 
-    const colors = ["#f43f5e", "#ec4899", "#fb7185", "#f472b6", "#fda4af"];
+    const colors = ["#bda47d", "#d9b19d", "#e5c8b9", "#a5b5a5", "#e9dbc1"];
 
     function addParticle(x: number, y: number) {
       const newParticle: Particle = {
         id: idCounter.current++,
         x,
         y,
-        size: Math.random() * 8 + 6,
+        size: Math.random() * 3 + 2,
         color: colors[Math.floor(Math.random() * colors.length)],
-        opacity: 0.9,
+        opacity: 0.55,
         vx: (Math.random() - 0.5) * 1.5,
         vy: (Math.random() - 0.5) * 1.5 - 1,
       };

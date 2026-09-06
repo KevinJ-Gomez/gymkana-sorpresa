@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
 
 /**
  * Intro cinemática. El texto se revela escalonado sobre la nebulosa vista de
@@ -32,7 +31,7 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
       animate={{ opacity: 1 }}
       // Sale deprisa: en cuanto arranca el salto, el protagonista es el 3D.
       exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      className="fixed inset-0 z-30 flex flex-col justify-between
+      className="journey-intro fixed inset-0 z-30 flex flex-col justify-between
         bg-[radial-gradient(ellipse_at_center,rgba(7,3,26,0.35),rgba(7,3,26,0.88))]
         px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))]"
     >
@@ -42,13 +41,13 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
         transition={{ duration: 1, delay: 0.2 }}
         className="text-center"
       >
-        <Heart className="mx-auto h-7 w-7 text-pink-300 fill-pink-300/40" />
-        <p className="mt-3 text-xs font-medium uppercase tracking-[0.3em] text-pink-200/70">
+        <div className="intro-number" aria-hidden="true">XI</div>
+        <p className="mt-3 text-xs font-medium uppercase tracking-[0.3em] text-petal-200/70">
           2 — 12 de octubre
         </p>
       </motion.div>
 
-      <div className="space-y-5">
+      <div className="intro-narrative space-y-5">
         {NARRATIVE.map((line, index) => (
           <motion.p
             key={line}
@@ -68,7 +67,7 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
           className="text-balance text-center text-2xl font-semibold leading-snug text-white"
         >
           {CLOSER}
-          <span className="mt-1.5 block text-base font-normal text-fuchsia-200/80">
+          <span className="mt-1.5 block text-base font-normal text-petal-200/80">
             {CLOSER_SUB}
           </span>
         </motion.p>
@@ -84,19 +83,11 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
           type="button"
           onClick={onStart}
           whileTap={{ scale: 0.96 }}
-          animate={{
-            boxShadow: [
-              "0 0 26px rgba(236,72,153,0.35)",
-              "0 0 52px rgba(236,72,153,0.65)",
-              "0 0 26px rgba(236,72,153,0.35)",
-            ],
-          }}
-          transition={{ boxShadow: { duration: 2.4, repeat: Infinity, ease: "easeInOut" } }}
-          className="flex w-full items-center justify-center gap-2.5 rounded-2xl
-            bg-gradient-to-r from-rose-400 via-fuchsia-500 to-violet-500
+          className="primary-action flex w-full items-center justify-center gap-2.5 rounded-2xl
+            bg-gradient-to-r from-petal-400 via-petal-500 to-petal-500
             px-6 py-5 text-lg font-semibold text-white"
         >
-          <Heart className="h-5 w-5 fill-current" />
+
           Comenzar Viaje
         </motion.button>
 

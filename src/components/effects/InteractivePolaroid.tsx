@@ -69,14 +69,14 @@ export function InteractivePolaroid({
           >
             {/* Cabecera trasera */}
             <div className="flex items-center gap-1 text-amber-900/60 text-xs font-semibold uppercase tracking-widest pt-2">
-              <Heart className="h-3.5 w-3.5 fill-rose-500 text-rose-500" />
+              <Heart className="h-3.5 w-3.5 fill-petal-500 text-petal-500" />
               Pista Secreta
             </div>
 
             {/* Mensaje secreto central manuscrito */}
             <div className="my-auto space-y-3 px-2">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-rose-500/15 text-rose-600 shadow-sm">
-                <Heart className="h-5 w-5 fill-rose-500" />
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-petal-500/15 text-petal-600 shadow-sm">
+                <Heart className="h-5 w-5 fill-petal-500" />
               </div>
               <p className="font-serif text-xl font-bold leading-relaxed text-zinc-900 italic">
                 “{secretNote}”

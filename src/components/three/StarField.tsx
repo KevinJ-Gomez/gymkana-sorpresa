@@ -20,7 +20,7 @@ const STAR_COLORS = [
   new THREE.Color("#ffe9c4"), // blanco cálido
   new THREE.Color("#cfe0ff"), // azuladas
   new THREE.Color("#ffc7e6"), // rosadas
-  new THREE.Color("#fbbf24"), // dorado ocasional
+  new THREE.Color("#c5a56d"), // dorado ocasional
 ];
 
 const vertexShader = /* glsl */ `

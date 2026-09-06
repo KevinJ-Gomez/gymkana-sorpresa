@@ -335,7 +335,7 @@ function SubtleTypewriterText({
     <p className="font-serif text-2xl sm:text-3xl md:text-4xl leading-relaxed sm:leading-loose text-white/95 drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)]">
       {text.slice(0, charCount)}
       {charCount < text.length && (
-        <span className="ml-1.5 inline-block h-[0.9em] w-[2px] animate-pulse bg-pink-400 align-middle shadow-[0_0_12px_rgba(244,114,182,0.9)]" />
+        <span className="ml-1.5 inline-block h-[0.9em] w-[2px] animate-pulse bg-petal-400 align-middle shadow-[0_0_12px_rgba(244,114,182,0.9)]" />
       )}
     </p>
   );
@@ -362,7 +362,7 @@ function BentoGridRenderer({
           animate={{ opacity: 1, y: 0 }}
           className="mb-2.5 text-center shrink-0"
         >
-          <span className="inline-block px-3.5 py-1 rounded-full bg-black/60 border border-white/20 text-xs sm:text-sm font-serif italic text-pink-200 backdrop-blur-md shadow-lg">
+          <span className="inline-block px-3.5 py-1 rounded-full bg-black/60 border border-white/20 text-xs sm:text-sm font-serif italic text-petal-200 backdrop-blur-md shadow-lg">
             {caption}
           </span>
         </motion.div>
@@ -701,7 +701,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
                 className="h-1 flex-1 rounded-full bg-white/25 overflow-hidden backdrop-blur-sm"
               >
                 <div
-                  className="h-full bg-pink-400 transition-none"
+                  className="h-full bg-petal-400 transition-none"
                   style={{ width: `${widthPct}%` }}
                 />
               </div>
@@ -712,7 +712,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
         {/* Cabecera con título del capítulo y botón saltar */}
         <div className="flex items-center justify-between pt-1">
           <div className="flex flex-col">
-            <span className="text-[11px] uppercase tracking-wider text-pink-300/80 font-medium">
+            <span className="text-[11px] uppercase tracking-wider text-petal-300/80 font-medium">
               {activeScene.type !== "end"
                 ? `Capítulo ${activeScene.chapterIndex + 1} de 6`
                 : "Recuerdos"}
@@ -724,7 +724,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
           <div className="flex items-center gap-2 pointer-events-auto">
             {isPaused && (
-              <span className="rounded-full border border-pink-500/40 bg-pink-500/20 px-2.5 py-0.5 text-[11px] font-medium text-pink-300 animate-pulse">
+              <span className="rounded-full border border-petal-500/40 bg-petal-500/20 px-2.5 py-0.5 text-[11px] font-medium text-petal-300 animate-pulse">
                 Pausado
               </span>
             )}
@@ -758,7 +758,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             {activeScene.type === "interstitial" && (
               <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-xl mx-auto rounded-3xl border border-white/15 bg-gradient-to-b from-[#1b0a2a]/90 to-[#0d0317]/95 p-8 shadow-2xl backdrop-blur-xl">
                 {activeScene.subtitle && (
-                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-300/85 mb-3 px-3 py-1 rounded-full border border-pink-400/20 bg-pink-500/10">
+                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-petal-300/85 mb-3 px-3 py-1 rounded-full border border-petal-400/20 bg-petal-500/10">
                     {activeScene.subtitle}
                   </span>
                 )}
@@ -777,7 +777,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
 
             {/* ESCENA FINAL */}
             {activeScene.type === "end" && (
-              <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-md mx-auto rounded-3xl border border-pink-400/30 bg-gradient-to-b from-[#2a0e36] to-[#0c0312] p-8 shadow-2xl">
+              <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-md mx-auto rounded-3xl border border-petal-400/30 bg-gradient-to-b from-[#2a0e36] to-[#0c0312] p-8 shadow-2xl">
                 <SubtleTypewriterText text={activeScene.text} isPaused={isPaused} />
                 <motion.button
                   initial={{ opacity: 0, y: 15 }}
@@ -787,7 +787,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
                     e.stopPropagation();
                     onFinish();
                   }}
-                  className="mt-6 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 active:scale-95"
+                  className="mt-6 rounded-full bg-gradient-to-r from-petal-500 to-petal-500 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 active:scale-95"
                 >
                   Ir a la Galería
                 </motion.button>
@@ -849,7 +849,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
             onClick={togglePause}
             className={`flex h-11 w-11 items-center justify-center rounded-full shadow-lg backdrop-blur-md transition-all active:scale-95 ${
               isPaused
-                ? "bg-pink-500 text-white ring-4 ring-pink-500/30"
+                ? "bg-petal-500 text-white ring-4 ring-petal-500/30"
                 : "bg-white/15 text-white hover:bg-white/25 border border-white/20"
             }`}
             title={isPaused ? "Reanudar" : "Pausar"}
@@ -864,7 +864,7 @@ function SlideshowPlayer({ onFinish }: { onFinish: () => void }) {
           {/* Botón Selector de Velocidad */}
           <button
             onClick={cycleSpeed}
-            className="flex h-9 px-3.5 items-center justify-center rounded-full bg-white/10 border border-white/20 text-xs font-mono font-medium text-pink-300 backdrop-blur-md active:scale-95 shadow-md"
+            className="flex h-9 px-3.5 items-center justify-center rounded-full bg-white/10 border border-white/20 text-xs font-mono font-medium text-petal-300 backdrop-blur-md active:scale-95 shadow-md"
             title="Cambiar velocidad"
           >
             {speed}x
@@ -988,7 +988,7 @@ function ChapterCarousel({
             {activeScene.type === "interstitial" ? (
               <div className="flex flex-col items-center justify-center text-center px-6 py-8 max-w-lg mx-auto rounded-3xl border border-white/15 bg-gradient-to-b from-[#1b0a2a]/90 to-[#0d0317]/95 p-8 shadow-2xl backdrop-blur-xl">
                 {activeScene.subtitle && (
-                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-pink-300/85 mb-3 px-3 py-1 rounded-full border border-pink-400/20 bg-pink-500/10">
+                  <span className="text-xs font-semibold uppercase tracking-[0.25em] text-petal-300/85 mb-3 px-3 py-1 rounded-full border border-petal-400/20 bg-petal-500/10">
                     {activeScene.subtitle}
                   </span>
                 )}
@@ -1059,7 +1059,7 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
           )}
           <button
             onClick={() => setPhase("slideshow")}
-            className="flex items-center gap-2 rounded-full bg-pink-500 px-6 py-3 font-semibold text-white transition hover:scale-105 hover:bg-pink-600 active:scale-95 shadow-lg"
+            className="flex items-center gap-2 rounded-full bg-petal-500 px-6 py-3 font-semibold text-white transition hover:scale-105 hover:bg-petal-600 active:scale-95 shadow-lg"
           >
             <Play className="h-5 w-5 fill-white" />
             Ver nuestra historia
@@ -1100,7 +1100,7 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
                   <ImageIcon className="h-24 w-24 text-white" />
                 </div>
                 <div className="relative z-10 flex flex-col gap-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-pink-300">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-petal-300">
                     Capítulo {i + 1}
                   </span>
                   <h4 className="text-lg font-medium text-white">{chapter.title}</h4>

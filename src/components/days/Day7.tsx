@@ -424,25 +424,25 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         transition={{ duration: 0.5 }}
         className="relative overflow-hidden rounded-3xl border border-white/20 bg-gradient-to-b from-[#2d1138] via-[#1a0c28] to-[#10051d] p-7 text-center shadow-2xl backdrop-blur-xl space-y-6"
       >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-pink-500/25 blur-3xl" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-petal-500/25 blur-3xl" />
         <div className="pointer-events-none absolute -left-10 -bottom-10 h-40 w-40 rounded-full bg-amber-400/20 blur-3xl" />
 
         <div className="relative z-10 flex flex-col items-center space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
+            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
             <span>Un Regalo Especial</span>
-            <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
           </div>
 
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             Lo que más amo de ti
           </h3>
 
-          <div className="rounded-2xl border border-pink-500/20 bg-pink-500/10 p-5 text-left space-y-3">
+          <div className="rounded-2xl border border-petal-500/20 bg-petal-500/10 p-5 text-left space-y-3">
             <p className="text-sm sm:text-base leading-relaxed text-white/95 font-serif italic">
               “Hoy no hay un regalo físico... pero te he preparado un ramo frondoso y lleno de vida con las cosas que más me gustan de ti:”
             </p>
-            <p className="text-xs sm:text-sm text-pink-200/90 leading-relaxed">
+            <p className="text-xs sm:text-sm text-petal-200/90 leading-relaxed">
               Un <strong>ramo de rosas botánicas</strong> que irá floreciendo ante tus ojos. Sigue la luz dorada y toca cada rosa en orden (del 1 al 13) para descubrir qué me hace amarte cada día.
             </p>
           </div>
@@ -455,7 +455,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
             }}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.96 }}
-            className="w-full rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-400 px-6 py-4 font-semibold text-white shadow-2xl transition hover:brightness-110 flex items-center justify-center gap-2 text-base"
+            className="w-full rounded-full bg-gradient-to-r from-petal-500 via-petal-500 to-amber-400 px-6 py-4 font-semibold text-white shadow-2xl transition hover:brightness-110 flex items-center justify-center gap-2 text-base"
           >
             <span>Hacer florecer nuestro ramo</span>
             <Heart className="h-5 w-5 fill-current" />
@@ -472,7 +472,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
     <div className="relative flex flex-col items-center space-y-4 text-center select-none">
       {/* Barra de progreso superior */}
       <div className="w-full max-w-sm space-y-1.5">
-        <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-pink-300 px-1">
+        <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-petal-300 px-1">
           <span>Rosas abiertas: {revealedIds.length} / 13</span>
           <span>
             {isAllRevealed ? "¡Ramo completo! ❤️" : `Siguiente rosa: #${nextTargetId}`}
@@ -480,7 +480,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         </div>
         <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300"
+            className="h-full bg-gradient-to-r from-petal-500 via-petal-400 to-amber-300"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
             transition={{ duration: 0.4 }}
@@ -709,12 +709,12 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-sm rounded-2xl border border-pink-400/40 bg-gradient-to-br from-pink-500/20 via-purple-900/30 to-amber-500/20 p-5 shadow-2xl backdrop-blur-md space-y-3"
+          className="w-full max-w-sm rounded-2xl border border-petal-400/40 bg-gradient-to-br from-petal-500/20 via-petal-900/30 to-amber-500/20 p-5 shadow-2xl backdrop-blur-md space-y-3"
         >
-          <div className="flex items-center justify-center gap-2 text-pink-300 font-serif text-base sm:text-lg font-bold">
-            <Heart className="h-5 w-5 fill-pink-400 text-pink-400" />
+          <div className="flex items-center justify-center gap-2 text-petal-300 font-serif text-base sm:text-lg font-bold">
+            <Heart className="h-5 w-5 fill-petal-400 text-petal-400" />
             <span>¡Tu ramo está en pleno esplendor!</span>
-            <Heart className="h-5 w-5 fill-pink-400 text-pink-400" />
+            <Heart className="h-5 w-5 fill-petal-400 text-petal-400" />
           </div>
 
           <p className="text-xs sm:text-sm text-white/90 font-serif italic">
@@ -724,7 +724,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
           <button
             type="button"
             onClick={() => setShowFullLetter(true)}
-            className="w-full rounded-full bg-pink-500/30 border border-pink-400/50 py-2.5 text-xs font-semibold text-pink-200 transition hover:bg-pink-500/40 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full rounded-full bg-petal-500/30 border border-petal-400/50 py-2.5 text-xs font-semibold text-petal-200 transition hover:bg-petal-500/40 active:scale-95 flex items-center justify-center gap-2"
           >
             <BookOpen className="h-4 w-4" />
             <span>Leer todas las dedicatorias juntas</span>
@@ -747,7 +747,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-center shadow-2xl space-y-4"
+              className="relative w-full max-w-sm overflow-hidden rounded-3xl border border-petal-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-center shadow-2xl space-y-4"
             >
               <button
                 onClick={() => setActiveFlower(null)}
@@ -766,7 +766,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               </div>
 
               <div>
-                <span className="text-xs font-semibold uppercase tracking-widest text-pink-300">
+                <span className="text-xs font-semibold uppercase tracking-widest text-petal-300">
                   Rosa #{activeFlower.id} de 13
                 </span>
                 <h4 className="font-serif text-xl font-bold text-white mt-0.5">
@@ -775,7 +775,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-left backdrop-blur-sm">
-                <p className="font-serif text-base sm:text-lg italic leading-relaxed text-pink-100">
+                <p className="font-serif text-base sm:text-lg italic leading-relaxed text-petal-100">
                   “{activeFlower.text}”
                 </p>
               </div>
@@ -783,7 +783,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               <button
                 type="button"
                 onClick={() => setActiveFlower(null)}
-                className="w-full rounded-full bg-gradient-to-r from-rose-500 to-pink-500 py-3 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
+                className="w-full rounded-full bg-gradient-to-r from-petal-500 to-petal-500 py-3 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
               >
                 Guardar en el ramo
               </button>
@@ -807,7 +807,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-left shadow-2xl"
+              className="relative flex max-h-[85vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-petal-500/30 bg-gradient-to-b from-[#2a1036] to-[#12051b] p-6 text-left shadow-2xl"
             >
               <button
                 onClick={() => setShowFullLetter(false)}
@@ -817,7 +817,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
               </button>
 
               <div className="border-b border-white/10 pb-3">
-                <span className="text-xs font-semibold uppercase tracking-widest text-pink-300">
+                <span className="text-xs font-semibold uppercase tracking-widest text-petal-300">
                   Ramo Completo
                 </span>
                 <h4 className="font-serif text-2xl font-bold text-white">
@@ -832,10 +832,10 @@ export function Day7({ isUnlocked }: DayComponentProps) {
                     className="rounded-2xl border border-white/10 bg-white/5 p-3.5 space-y-1 backdrop-blur-sm"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-pink-500/30 text-[10px] font-bold text-pink-200">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-petal-500/30 text-[10px] font-bold text-petal-200">
                         {flower.id}
                       </span>
-                      <span className="text-xs font-semibold text-pink-300">
+                      <span className="text-xs font-semibold text-petal-300">
                         {flower.name}
                       </span>
                     </div>
@@ -850,7 +850,7 @@ export function Day7({ isUnlocked }: DayComponentProps) {
                 <button
                   type="button"
                   onClick={() => setShowFullLetter(false)}
-                  className="rounded-full bg-gradient-to-r from-rose-500 to-pink-500 px-8 py-2.5 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
+                  className="rounded-full bg-gradient-to-r from-petal-500 to-petal-500 px-8 py-2.5 font-semibold text-white shadow-lg transition hover:brightness-110 active:scale-95 text-sm"
                 >
                   Cerrar
                 </button>

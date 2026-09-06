@@ -164,22 +164,22 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-3xl border border-pink-400/30 bg-gradient-to-b from-[#2a0e36] via-[#1a0724] to-[#0c0312] p-6 sm:p-7 text-center shadow-2xl space-y-5"
+        className="relative overflow-hidden rounded-3xl border border-petal-400/30 bg-gradient-to-b from-[#2a0e36] via-[#1a0724] to-[#0c0312] p-6 sm:p-7 text-center shadow-2xl space-y-5"
       >
-        <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-pink-500/25 blur-3xl" />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-44 w-44 rounded-full bg-petal-500/25 blur-3xl" />
         <div className="pointer-events-none absolute -left-10 -bottom-10 h-44 w-44 rounded-full bg-amber-400/20 blur-3xl" />
 
-        <div className="inline-flex items-center gap-2 rounded-full border border-pink-400/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-petal-400/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
           <span>¡Candado 100% Abierto!</span>
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
         </div>
 
         <div className="space-y-1.5">
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow">
             {config.rewardTitle}
           </h3>
-          <p className="text-xs sm:text-sm text-pink-200/90 font-mono tracking-wide">
+          <p className="text-xs sm:text-sm text-petal-200/90 font-mono tracking-wide">
             SEGUNDO REGALO DE LA FAMILIA
           </p>
         </div>
@@ -199,10 +199,10 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-2 text-pink-300 text-xs font-serif italic">
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+        <div className="flex items-center justify-center gap-2 text-petal-300 text-xs font-serif italic">
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
           <span>Con todo el amor de tu familia política y tu novio</span>
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
         </div>
       </motion.div>
     );
@@ -223,7 +223,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
             <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
               El Candado de los 3 Cómplices
             </h3>
-            <p className="text-xs text-pink-300/90 font-mono">
+            <p className="text-xs text-petal-300/90 font-mono">
               Cerraduras abiertas: {unlockedCount} / 3
             </p>
           </div>
@@ -301,7 +301,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         >
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-pink-500/20 text-xs font-bold text-pink-300 font-mono">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-petal-500/20 text-xs font-bold text-petal-300 font-mono">
                 1
               </span>
               <h4 className="font-serif font-bold text-sm sm:text-base text-white">
@@ -324,7 +324,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           {!unlocked1 ? (
             <div className="space-y-3">
               {/* Acertijo para deducir quién es */}
-              <div className="rounded-2xl border border-pink-500/20 bg-pink-500/10 p-3.5 text-xs text-pink-100/90 leading-relaxed font-serif italic">
+              <div className="rounded-2xl border border-petal-500/20 bg-petal-500/10 p-3.5 text-xs text-petal-100/90 leading-relaxed font-serif italic">
                 “Cocina con amor insuperable, crió al chico de tus ojos y hoy te cuida y te quiere como a una hija más. En esta familia su palabra es ley... ¿Quién tiene tu primera clave?”
               </div>
 
@@ -343,18 +343,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleVerify1()}
                     placeholder="Introduce la respuesta a su pregunta..."
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-pink-400 focus:outline-none"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-petal-400 focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={handleVerify1}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-500 to-petal-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                   >
                     Probar
                   </button>
                 </div>
                 {error1 && (
-                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Revisa bien lo que te ha preguntado o si le has escrito a la persona correcta.</span>
                   </p>
@@ -380,7 +380,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         >
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-purple-500/20 text-xs font-bold text-purple-300 font-mono">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-petal-500/20 text-xs font-bold text-petal-300 font-mono">
                 2
               </span>
               <h4 className="font-serif font-bold text-sm sm:text-base text-white">
@@ -403,7 +403,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           {!unlocked2 ? (
             <div className="space-y-3">
               {/* Acertijo para deducir quién es */}
-              <div className="rounded-2xl border border-purple-500/20 bg-purple-500/10 p-3.5 text-xs text-purple-100/90 leading-relaxed font-serif italic">
+              <div className="rounded-2xl border border-petal-500/20 bg-petal-500/10 p-3.5 text-xs text-petal-100/90 leading-relaxed font-serif italic">
                 “No comparto tu sangre, pero comparto la infancia y los secretos del hombre que amas. Su madre es mi madre, su casa fue mi casa y hoy somos cómplices... ¿Quién soy?”
               </div>
 
@@ -422,18 +422,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleVerify2()}
                     placeholder="Introduce la respuesta a su pregunta..."
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-purple-400 focus:outline-none"
+                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-petal-400 focus:outline-none"
                   />
                   <button
                     type="button"
                     onClick={handleVerify2}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-500 to-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                   >
                     Probar
                   </button>
                 </div>
                 {error2 && (
-                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Pídele que te repita la pregunta o revisa la fecha/mes.</span>
                   </p>
@@ -512,7 +512,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                   </button>
                 </div>
                 {error3 && (
-                  <p className="text-[11px] text-rose-400 flex items-center gap-1">
+                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Piensa bien en sus sagas y películas de cabecera.</span>
                   </p>

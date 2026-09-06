@@ -36,8 +36,8 @@ export function DesktopFrame() {
     // la cuenta no cuadraba y en ventanas bajas los controles se montaban
     // encima del móvil y el pie se salía de pantalla sin poder llegar a él.
     <div
-      className="fixed inset-0 flex flex-col items-center gap-4 overflow-hidden p-6
-        bg-[radial-gradient(ellipse_at_top,#1e1040,#0b0620_60%)]"
+      className="desktop-studio fixed inset-0 flex flex-col items-center gap-4 overflow-hidden p-6
+        bg-[radial-gradient(ellipse_at_top,#1e1040,#141919_60%)]"
     >
       {/* Cabecera deliberadamente mínima: cada píxel que gasta el marco se lo
           quita al móvil simulado, y un móvil más bajo que uno real enseñaría
@@ -52,7 +52,7 @@ export function DesktopFrame() {
       {/* Móvil simulado */}
       <div className="flex min-h-0 flex-1 items-center justify-center">
         <div
-          className="relative rounded-[2.75rem] border border-white/15 bg-black p-3
+          className="device-frame relative rounded-[2.75rem] border border-white/15 bg-black p-3
             shadow-[0_25px_80px_rgba(139,92,246,0.25)]"
           // +24px = el padding del marco, para que el hueco interior tope
           // exactamente en la altura real del dispositivo elegido.
@@ -70,7 +70,7 @@ export function DesktopFrame() {
             src="/?embed=1"
             title="Gymkana (vista móvil)"
             allow="autoplay; fullscreen"
-            className="block h-full rounded-[2rem] border-0 bg-[#0b0620]"
+            className="block h-full rounded-[2rem] border-0 bg-[#141919]"
             style={{ width: device.width }}
           />
         </div>

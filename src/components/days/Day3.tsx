@@ -98,15 +98,15 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
       className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl"
     >
       {/* Luces difusas decorativas */}
-      <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-pink-500/20 blur-2xl" />
-      <div className="pointer-events-none absolute -left-12 -bottom-12 h-36 w-36 rounded-full bg-purple-500/20 blur-2xl" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-petal-500/20 blur-2xl" />
+      <div className="pointer-events-none absolute -left-12 -bottom-12 h-36 w-36 rounded-full bg-petal-500/20 blur-2xl" />
 
       <div className="relative z-10 flex flex-col items-center space-y-5">
         {/* Badge del premio */}
-        <div className="flex items-center justify-center gap-2 rounded-full border border-pink-500/30 bg-pink-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-pink-300 backdrop-blur-md">
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+        <div className="flex items-center justify-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
           <span>Te has ganado...</span>
-          <Heart className="h-4 w-4 fill-pink-400 text-pink-400" />
+          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
         </div>
 
         {/* Título del premio */}
@@ -125,7 +125,7 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
             onClick={togglePlay}
             className={`flex items-center gap-3 rounded-full px-6 py-3.5 font-medium text-white shadow-xl backdrop-blur-md transition-all active:scale-95 ${
               isPlaying
-                ? "bg-pink-500 hover:bg-pink-600 ring-4 ring-pink-500/30"
+                ? "bg-petal-500 hover:bg-petal-600 ring-4 ring-petal-500/30"
                 : "bg-white/20 hover:bg-white/30 border border-white/30"
             }`}
           >
@@ -156,7 +156,7 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="w-1 rounded-full bg-pink-400"
+                  className="w-1 rounded-full bg-petal-400"
                   style={{ height: "100%", transformOrigin: "bottom" }}
                 />
               ))}
