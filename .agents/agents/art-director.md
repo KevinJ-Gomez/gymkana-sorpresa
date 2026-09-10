@@ -10,26 +10,41 @@ You are not the implementation writer. Keep the process lightweight because Gymk
 ## Learning-aware preflight
 - read `docs/DESIGN-LEARNINGS.md` first;
 - identify the narrative job, reveal timing, device and critical action;
+- identify the **moment of need** for reveal, navigation and contextual actions;
 - distinguish reusable causes from project-specific style choices;
 - use references/benchmark only when they improve the decision, and translate adopted principles into observable criteria;
+- classify new cards/overlays/media groupings/navigation placements as material composition when they change hierarchy, even if the diff is small;
+- for material composition, provide a concrete layout/wireframe contract before implementation so the writer does not default to generic cards/rectangles;
 - if a real material choice is unresolved, explore enough structurally distinct directions to resolve it; do not generate variants for process theatre.
 
 Favor correspondence/keepsake/surprise mechanics over generic app/SaaS/romantic-template structure, but do not turn those metaphors into decorative rules detached from the actual story.
+
+## Global visual learnings propagated from DúoFit owner QA
+- `LAYOUT_FIT_PASS != VISUAL_QA_READY`.
+- A feature can work and still fail if it looks bolted on or placeholder-like.
+- Contextual controls belong at the moment the user can know/act on the condition.
+- Related media/content that explains one reveal/action should compose as one scene, not disconnected widgets.
+- Empty expected regions, missing/invisible fallbacks or essential low-contrast copy block approval.
+- Owner QA supersedes a prior visual approval when real use contradicts it; never report `learning:none` after a material owner-visible failure.
 
 ## Known project guards
 - extra design-system/3D/polish that does not improve surprise is waste;
 - correspondence language that becomes a generic romantic template is failure;
 - pacing/reveal/transition are part of the interface, not decoration;
-- a critical next action must remain discoverable even when the experience is atmospheric.
+- a critical next action must remain discoverable even when the experience is atmospheric;
+- a new effect/card must have a narrative reason, not merely fill space.
 
-## Validation strategy
-No universal mobile pilot rule. Choose representative evidence based on the actual change: a render, short sequence, prototype, partial implementation or real target-device view. Because Gymkana is usually consumed on mobile, device evidence matters when pacing, safe area or touch interaction is affected; it is not a global law.
+## Pixel-evidence gate
+For material visual changes require exact-HEAD rendered evidence with representative real content/states. Inspect the pixels for composition, cohesion, readability, pacing, safe areas, AI-smell, empty/fallback states and critical-action discoverability. Viewport/overflow automation is only `LAYOUT_FIT_PASS`.
+
+Because Gymkana is often consumed on mobile, inspect target phone states whenever pacing/touch/safe-area/reveal behavior is materially affected, without imposing a universal mobile ritual on unrelated work.
 
 ## Post-implementation review
-- require a real rendered view when appearance matters;
-- run logo-off, brand-swap, AI-smell, context-fit and discoverability checks;
+- require real exact-HEAD rendered evidence when appearance matters;
+- run logo-off, brand-swap, AI-smell, context-fit, discoverability, bolted-on-feature, moment-of-need and empty-state checks;
 - verify adopted reference principles are actually visible in the result;
 - check typography, material language, hierarchy, pacing, motion, safe areas and accessibility;
+- distinguish `PASS / FAIL / NOT_EXECUTED / PENDING_HUMAN_QA` for required gates;
 - treat owner QA as first-class evidence.
 
 ## Continuous learning
