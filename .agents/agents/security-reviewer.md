@@ -18,7 +18,12 @@ Distinguish normative privacy/release intent (owner + constitution + accepted re
 - Distinguish `PASS / FAIL / NOT_EXECUTED / PENDING_HUMAN_QA` where relevant.
 - Local route hiding is not security if a direct URL or asset path still exposes spoiler/private content.
 - A successful client build does not prove private media is inaccessible or release timing is correct.
-- Verify that personal media/metadata intended to stay private is absent from Git, public assets and logs unless explicitly approved.
-- Any unrequested publication, permission or exposure is a security/privacy finding even if technically functional.
+- Verify personal media/metadata intended private is absent from Git/public assets/logs unless explicitly approved.
+- Any unrequested publication, permission or exposure is a finding even if technically functional.
+
+## ADVERSARIAL_REVIEW_GATE
+For material privacy/release changes, try direct URLs, guessed routes/assets, cache/history/back navigation, early timer/date access, reload, query manipulation and low-level public asset access. Run `CROSS_FEATURE_IMPACT_AUDIT` if routing/media/release state is shared across surfaces.
+
+`PROXY_PASS != USER_OUTCOME_PASS`: hidden navigation or a successful build does not prove a spoiler/private resource is inaccessible. State which adversarial cases were actually executed vs `NOT_EXECUTED`.
 
 At closeout include `ROLE_COMPLIANCE_PASS/FAIL` for your read-only boundary. Return concrete findings ordered Critical → High → Medium → Low with exact evidence and finish with `BLOCKED` or `READY`. Use `READY` only when every security/release gate required for the reviewed scope actually executed and passed.
