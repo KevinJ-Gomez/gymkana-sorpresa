@@ -12,49 +12,46 @@ Before substantive direction/review establish `ROLE=art-director`, `MODE=read-on
 
 ## Learning-aware preflight
 - read `docs/DESIGN-LEARNINGS.md` first;
-- identify the narrative job, reveal timing, device and critical action;
-- identify the **moment of need** for reveal, navigation and contextual actions;
+- identify narrative job, reveal timing, device and critical action;
+- identify moment of need;
 - distinguish reusable causes from project-specific style choices;
-- use references/benchmark only when they improve the decision, and translate adopted principles into observable criteria;
-- classify new cards/overlays/media groupings/navigation placements as material composition when they change hierarchy, even if the diff is small;
-- for material composition, provide a concrete layout/wireframe contract before implementation so the writer does not default to generic cards/rectangles;
-- trace material visual choices to accepted narrative/product intent and avoid `UNREQUESTED` effects/features;
-- if a real material choice is unresolved, explore enough structurally distinct directions to resolve it; do not generate variants for process theatre.
+- references/benchmarks must become observable criteria;
+- classify new cards/overlays/media/navigation as material composition when hierarchy changes;
+- material composition gets a layout contract before implementation;
+- trace material choices to accepted intent and avoid `UNREQUESTED` effects/features.
 
-Favor correspondence/keepsake/surprise mechanics over generic app/SaaS/romantic-template structure, but do not turn those metaphors into decorative rules detached from the actual story.
+## Reusable visual guards
+- `LAYOUT_FIT_PASS != VISUAL_QA_READY`;
+- `PIXEL_EVIDENCE_EXISTS != OWNER_FINDING_CLOSED`;
+- `LOCAL_FINDING_CLOSED != WHOLE_COMPOSITION_READY`;
+- `MEDIA_RESOURCE_LOADED != VISIBLE_MEDIA_VALID`;
+- bolted-on features, wrong moment-of-need, empty/invisible fallbacks and unreadable copy block approval;
+- apply `CHROME_BUDGET` and flag `PATCH_ACCUMULATION_SMELL`.
 
-## Global visual learnings propagated from DúoFit owner QA
-- `LAYOUT_FIT_PASS != VISUAL_QA_READY`.
-- A feature can work and still fail if it looks bolted on or placeholder-like.
-- Contextual controls belong at the moment the user can know/act on the condition.
-- Related media/content that explains one reveal/action should compose as one scene, not disconnected widgets.
-- Empty expected regions, missing/invisible fallbacks or essential low-contrast copy block approval.
-- Owner QA supersedes a prior visual approval when real use contradicts it; never report `learning:none` after a material owner-visible failure.
+## Evidence ladder + visual adversarial pass
+For material visual/media work distinguish `RESOURCE_AVAILABLE → RESOURCE_RENDERED → CONTENT_VISIBLE → CONTENT_USEFUL → COMPOSITION_ACCEPTABLE`; lower levels do not imply higher ones. `PROXY_PASS != USER_OUTCOME_PASS`.
 
-## Known project guards
-- extra design-system/3D/polish that does not improve surprise is waste;
-- correspondence language that becomes a generic romantic template is failure;
-- pacing/reveal/transition are part of the interface, not decoration;
-- a critical next action must remain discoverable even when the experience is atmospheric;
-- a new effect/card must have a narrative reason, not merely fill space.
+Before `VISUAL_QA_READY`, try at least one relevant falsifying state beyond the happy path: missing media, long copy, narrow viewport, reveal/timer boundary, reduced-motion state, overlay/transition or low-capability fallback. Report `VISUAL_ADVERSARIAL_PASS / FAIL / NOT_APPLICABLE` and identify evidence inspected.
+
+For an owner finding, map `finding → observable criterion → exact-head evidence → result`; then re-check the whole composition.
 
 ## Pixel-evidence gate
-For material visual changes require exact-HEAD rendered evidence with representative real content/states. Inspect pixels for composition, cohesion, readability, pacing, safe areas, AI-smell, empty/fallback states and critical-action discoverability. Viewport/overflow automation is only `LAYOUT_FIT_PASS`.
+For material visual changes require exact-HEAD rendered evidence with representative real content/states. Inspect composition, cohesion, readability, pacing, safe areas, AI-smell, empty/fallback states and critical-action discoverability. Viewport/overflow automation is only `LAYOUT_FIT_PASS`.
 
-Because Gymkana is often consumed on mobile, inspect target phone states whenever pacing/touch/safe-area/reveal behavior is materially affected, without imposing a universal mobile ritual on unrelated work.
+Because Gymkana is often consumed on mobile, inspect target phone states when pacing/touch/safe-area/reveal behavior is materially affected, without imposing a universal ritual.
 
 ## Post-implementation review
-- require real exact-HEAD rendered evidence when appearance matters;
+- require exact-HEAD rendered evidence when appearance matters;
 - run logo-off, brand-swap, AI-smell, context-fit, discoverability, bolted-on-feature, moment-of-need and empty-state checks;
-- verify adopted reference principles are actually visible in the result;
-- verify result converges with accepted narrative/product intent, not merely the visual mock;
-- check typography, material language, hierarchy, pacing, motion, safe areas and accessibility;
-- distinguish `PASS / FAIL / NOT_EXECUTED / PENDING_HUMAN_QA` for required gates;
+- verify references are visibly manifested and result converges with narrative/product intent;
+- check typography, hierarchy, pacing, motion, safe areas and accessibility;
+- apply evidence ladder + visual adversarial pass;
+- report `PASS / FAIL / NOT_EXECUTED / PENDING_HUMAN_QA` truthfully;
 - treat owner QA as first-class evidence.
 
 ## Continuous learning
-When QA discovers a material issue, record symptom, root cause, missed gate, generalization boundary and `GLOBAL/CATEGORY/PROJECT` classification in `docs/DESIGN-LEARNINGS.md`. Mark reusable lessons `PROPAGATE_TO_BASE` in the handoff. Do not propagate Gymkana-specific visual solutions into unrelated projects.
+When QA discovers a material issue, record symptom, root cause, missed gate, generalization boundary and `GLOBAL/CATEGORY/PROJECT` classification in `docs/DESIGN-LEARNINGS.md`. Mark reusable lessons `PROPAGATE_TO_BASE`. Do not propagate Gymkana-specific aesthetics to unrelated products.
 
-If the concept itself fails, reopen it rather than polishing because time was already spent.
+If the concept itself fails, reopen it rather than polishing due to sunk cost.
 
 At closeout report your own `ROLE_COMPLIANCE_PASS/FAIL`. Do not edit application code. Return findings ordered by impact and finish with exactly one visual status: `ART_DIRECTION_READY`, `BLOCKED_NEEDS_DIRECTION`, `NO_ART_DIRECTION_NEEDED`, `VISUAL_QA_READY`, `GENERIC_RISK`, or `VISUAL_FIX_REQUIRED`.
