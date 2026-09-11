@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #141919;
-  --foreground: #f3eee4;
+  --background: #15061c;
+  --foreground: #fcf4f7;
 }
 
 @theme inline {
@@ -114,23 +114,134 @@ button:disabled { cursor: not-allowed; }
 .journey-header > button { font: 32px/1.15 var(--font-serif); filter: none; color: #fcf4f7; }
 .journey-header > p { margin-top: 8px; font-size: 11px; letter-spacing: .06em; }
 .journey-header > div > div { border: 0; background: transparent; box-shadow: none; border-radius: 0; font-size: 10px; }
-.journey-day-link { text-align: left; border-radius: 0; border: 0; border-top: 1px solid #f472b650; background: linear-gradient(180deg, #1f0a28ec, #15061dc9); padding: 19px 22px; box-shadow: 0 12px 40px rgba(219, 39, 119, 0.12); }
-.journey-day-link > p:first-child { font-size: 9px; letter-spacing: .18em; }
-.journey-day-link > p:nth-child(2) { font: 28px/1.2 var(--font-serif); margin-top: 8px; }
-.journey-day-link > p:last-child { justify-content: flex-start; margin-top: 13px; font-size: 11px; color: #fbcfe8; }
-.day-sheet { border-radius: 16px 16px 0 0; border-color: rgba(244, 114, 182, 0.35); background: #15061e; }
+.journey-day-link {
+  text-align: left;
+  border-radius: 20px;
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  box-shadow: inset 0 0 0 3px #faf0f4, inset 0 0 0 4px rgba(244, 114, 182, 0.2), 0 10px 30px rgba(0, 0, 0, 0.4);
+  background: #fff8fa;
+  padding: 16px 20px;
+  color: #4a1d2e;
+}
+.journey-day-link > p:first-child { font-size: 9px; letter-spacing: .18em; color: #9d5272; }
+.journey-day-link > p:nth-child(2) { font: 24px/1.2 var(--font-serif); margin-top: 4px; color: #4a1d2e; }
+.journey-day-link > p:last-child { justify-content: flex-start; margin-top: 8px; font-size: 11px; color: #9f496e; }
+
+.day-sheet {
+  border-radius: 24px 24px 0 0;
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  background: #fff8fa;
+  color: #4a1d2e;
+  box-shadow: inset 0 0 0 6px #faf0f4, inset 0 0 0 7px rgba(244, 114, 182, 0.25), 0 -12px 50px rgba(0, 0, 0, 0.55);
+}
 .day-sheet::before { display: none; }
-.day-sheet > header { flex-wrap: wrap; padding-top: 18px; border-bottom: 1px solid rgba(244, 114, 182, 0.2); margin-bottom: 24px; }
+.day-sheet > header {
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-bottom: 1px solid rgba(244, 114, 182, 0.25);
+  margin-bottom: 18px;
+}
 .day-sheet > header > div:first-child { flex: 1 1 180px; }
 .day-sheet > header > div:last-child { flex-wrap: wrap; max-width: 100%; }
-.day-sheet > header > div:last-child > span { white-space: normal; overflow-wrap: anywhere; max-width: 200px; border-radius: 9999px; font-size: 10px; background: rgba(244, 114, 182, 0.15); color: #f9a8d4; border: 1px solid rgba(244, 114, 182, 0.3); }
-.chapter-number { font: italic 45px/1 var(--font-serif); color: #f472b6; min-width: 48px; }
-.day-sheet h2 { font-size: 28px; font-weight: 400; color: #fcf4f7; }
-.day-sheet h3 { font-size: 25px; font-weight: 400; color: #fcf4f7; }
-.day-sheet form > p:first-child { font: 23px/1.6 var(--font-serif); color: #fcf4f7; }
-.day-sheet input[type="text"] { background: rgba(255, 255, 255, 0.06); border-radius: 8px; border-color: rgba(244, 114, 182, 0.35); color: #fcf4f7; }
-.day-sheet > div:last-child button { border-radius: 8px; background: transparent; padding-block: 12px; }
-.plan-sheet { background: #15061e; border-radius: 16px 16px 0 0; border-color: rgba(244, 114, 182, 0.35); }
+.day-sheet > header > div:last-child > span {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  max-width: 200px;
+  border-radius: 9999px;
+  font-size: 10px;
+  background: #fce7f3;
+  color: #9d174d;
+  border: 1px solid rgba(244, 114, 182, 0.4);
+}
+.chapter-number { font: italic 44px/1 var(--font-serif); color: #be185d; min-width: 44px; }
+.day-sheet h2 { font-size: 26px; font-weight: 600; color: #4a1d2e; font-family: var(--font-serif); }
+.day-sheet h3 { font-size: 22px; font-weight: 600; color: #4a1d2e; font-family: var(--font-serif); }
+.day-sheet form > p:first-child { font: 20px/1.6 var(--font-serif); color: #4a1d2e; }
+.day-sheet input[type="text"] {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(244, 114, 182, 0.45);
+  color: #4a1d2e;
+}
+.day-sheet input[type="text"]::placeholder {
+  color: #a8587c;
+}
+.day-sheet > div:last-child button {
+  border-radius: 9999px;
+  background: #fce7f3;
+  color: #9d174d;
+  border: 1px solid rgba(244, 114, 182, 0.35);
+  padding-block: 10px;
+}
+
+/* Cascada de legibilidad para el contenido de los retos (Day1 - Day11) dentro de la carta de papel */
+.day-sheet p,
+.day-sheet h4,
+.day-sheet h5,
+.day-sheet label {
+  color: #4a1d2e;
+}
+.day-sheet span:not([class*="bg-"]):not([class*="letter-seal"]):not([class*="chapter-number"]):not([class*="text-petal"]):not([class*="text-amber"]) {
+  color: #4a1d2e;
+}
+.day-sheet [class*="text-white"] {
+  color: #4a1d2e !important;
+}
+.day-sheet [class*="text-white/"] {
+  color: #6b2641 !important;
+}
+.day-sheet p[class*="italic"],
+.day-sheet span[class*="italic"] {
+  color: #9f496e !important;
+}
+.day-sheet [class*="bg-white/5"],
+.day-sheet [class*="bg-white/10"],
+.day-sheet [class*="bg-black/"] {
+  background-color: #faf0f4 !important;
+  border-color: rgba(244, 114, 182, 0.35) !important;
+}
+.day-sheet [class*="border-white"] {
+  border-color: rgba(244, 114, 182, 0.35) !important;
+}
+.day-sheet button[class*="bg-white/10"],
+.day-sheet button[class*="bg-white/5"] {
+  background-color: #fce7f3 !important;
+  color: #831843 !important;
+  border-color: rgba(244, 114, 182, 0.4) !important;
+}
+
+/* Blindaje para visores y modales a pantalla completa dentro de los días (StoryViewer en Day2, dedicatorias en Day7, etc.) */
+.day-sheet :is([class*="fixed"], .fixed)[class*="bg-black/"],
+.day-sheet :is([class*="fixed"], .fixed)[class*="bg-black"] {
+  background-color: rgba(0, 0, 0, 0.88) !important;
+}
+.day-sheet :is([class*="fixed"], .fixed) [class*="text-white"] {
+  color: #ffffff !important;
+}
+.day-sheet :is([class*="fixed"], .fixed) [class*="text-white/"] {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+.day-sheet :is([class*="fixed"], .fixed) p,
+.day-sheet :is([class*="fixed"], .fixed) h4,
+.day-sheet :is([class*="fixed"], .fixed) h5 {
+  color: #ffffff;
+}
+.day-sheet :is([class*="fixed"], .fixed) [class*="bg-white/5"],
+.day-sheet :is([class*="fixed"], .fixed) [class*="bg-white/10"] {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.day-sheet :is([class*="fixed"], .fixed) [class*="border-white"] {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.plan-sheet {
+  border-radius: 24px 24px 0 0;
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  background: #fff8fa;
+  color: #4a1d2e;
+  box-shadow: inset 0 0 0 6px #faf0f4, inset 0 0 0 7px rgba(244, 114, 182, 0.25), 0 -12px 50px rgba(0, 0, 0, 0.55);
+}
 .desktop-studio { background: radial-gradient(ellipse at 50% 40%, #3b1236, #0e0416 75%); }
 .device-frame { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); border-color: rgba(244, 114, 182, 0.35); background: #1a0824; }
 @media (max-height: 700px) {

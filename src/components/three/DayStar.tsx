@@ -26,10 +26,10 @@ const STYLE: Record<
     pulseAmount: number;
   }
 > = {
-  // Apagada (bloqueada): totalmente apagada, núcleo tenue y sin brillo ni destello
+  // Apagada (bloqueada): núcleo tenue pétalo apagado, sin brillo ni destello
   locked: {
-    core: "#475569",
-    glow: "#334155",
+    core: "#6b3a4c",
+    glow: "#4a1d2e",
     coreScale: 0.42,
     glowScale: 1.0,
     glowOpacity: 0,
@@ -37,29 +37,29 @@ const STYLE: Record<
     pulseSpeed: 0.5,
     pulseAmount: 0.01,
   },
-  // Apagada (disponible pero reto no completado): apagada, sin brillo ni destello
+  // Apagada (disponible pero reto no completado): núcleo pétalo visible, sutil latido
   available: {
-    core: "#64748b",
-    glow: "#475569",
-    coreScale: 0.5,
+    core: "#9f496e",
+    glow: "#831843",
+    coreScale: 0.52,
     glowScale: 1.2,
     glowOpacity: 0,
     flare: 0,
     pulseSpeed: 0.8,
     pulseAmount: 0.02,
   },
-  // Apagada (día activo/hoy, pero reto no completado): indicador sutil para saber dónde tocar, pero APAGADA (sin destello ni brillo cegador)
+  // Día activo/hoy (reto pendiente): estrella que parpadea con aura de flor cálida
   today: {
-    core: "#cbd5e1",
+    core: "#fce7f3",
     glow: "#f472b6",
-    coreScale: 0.65,
-    glowScale: 1.8,
-    glowOpacity: 0.08,
+    coreScale: 0.7,
+    glowScale: 2.0,
+    glowOpacity: 0.16,
     flare: 0,
-    pulseSpeed: 1.2,
-    pulseAmount: 0.05,
+    pulseSpeed: 1.3,
+    pulseAmount: 0.06,
   },
-  // ¡BRILLANDO! (Acertijo completado con éxito): resplandor radiante rosado y destello horizontal anamórfico completo
+  // ¡BRILLANDO! (Acertijo completado): resplandor radiante frambuesa/cera y destello dorado/rosado
   solved: {
     core: "#ffffff",
     glow: "#f472b6",

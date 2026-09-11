@@ -19,7 +19,7 @@ import { WarpStreaks } from "./WarpStreaks";
 
 export type { SphereState };
 
-const DEEP_SPACE = "#101616";
+const DEEP_SPACE = "#15061c";
 /** Distancia de cámara recorriendo la constelación de cerca. */
 const TRAVEL_DIST = 8.6;
 /** Distancia de partida de la intro, desde donde arranca el salto. */

@@ -48,25 +48,25 @@ export function CountdownTimer() {
 
   if (timeLeft.isPassed) {
     return (
-      <div className="flex items-center gap-1.5 rounded-full border border-petal-400/30 bg-petal-500/15 px-3 py-1 text-xs font-semibold text-petal-200 shadow-sm backdrop-blur-md">
-        <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400 animate-pulse" />
-        ¡Felices 30 Cumpleaños!
+      <div className="flex items-center gap-1.5 rounded-full border border-petal-400/40 bg-[#fff8fa] px-3.5 py-1.5 text-xs font-semibold text-[#be185d] shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(0,0,0,0.25)]">
+        <Heart className="h-3.5 w-3.5 fill-[#be185d] text-[#be185d] animate-pulse" />
+        <span className="font-serif tracking-wide">¡Felices 30 Cumpleaños!</span>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3.5 py-1 text-xs font-medium text-white/90 shadow-md backdrop-blur-md">
-      <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
-      <span className="text-[11px] text-petal-200/80">30 Cumpleaños:</span>
-      <div className="flex items-center gap-1 font-mono font-semibold text-white">
+    <div className="flex items-center gap-2 rounded-full border border-[#f472b6]/40 bg-[#fff8fa]/95 px-4 py-1.5 text-xs font-medium text-[#4a1d2e] shadow-[inset_0_0_0_2px_#faf0f4,0_6px_20px_rgba(0,0,0,0.28)] backdrop-blur-md">
+      <Heart className="h-3.5 w-3.5 fill-[#be185d] text-[#be185d]" />
+      <span className="text-[11px] font-serif uppercase tracking-wider text-[#9d5272]">30 Cumpleaños:</span>
+      <div className="flex items-center gap-1.5 font-serif font-semibold text-[#be185d]">
         <span>{timeLeft.days}d</span>
-        <span className="text-white/40">:</span>
+        <span className="text-[#e895b2] font-normal">:</span>
         <span>{String(timeLeft.hours).padStart(2, "0")}h</span>
-        <span className="text-white/40">:</span>
+        <span className="text-[#e895b2] font-normal">:</span>
         <span>{String(timeLeft.minutes).padStart(2, "0")}m</span>
-        <span className="text-white/40">:</span>
-        <span className="text-petal-300">{String(timeLeft.seconds).padStart(2, "0")}s</span>
+        <span className="text-[#e895b2] font-normal">:</span>
+        <span className="text-[#be185d] font-bold">{String(timeLeft.seconds).padStart(2, "0")}s</span>
       </div>
     </div>
   );

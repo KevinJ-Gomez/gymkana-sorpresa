@@ -39,7 +39,7 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
     hapticSuccess();
 
     // Generar partículas de corazones y chispas festivas
-    const colors = ["#d9b19d", "#a66056", "#c5a56d", "#a5b5a5", "#e5c8b9", "#f3eee4"];
+    const colors = ["#be185d", "#db2777", "#f472b6", "#fda4af", "#fff8fa", "#fce7f3"];
     const pts = Array.from({ length: 45 }, (_, i) => {
       const angle = (i / 45) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
       const dist = 90 + Math.random() * 160;
@@ -64,7 +64,7 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6 backdrop-blur-xl"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#15061c]/90 p-6 backdrop-blur-xl"
     >
       <div className="relative flex flex-col items-center text-center">
         {/* Corazones y destellos que estallan */}
@@ -118,11 +118,11 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
             }
             className="relative z-10 flex items-center justify-center"
           >
-            <div className="flex h-16 w-36 items-center justify-center rounded-2xl bg-gradient-to-b from-petal-500 to-petal-600 shadow-xl border-t border-petal-300">
+            <div className="flex h-16 w-36 items-center justify-center rounded-2xl bg-gradient-to-b from-[#db2777] to-[#be185d] shadow-xl border-t border-petal-300">
               <div className="absolute -top-4 flex items-center justify-center">
                 <Heart className="h-7 w-7 text-petal-200 fill-petal-300 drop-shadow" />
               </div>
-              <div className="h-full w-5 bg-petal-300 border-x border-petal-200" />
+              <div className="h-full w-5 bg-[#fff8fa] border-x border-[#f4c2d4]" />
             </div>
           </motion.div>
 
@@ -130,10 +130,10 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
           <motion.div
             animate={opened ? { scale: [1, 1.15, 0.9, 0], opacity: [1, 1, 0] } : {}}
             transition={{ duration: 0.9, ease: "easeOut" }}
-            className="relative -mt-2 flex h-28 w-32 items-center justify-center rounded-2xl bg-gradient-to-b from-petal-600 to-petal-700 shadow-2xl border border-petal-400"
+            className="relative -mt-2 flex h-28 w-32 items-center justify-center rounded-2xl bg-gradient-to-b from-[#be185d] to-[#9d174d] shadow-2xl border border-petal-400"
           >
-            <div className="h-full w-5 bg-petal-300 border-x border-petal-200" />
-            <div className="absolute inset-x-0 h-5 bg-petal-300 border-y border-petal-200" />
+            <div className="h-full w-5 bg-[#fff8fa] border-x border-[#f4c2d4]" />
+            <div className="absolute inset-x-0 h-5 bg-[#fff8fa] border-y border-[#f4c2d4]" />
           </motion.div>
         </motion.div>
 
@@ -144,16 +144,16 @@ function GiftUnboxContent({ onOpened, giftTitle }: Omit<GiftUnboxModalProps, "is
           transition={{ delay: 0.3 }}
           className="mt-6 space-y-2"
         >
-          <h3 className="text-2xl font-bold text-white drop-shadow flex items-center justify-center gap-2">
+          <h3 className="font-serif text-2xl font-bold text-white drop-shadow flex items-center justify-center gap-2">
             <Smile className="h-6 w-6 text-petal-300" />
             {opened ? "¡Estrella Encendida!" : "¡Has resuelto el reto!"}
           </h3>
-          <p className="text-sm text-petal-200/80">
+          <p className="font-serif italic text-sm text-petal-200/80">
             {opened ? "¡Tu estrella ya brilla en la constelación!" : "Toca para abrir tu sorpresa y encender la estrella"}
           </p>
           {giftTitle && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-petal-400/40 bg-petal-400/15 px-4 py-1 text-xs font-semibold text-petal-300">
-              <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-petal-300/40 bg-[#fff8fa] px-4 py-1 text-xs font-serif font-semibold text-[#be185d] shadow-[inset_0_0_0_1px_#faf0f4,0_2px_8px_rgba(0,0,0,0.2)]">
+              <Heart className="h-3.5 w-3.5 fill-[#be185d] text-[#be185d]" />
               {giftTitle}
             </span>
           )}
