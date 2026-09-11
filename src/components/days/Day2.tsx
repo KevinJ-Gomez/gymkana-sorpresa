@@ -1177,16 +1177,16 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center space-y-4 rounded-2xl border border-petal-400/30 bg-gradient-to-b from-[#1b0a2a]/80 to-[#0d0317]/90 p-6 sm:p-8 text-center shadow-2xl backdrop-blur-md"
+        className="flex flex-col items-center space-y-4 rounded-2xl border border-petal-400/30 bg-gradient-to-b from-[#1b0a2a] to-[#0d0317] p-6 sm:p-8 text-center shadow-2xl backdrop-blur-md"
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-petal-500/15 border border-petal-400/30 text-xs font-medium text-petal-300">
           <span>Capítulos de Nuestra Historia</span>
         </div>
-        <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-white">
+        <h3 className="text-2xl sm:text-3xl font-serif font-semibold text-white drop-shadow">
           {config.rewardTitle}
         </h3>
         {config.rewardDescription && (
-          <p className="text-sm leading-relaxed text-white/80 max-w-lg mx-auto">
+          <p className="text-sm leading-relaxed text-white/90 max-w-lg mx-auto">
             {config.rewardDescription}
           </p>
         )}
@@ -1194,7 +1194,7 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
         {/* Botón para ver toda la historia completa */}
         <button
           onClick={() => setViewingAll(true)}
-          className="mt-2 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-petal-500 to-petal-600 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 hover:scale-105 active:scale-95"
+          className="primary-action mt-2 flex items-center gap-2.5 rounded-full bg-gradient-to-r from-petal-600 to-petal-700 px-7 py-3 font-semibold text-white shadow-xl transition hover:brightness-110 hover:scale-105 active:scale-95 cursor-pointer"
         >
           <Play className="h-5 w-5 fill-white" />
           <span>Ver toda la historia completa</span>
@@ -1204,8 +1204,8 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
       {/* Grid de Capítulos */}
       <div className="space-y-3">
         <div className="flex items-center justify-between px-1">
-          <h4 className="text-base font-medium text-white/90">O elige un capítulo</h4>
-          <span className="text-xs text-petal-300/80">6 capítulos</span>
+          <h4 className="text-base font-serif font-bold text-[#4a1d2e]">O elige un capítulo</h4>
+          <span className="text-xs font-mono text-[#9d5272]">6 capítulos</span>
         </div>
 
         <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
@@ -1216,17 +1216,17 @@ export function Day2({ config, isUnlocked }: DayComponentProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
               onClick={() => setActiveChapter(chapter)}
-              className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg backdrop-blur-md transition-all hover:bg-white/10 hover:border-petal-400/30 hover:shadow-petal-500/10 active:scale-98"
+              className="group relative cursor-pointer overflow-hidden rounded-2xl border border-petal-300/40 bg-white p-5 shadow-sm transition-all hover:border-petal-400/80 hover:shadow-md active:scale-98"
             >
-              <div className="absolute -right-3 -top-3 opacity-10 transition-transform group-hover:scale-110 group-hover:opacity-20 text-petal-400">
+              <div className="absolute -right-3 -top-3 opacity-20 transition-transform group-hover:scale-110 text-petal-200">
                 <ImageIcon className="h-20 w-20" />
               </div>
               <div className="relative z-10 flex flex-col gap-1.5">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-petal-300">
+                <span className="text-[11px] font-serif font-semibold uppercase tracking-wider text-[#be185d]">
                   Capítulo {i + 1}
                 </span>
-                <h5 className="text-lg font-medium text-white">{chapter.title}</h5>
-                <p className="mt-1 text-xs text-white/60">
+                <h5 className="text-lg font-serif font-bold text-[#4a1d2e]">{chapter.title}</h5>
+                <p className="mt-0.5 text-xs text-[#9d5272]">
                   {chapter.imageCount} recuerdos
                 </p>
               </div>

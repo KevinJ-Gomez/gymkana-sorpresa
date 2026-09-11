@@ -472,13 +472,13 @@ export function Day7({ isUnlocked }: DayComponentProps) {
     <div className="relative flex flex-col items-center space-y-4 text-center select-none">
       {/* Barra de progreso superior */}
       <div className="w-full max-w-sm space-y-1.5">
-        <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-petal-300 px-1">
+        <div className="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-[#9d174d] px-1">
           <span>Rosas abiertas: {revealedIds.length} / 13</span>
           <span>
             {isAllRevealed ? "¡Ramo completo! ❤️" : `Siguiente rosa: #${nextTargetId}`}
           </span>
         </div>
-        <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-petal-200/60 overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-petal-500 via-petal-400 to-amber-300"
             initial={{ width: 0 }}
@@ -709,22 +709,22 @@ export function Day7({ isUnlocked }: DayComponentProps) {
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-sm rounded-2xl border border-petal-400/40 bg-gradient-to-br from-petal-500/20 via-petal-900/30 to-amber-500/20 p-5 shadow-2xl backdrop-blur-md space-y-3"
+          className="w-full max-w-sm rounded-2xl border border-petal-300/60 bg-[#faf0f4] p-5 shadow-lg space-y-3"
         >
-          <div className="flex items-center justify-center gap-2 text-petal-300 font-serif text-base sm:text-lg font-bold">
-            <Heart className="h-5 w-5 fill-petal-400 text-petal-400" />
+          <div className="flex items-center justify-center gap-2 text-[#be185d] font-serif text-base sm:text-lg font-bold">
+            <Heart className="h-5 w-5 fill-[#be185d] text-[#be185d]" />
             <span>¡Tu ramo está en pleno esplendor!</span>
-            <Heart className="h-5 w-5 fill-petal-400 text-petal-400" />
+            <Heart className="h-5 w-5 fill-[#be185d] text-[#be185d]" />
           </div>
 
-          <p className="text-xs sm:text-sm text-white/90 font-serif italic">
+          <p className="text-xs sm:text-sm text-[#4a1d2e] font-serif italic">
             “13 rosas, 13 verdades y un millón de razones para quererte.”
           </p>
 
           <button
             type="button"
             onClick={() => setShowFullLetter(true)}
-            className="w-full rounded-full bg-petal-500/30 border border-petal-400/50 py-2.5 text-xs font-semibold text-petal-200 transition hover:bg-petal-500/40 active:scale-95 flex items-center justify-center gap-2"
+            className="w-full rounded-full bg-gradient-to-r from-petal-600 to-petal-700 py-2.5 text-xs font-semibold text-white shadow-md transition hover:brightness-110 active:scale-95 flex items-center justify-center gap-2"
           >
             <BookOpen className="h-4 w-4" />
             <span>Leer todas las dedicatorias juntas</span>

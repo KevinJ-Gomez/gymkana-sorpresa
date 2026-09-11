@@ -15,9 +15,9 @@ export function Day9({ config, isUnlocked }: DayComponentProps) {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="space-y-4 text-center"
     >
-      <h3 className="text-lg font-semibold text-white">{config.rewardTitle}</h3>
+      <h3 className="text-lg font-serif font-bold text-[#4a1d2e]">{config.rewardTitle}</h3>
       {config.rewardDescription && (
-        <p className="text-sm text-white/75">{config.rewardDescription}</p>
+        <p className="text-sm font-serif italic text-[#831843]">{config.rewardDescription}</p>
       )}
 
       {config.imageSrc && (

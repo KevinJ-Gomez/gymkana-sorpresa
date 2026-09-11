@@ -20,10 +20,10 @@ export function Day1({ config, isUnlocked }: DayComponentProps) {
       transition={{ duration: 0.5 }}
       className="space-y-4 text-center"
     >
-      <h3 className="text-xl font-semibold text-white">{config.rewardTitle}</h3>
+      <h3 className="text-xl font-serif font-bold text-[#4a1d2e]">{config.rewardTitle}</h3>
       {/* `whitespace-pre-line` respeta los saltos de línea del config, que es
           donde vive el texto con su separación entre el premio y la pista. */}
-      <p className="mx-auto max-w-md whitespace-pre-line text-left leading-relaxed text-white/85">
+      <p className="mx-auto max-w-md whitespace-pre-line text-left font-serif leading-relaxed text-[#4a1d2e]">
         {config.rewardDescription}
       </p>
     </motion.div>

@@ -28,10 +28,10 @@ export function GiftImageReveal({
       className="mx-auto max-w-sm"
     >
       {failed ? (
-        <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-white/30 bg-white/5 p-6 text-center text-white/70">
-          <ImageOff className="h-10 w-10" />
-          <p className="text-sm">
-            Añade tu imagen en <code className="rounded bg-black/30 px-1.5 py-0.5">public{src}</code>
+        <div className="flex aspect-square flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-petal-300/60 bg-[#faf0f4] p-6 text-center text-[#9d5272]">
+          <ImageOff className="h-10 w-10 text-[#be185d]/60" />
+          <p className="text-sm font-serif text-[#4a1d2e]">
+            Añade tu imagen en <code className="rounded bg-petal-200/50 px-1.5 py-0.5 text-[#4a1d2e]">public{src}</code>
           </p>
         </div>
       ) : (
@@ -40,11 +40,11 @@ export function GiftImageReveal({
           src={src}
           alt={alt}
           onError={() => setFailed(true)}
-          className="aspect-square w-full rounded-2xl object-cover shadow-lg"
+          className="aspect-square w-full rounded-2xl object-cover shadow-lg border border-petal-300/40"
         />
       )}
       {caption && (
-        <figcaption className="mt-3 text-center text-sm italic text-white/80">
+        <figcaption className="mt-3 text-center text-sm font-serif italic text-[#4a1d2e]/85">
           {caption}
         </figcaption>
       )}

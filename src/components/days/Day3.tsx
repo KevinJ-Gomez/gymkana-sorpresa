@@ -95,27 +95,23 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
       initial={{ opacity: 0, y: 16, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.4 }}
-      className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl"
+      className="relative overflow-hidden rounded-2xl border border-petal-300/40 bg-[#faf0f4] p-6 sm:p-8 text-center shadow-lg"
     >
-      {/* Luces difusas decorativas */}
-      <div className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-petal-500/20 blur-2xl" />
-      <div className="pointer-events-none absolute -left-12 -bottom-12 h-36 w-36 rounded-full bg-petal-500/20 blur-2xl" />
-
       <div className="relative z-10 flex flex-col items-center space-y-5">
         {/* Badge del premio */}
-        <div className="flex items-center justify-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
-          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
+        <div className="flex items-center justify-center gap-2 rounded-full border border-petal-300/60 bg-[#fce7f3] px-4 py-1.5 text-xs font-serif font-semibold uppercase tracking-wider text-[#be185d] shadow-xs">
+          <Heart className="h-4 w-4 fill-[#be185d] text-[#be185d]" />
           <span>Te has ganado...</span>
-          <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
+          <Heart className="h-4 w-4 fill-[#be185d] text-[#be185d]" />
         </div>
 
         {/* Título del premio */}
-        <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+        <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#4a1d2e]">
           {config.rewardTitle || "Cena Romántica"}
         </h3>
 
         {/* Descripción del premio */}
-        <p className="max-w-md text-sm sm:text-base leading-relaxed text-white/90 drop-shadow">
+        <p className="max-w-md font-serif text-sm sm:text-base leading-relaxed text-[#4a1d2e]">
           {config.rewardDescription}
         </p>
 
@@ -123,10 +119,10 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
         <div className="pt-2 w-full flex flex-col items-center gap-3">
           <button
             onClick={togglePlay}
-            className={`flex items-center gap-3 rounded-full px-6 py-3.5 font-medium text-white shadow-xl backdrop-blur-md transition-all active:scale-95 ${
+            className={`flex items-center gap-3 rounded-full px-6 py-3.5 font-medium text-white shadow-xl transition-all active:scale-95 ${
               isPlaying
-                ? "bg-petal-500 hover:bg-petal-600 ring-4 ring-petal-500/30"
-                : "bg-white/20 hover:bg-white/30 border border-white/30"
+                ? "bg-gradient-to-r from-petal-600 via-petal-700 to-petal-800 ring-4 ring-petal-400/30"
+                : "bg-gradient-to-r from-petal-500 via-petal-600 to-petal-700"
             }`}
           >
             {isPlaying ? (
@@ -156,7 +152,7 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                  className="w-1 rounded-full bg-petal-400"
+                  className="w-1 rounded-full bg-[#be185d]"
                   style={{ height: "100%", transformOrigin: "bottom" }}
                 />
               ))}
@@ -164,7 +160,7 @@ export function Day3({ config, isUnlocked }: DayComponentProps) {
           )}
 
           {hasAutoplayFailed && !isPlaying && (
-            <p className="text-xs text-white/60">
+            <p className="text-xs font-serif text-[#9d5272]">
               🎵 Toca el botón para escuchar la canción
             </p>
           )}

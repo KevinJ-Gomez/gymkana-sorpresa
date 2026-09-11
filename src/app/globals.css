@@ -181,33 +181,24 @@ button:disabled { cursor: not-allowed; }
 .day-sheet label {
   color: #4a1d2e;
 }
-.day-sheet span:not([class*="bg-"]):not([class*="letter-seal"]):not([class*="chapter-number"]):not([class*="text-petal"]):not([class*="text-amber"]) {
-  color: #4a1d2e;
+
+/* Blindaje de botones: cualquier botón de acción, botón con fondo degradado o color pétalo/carmín
+   debe tener SIEMPRE texto e icono blanco puro, sin que la tinta ciruela del papel lo sobreescriba */
+.day-sheet :is(.primary-action, button[class*="bg-gradient"], button[class*="bg-petal"], button[class*="bg-[#"], [class*="primary-action"], a[download]),
+.day-sheet :is(.primary-action, button[class*="bg-gradient"], button[class*="bg-petal"], button[class*="bg-[#"], [class*="primary-action"], a[download]) :is(span, p, [class*="text-white"], [class*="text-white/"]) {
+  color: #ffffff !important;
 }
-.day-sheet [class*="text-white"] {
-  color: #4a1d2e !important;
+
+/* Blindaje de contenedores con fondo oscuro intencional (tarjetas cósmicas, modales, etc.) */
+.day-sheet :is([class*="bg-gradient-to-b from-[#"], [class*="bg-gradient-to-br from-[#"], [class*="bg-[#1"], [class*="bg-[#2"], [class*="bg-[#0"], [class*="bg-petal-950"], [class*="bg-red-950"]),
+.day-sheet :is([class*="bg-gradient-to-b from-[#"], [class*="bg-gradient-to-br from-[#"], [class*="bg-[#1"], [class*="bg-[#2"], [class*="bg-[#0"], [class*="bg-petal-950"], [class*="bg-red-950"]) [class*="text-white"] {
+  color: #ffffff !important;
 }
-.day-sheet [class*="text-white/"] {
-  color: #6b2641 !important;
+.day-sheet :is([class*="bg-gradient-to-b from-[#"], [class*="bg-gradient-to-br from-[#"], [class*="bg-[#1"], [class*="bg-[#2"], [class*="bg-[#0"], [class*="bg-petal-950"], [class*="bg-red-950"]) [class*="text-white/"] {
+  color: rgba(255, 255, 255, 0.85) !important;
 }
-.day-sheet p[class*="italic"],
-.day-sheet span[class*="italic"] {
-  color: #9f496e !important;
-}
-.day-sheet [class*="bg-white/5"],
-.day-sheet [class*="bg-white/10"],
-.day-sheet [class*="bg-black/"] {
-  background-color: #faf0f4 !important;
-  border-color: rgba(244, 114, 182, 0.35) !important;
-}
-.day-sheet [class*="border-white"] {
-  border-color: rgba(244, 114, 182, 0.35) !important;
-}
-.day-sheet button[class*="bg-white/10"],
-.day-sheet button[class*="bg-white/5"] {
-  background-color: #fce7f3 !important;
-  color: #831843 !important;
-  border-color: rgba(244, 114, 182, 0.4) !important;
+.day-sheet :is([class*="bg-gradient-to-b from-[#"], [class*="bg-gradient-to-br from-[#"], [class*="bg-[#1"], [class*="bg-[#2"], [class*="bg-[#0"], [class*="bg-petal-950"], [class*="bg-red-950"]) :is(h2, h3, h4, h5) {
+  color: #ffffff !important;
 }
 
 /* Blindaje para visores y modales a pantalla completa dentro de los días (StoryViewer en Day2, dedicatorias en Day7, etc.) */

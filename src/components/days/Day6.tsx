@@ -29,9 +29,9 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="space-y-3 text-center"
       >
-        <h3 className="text-lg font-semibold text-white">{config.rewardTitle}</h3>
+        <h3 className="text-lg font-serif font-bold text-[#4a1d2e]">{config.rewardTitle}</h3>
         {config.excursionHint && (
-          <p className="rounded-xl border border-dashed border-white/30 bg-white/5 p-4 text-white/90">
+          <p className="rounded-xl border border-dashed border-petal-300/60 bg-[#faf0f4] p-4 text-sm text-[#4a1d2e] leading-relaxed">
             {config.excursionHint}
           </p>
         )}
@@ -53,7 +53,7 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-white/85">{config.riddle}</p>
+      <p className="font-serif text-sm sm:text-base text-[#4a1d2e] leading-relaxed">{config.riddle}</p>
       <div className="grid grid-cols-3 gap-3">
         {tiles.map((tile) => {
           const isDone = tile < nextExpected;
@@ -67,8 +67,8 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
               animate={wrongTile === tile ? { x: [0, -6, 6, -6, 0] } : {}}
               className={`flex aspect-square items-center justify-center rounded-xl border text-xl font-semibold transition ${
                 isDone
-                  ? "border-petal-400/60 bg-petal-500/20 text-petal-200"
-                  : "border-white/20 bg-white/10 text-white active:bg-white/20 sm:hover:bg-white/20"
+                  ? "border-petal-400 bg-petal-100 text-petal-800 font-bold shadow-xs"
+                  : "border-petal-200 bg-white text-[#4a1d2e] hover:bg-[#faf0f4] active:bg-petal-50 shadow-xs"
               }`}
             >
               {tile}
@@ -76,7 +76,7 @@ export function Day6({ config, isUnlocked, onUnlock }: DayComponentProps) {
           );
         })}
       </div>
-      <p className="text-center text-xs text-white/50">
+      <p className="text-center text-xs font-mono text-[#9d5272]">
         Progreso: {Math.min(nextExpected - 1, pieceCount)} / {pieceCount}
       </p>
     </div>

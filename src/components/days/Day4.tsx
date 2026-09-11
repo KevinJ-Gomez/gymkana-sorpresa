@@ -100,27 +100,23 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-5 sm:p-7 text-center shadow-2xl backdrop-blur-xl"
+        className="relative overflow-hidden rounded-2xl border border-petal-300/40 bg-[#faf0f4] p-5 sm:p-7 text-center shadow-lg"
       >
-        {/* Glows decorativos */}
-        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-petal-500/20 blur-2xl" />
-        <div className="pointer-events-none absolute -left-10 -bottom-10 h-32 w-32 rounded-full bg-petal-500/20 blur-2xl" />
-
         <div className="relative z-10 flex flex-col items-center space-y-4">
           {/* Badge de complicidad familiar */}
-          <div className="flex items-center justify-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
-            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
+          <div className="flex items-center justify-center gap-2 rounded-full border border-petal-300/60 bg-[#fce7f3] px-4 py-1.5 text-xs font-serif font-semibold uppercase tracking-wider text-[#be185d] shadow-xs">
+            <Heart className="h-4 w-4 fill-[#be185d] text-[#be185d]" />
             <span>Misión Familiar Desbloqueada</span>
-            <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
+            <Heart className="h-4 w-4 fill-[#be185d] text-[#be185d]" />
           </div>
 
           {/* Título de la recompensa */}
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#4a1d2e]">
             {config.rewardTitle || "¡Cómplices de hoy reveladas!"}
           </h3>
 
           {/* Foto de la Suegra y Cuñada con el regalo */}
-          <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-white/20 bg-black/40 shadow-2xl">
+          <div className="relative w-full max-w-sm overflow-hidden rounded-2xl border border-petal-300/50 bg-white shadow-xl">
             {!imageError ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -131,26 +127,26 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
               />
             ) : (
               // Placeholder elegante en caso de que la foto aún no se haya copiado
-              <div className="flex flex-col items-center justify-center p-8 text-center text-petal-200">
-                <ImageIcon className="h-12 w-12 text-petal-400/70 mb-3 animate-pulse" />
-                <p className="font-medium text-base text-white">
+              <div className="flex flex-col items-center justify-center p-8 text-center text-[#9d5272]">
+                <ImageIcon className="h-12 w-12 text-[#be185d]/60 mb-3 animate-pulse" />
+                <p className="font-serif font-semibold text-base text-[#4a1d2e]">
                   Foto de mamá y hermana con tu regalo
                 </p>
-                <p className="mt-1 text-xs text-white/60">
+                <p className="mt-1 text-xs text-[#9d5272]">
                   (Coloca tu foto en <code>public/images/day4-complices.jpg</code>)
                 </p>
               </div>
             )}
             {config.imageCaption && (
-              <div className="bg-black/60 px-4 py-2 text-center text-xs font-medium text-petal-200 backdrop-blur-md">
+              <div className="bg-[#1e0a2b] px-4 py-2 text-center text-xs font-serif italic text-petal-200">
                 {config.imageCaption}
               </div>
             )}
           </div>
 
           {/* Mensaje de la Misión para pedir la pista */}
-          <div className="rounded-xl border border-petal-500/20 bg-petal-500/10 p-4 text-center">
-            <p className="text-sm sm:text-base leading-relaxed text-white/95 drop-shadow">
+          <div className="rounded-xl border border-petal-300/40 bg-white p-4 text-center shadow-xs">
+            <p className="font-serif text-sm sm:text-base leading-relaxed text-[#4a1d2e]">
               {config.rewardDescription ||
                 "Hay dos personas muy especiales que te han preparado algo. Busca a tu suegra y a tu cuñada y pídeles la pista de dónde se encuentra escondido el regalo que con tanto amor han elegido para ti."}
             </p>
@@ -165,7 +161,7 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
   // ==========================================
   return (
     <div className="space-y-4 text-center">
-      <p className="text-sm sm:text-base text-white/90 leading-relaxed font-medium">
+      <p className="font-serif text-sm sm:text-base text-[#4a1d2e] leading-relaxed font-medium">
         {config.riddle ||
           "Intercambia las piezas tocando una y luego otra para ordenar la frase con sentido:"}
       </p>
@@ -187,17 +183,17 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
                 whileTap={{ scale: 0.95 }}
                 className={`relative flex aspect-[4/3] flex-col items-center justify-center p-2 rounded-xl border text-center transition-all select-none ${
                   isSelected
-                    ? "border-petal-400 bg-petal-500/40 shadow-[0_0_20px_rgba(244,114,182,0.7)] ring-2 ring-petal-400 scale-105 z-10"
+                    ? "border-petal-500 bg-petal-100 ring-2 ring-petal-400 text-petal-900 shadow-md scale-105 z-10"
                     : isInCorrectPlace
-                    ? "border-petal-300/80 bg-petal-500/25 text-petal-100 shadow-[0_0_12px_rgba(244,114,182,0.35)] ring-1 ring-petal-400/40"
-                    : "border-white/15 bg-white/10 text-white/90 hover:bg-white/15 active:bg-white/20 backdrop-blur-md"
+                    ? "border-petal-400/80 bg-[#fce7f3] text-[#be185d] shadow-xs ring-1 ring-petal-400/40 font-semibold"
+                    : "border-petal-200 bg-white text-[#4a1d2e] hover:bg-[#faf0f4] active:bg-petal-50 shadow-xs"
                 }`}
               >
-                <span className="text-[11px] sm:text-xs font-medium leading-snug tracking-tight text-white drop-shadow">
+                <span className="text-[11px] sm:text-xs font-medium leading-snug tracking-tight text-inherit">
                   {piece.text}
                 </span>
                 {isInCorrectPlace && (
-                  <CheckCircle2 className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-petal-300 drop-shadow" />
+                  <CheckCircle2 className="absolute top-1.5 right-1.5 h-3.5 w-3.5 text-[#be185d]" />
                 )}
               </motion.button>
             );
@@ -206,12 +202,12 @@ export function Day4({ config, isUnlocked, onUnlock }: DayComponentProps) {
       </div>
 
       {/* Barra de estado y reset */}
-      <div className="flex items-center justify-between max-w-sm mx-auto px-2 pt-1 text-xs text-white/60">
+      <div className="flex items-center justify-between max-w-sm mx-auto px-2 pt-1 text-xs text-[#9d5272]">
         <span>Movimientos: {moveCount}</span>
         <button
           type="button"
           onClick={resetPuzzle}
-          className="flex items-center gap-1 hover:text-white transition active:scale-95"
+          className="flex items-center gap-1 hover:text-[#4a1d2e] transition active:scale-95 cursor-pointer"
         >
           <RotateCcw className="h-3.5 w-3.5" />
           <span>Barajar de nuevo</span>

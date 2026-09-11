@@ -72,32 +72,28 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-6 sm:p-8 text-center shadow-2xl backdrop-blur-xl"
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden rounded-2xl border border-petal-300/40 bg-[#faf0f4] p-6 sm:p-8 text-center shadow-lg"
       >
-        {/* Glows dorados y rosados */}
-        <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-amber-400/20 blur-2xl" />
-        <div className="pointer-events-none absolute -left-10 -bottom-10 h-36 w-36 rounded-full bg-petal-500/25 blur-2xl" />
-
         <div className="relative z-10 flex flex-col items-center space-y-5">
           {/* Badge de victoria */}
-          <div className="flex items-center justify-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-200 backdrop-blur-md">
-            <Trophy className="h-4 w-4 text-amber-300" />
+          <div className="flex items-center justify-center gap-2 rounded-full border border-amber-400/50 bg-amber-100 px-4 py-1.5 text-xs font-serif font-semibold uppercase tracking-wider text-amber-900 shadow-xs">
+            <Trophy className="h-4 w-4 text-amber-700" />
             <span>¡Apuesta Ganada Impecable! (5/5)</span>
-            <Heart className="h-4 w-4 fill-amber-300 text-amber-300" />
+            <Heart className="h-4 w-4 fill-[#be185d] text-[#be185d]" />
           </div>
 
           {/* Título de la recompensa */}
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#4a1d2e]">
             {config.rewardTitle || "¡Vale Digital Desbloqueado!"}
           </h3>
 
-          <p className="max-w-md text-sm sm:text-base text-white/90 leading-relaxed">
+          <p className="max-w-md font-serif text-sm sm:text-base text-[#4a1d2e] leading-relaxed">
             {config.rewardDescription}
           </p>
 
           {/* Ticket Dorado / Vale Oficial */}
-          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border-2 border-dashed border-amber-300/60 bg-gradient-to-br from-amber-500/20 via-petal-500/15 to-petal-900/40 p-6 shadow-2xl backdrop-blur-md">
+          <div className="relative w-full max-w-md overflow-hidden rounded-2xl border-2 border-dashed border-amber-400/60 bg-gradient-to-br from-[#2a0e36] via-[#1a0724] to-[#0c0312] p-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-amber-300/30 pb-3 mb-4">
               <div className="flex items-center gap-2 text-amber-300 font-bold text-sm uppercase tracking-wider">
                 <Utensils className="h-4 w-4" />
@@ -131,20 +127,20 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="space-y-5 rounded-2xl border border-petal-500/30 bg-petal-950/30 p-6 sm:p-7 text-center backdrop-blur-xl shadow-2xl"
+        className="space-y-5 rounded-2xl border border-petal-300/40 bg-[#faf0f4] p-6 sm:p-7 text-center shadow-lg"
       >
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-petal-500/20 text-petal-300">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#fce7f3] text-[#be185d] border border-petal-300/50">
           <AlertCircle className="h-8 w-8" />
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-serif text-2xl font-bold text-white">
+          <h3 className="font-serif text-2xl font-bold text-[#4a1d2e]">
             ¡Has perdido la apuesta! 😜
           </h3>
-          <p className="text-sm sm:text-base leading-relaxed text-petal-100/90">
+          <p className="font-serif text-sm sm:text-base leading-relaxed text-[#4a1d2e]">
             La regla era <strong>0 fallos</strong>... ¡así que me debes una cena o almuerzo pagada y organizada por ti cuando yo quiera! 🍽️✨
           </p>
-          <p className="text-xs text-white/60 italic pt-1">
+          <p className="text-xs text-[#9d5272] italic pt-1">
             Pero como soy generoso, puedes volver a intentarlo para intentar ganar tu vale:
           </p>
         </div>
@@ -152,7 +148,7 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <button
           type="button"
           onClick={resetQuiz}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-petal-500 to-petal-500 px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-105 active:scale-95"
+          className="primary-action inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-petal-600 to-petal-700 px-6 py-3 font-semibold text-white shadow-md transition hover:scale-105 active:scale-95 cursor-pointer"
         >
           <RotateCcw className="h-4 w-4" />
           <span>Volver a intentarlo</span>
@@ -169,35 +165,35 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="space-y-5 rounded-2xl border border-white/20 bg-white/10 p-6 sm:p-7 text-center backdrop-blur-xl shadow-2xl"
+        className="space-y-5 rounded-2xl border border-petal-300/40 bg-[#faf0f4] p-6 sm:p-7 text-center shadow-lg"
       >
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-petal-500/30 bg-petal-500/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-petal-300 backdrop-blur-md">
-          <Swords className="h-4 w-4 text-petal-300" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-petal-300/60 bg-[#fce7f3] px-4 py-1.5 text-xs font-serif font-semibold uppercase tracking-wider text-[#be185d] shadow-xs">
+          <Swords className="h-4 w-4 text-[#be185d]" />
           <span>Duelo de Pareja</span>
         </div>
 
         <div className="space-y-2">
-          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow">
+          <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#4a1d2e]">
             ¿Cuánto nos conoces?
           </h3>
-          <p className="text-sm text-white/80 leading-relaxed">
+          <p className="font-serif text-sm text-[#4a1d2e] leading-relaxed">
             Ha llegado el momento de poner a prueba tu memoria con 5 preguntas sobre nuestra historia, viajes y manías.
           </p>
         </div>
 
         {/* Reglas del Reto */}
-        <div className="space-y-3 rounded-xl border border-white/10 bg-white/5 p-4 text-left text-xs sm:text-sm text-white/90">
+        <div className="space-y-3 rounded-xl border border-petal-300/40 bg-white p-4 text-left text-xs sm:text-sm text-[#4a1d2e] shadow-xs">
           <div className="flex items-start gap-2.5">
             <span className="text-base">🎯</span>
             <p><strong>5 Preguntas en total</strong> sobre nosotros.</p>
           </div>
           <div className="flex items-start gap-2.5">
-            <ShieldAlert className="h-4 w-4 text-amber-300 shrink-0 mt-0.5" />
-            <p><strong className="text-amber-200">0 Fallos permitidos:</strong> un solo error y perderás el duelo.</p>
+            <ShieldAlert className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+            <p><strong className="text-amber-800">0 Fallos permitidos:</strong> un solo error y perderás el duelo.</p>
           </div>
           <div className="flex items-start gap-2.5">
-            <Gift className="h-4 w-4 text-petal-300 shrink-0 mt-0.5" />
+            <Gift className="h-4 w-4 text-[#be185d] shrink-0 mt-0.5" />
             <p><strong>Si aciertas las 5:</strong> Desbloquearás una recompensa muy especial para ti.</p>
           </div>
           <div className="flex items-start gap-2.5">
@@ -209,7 +205,7 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <button
           type="button"
           onClick={() => setHasStarted(true)}
-          className="w-full rounded-full bg-gradient-to-r from-petal-500 via-petal-500 to-petal-600 px-6 py-4 font-semibold text-white shadow-xl transition hover:scale-[1.02] active:scale-95 text-base"
+          className="primary-action w-full rounded-full bg-gradient-to-r from-petal-600 via-petal-700 to-petal-800 px-6 py-4 font-semibold text-white shadow-xl transition hover:scale-[1.02] active:scale-95 text-base cursor-pointer"
         >
           ¡Acepto el reto! 🚀
         </button>
@@ -227,15 +223,15 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
     <div className="space-y-5">
       {/* Cabecera del reto y apuesta */}
       <div className="space-y-2 text-center">
-        <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-petal-300 px-1">
+        <div className="flex items-center justify-between text-xs font-serif font-semibold uppercase tracking-wider text-[#9d5272] px-1">
           <span>Pregunta {currentIndex + 1} de {questions.length}</span>
           <span>0 Fallos permitidos</span>
         </div>
 
         {/* Barra de progreso */}
-        <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+        <div className="h-1.5 w-full rounded-full bg-petal-200/50 overflow-hidden">
           <motion.div
-            className="h-full bg-gradient-to-r from-petal-500 to-petal-400"
+            className="h-full bg-gradient-to-r from-petal-500 to-petal-700"
             initial={{ width: 0 }}
             animate={{ width: `${progressPercent}%` }}
             transition={{ duration: 0.3 }}
@@ -253,8 +249,8 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
           transition={{ duration: 0.25 }}
           className="space-y-4"
         >
-          <div className="rounded-2xl border border-white/15 bg-white/10 p-5 text-center shadow-lg backdrop-blur-md">
-            <h4 className="font-serif text-lg sm:text-xl font-medium text-white leading-relaxed">
+          <div className="rounded-2xl border border-petal-300/40 bg-white p-5 text-center shadow-xs">
+            <h4 className="font-serif text-lg sm:text-xl font-medium text-[#4a1d2e] leading-relaxed">
               {currentQuestion.question}
             </h4>
           </div>
@@ -265,12 +261,12 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
               const isSelected = selectedOption === optIdx;
               const isCorrect = checkIsOptionCorrect(currentIndex, optIdx);
 
-              let buttonStyles = "border-white/15 bg-white/5 text-white/90 hover:bg-white/15 active:bg-white/20";
+              let buttonStyles = "border-petal-200 bg-white text-[#4a1d2e] hover:bg-[#faf0f4] active:bg-petal-50 shadow-xs";
               if (isSelected) {
                 if (isCorrect) {
-                  buttonStyles = "border-petal-400 bg-petal-500/30 text-white ring-2 ring-petal-400 shadow-[0_0_15px_rgba(244,114,182,0.4)]";
+                  buttonStyles = "border-petal-500 bg-gradient-to-r from-petal-600 to-petal-700 text-white ring-2 ring-petal-400 shadow-md";
                 } else {
-                  buttonStyles = "border-red-400/80 bg-red-950/40 text-red-200 ring-2 ring-red-400/50";
+                  buttonStyles = "border-red-400 bg-red-100 text-red-900 ring-2 ring-red-400/50";
                 }
               }
 
@@ -281,15 +277,15 @@ export function Day5({ config, isUnlocked, onUnlock }: DayComponentProps) {
                   onClick={() => handleSelectOption(optIdx)}
                   disabled={isChecking}
                   whileTap={isChecking ? undefined : { scale: 0.98 }}
-                  className={`flex items-center justify-between rounded-xl border p-4 text-left text-sm sm:text-base font-medium transition-all shadow-md backdrop-blur-md select-none ${buttonStyles}`}
+                  className={`flex items-center justify-between rounded-xl border p-4 text-left text-sm sm:text-base font-medium transition-all shadow-xs select-none cursor-pointer ${buttonStyles}`}
                 >
                   <span>{option}</span>
                   {isSelected && (
                     <span>
                       {isCorrect ? (
-                        <CheckCircle className="h-5 w-5 text-petal-300" />
+                        <CheckCircle className="h-5 w-5 text-white" />
                       ) : (
-                        <AlertCircle className="h-5 w-5 text-red-300" />
+                        <AlertCircle className="h-5 w-5 text-red-600" />
                       )}
                     </span>
                   )}

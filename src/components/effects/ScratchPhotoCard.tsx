@@ -174,10 +174,10 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
                 initial={{ opacity: 0 }}
                 animate={{ opacity: [0, 1, 1, 0], x: [-20, 20, -20] }}
                 transition={{ duration: 2.2, repeat: Infinity }}
-                className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/75 px-3 py-1 text-xs font-medium text-white backdrop-blur-md"
+                className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-[#1e0a2b]/90 border border-petal-300/40 px-3.5 py-1.5 text-xs font-serif font-medium text-white shadow-lg backdrop-blur-md"
               >
                 <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
-                Rasca con el dedo
+                <span>Rasca con el dedo</span>
               </motion.div>
             )}
           </motion.div>
@@ -189,11 +189,11 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/80 px-4 py-2.5 text-center border-t border-white/10"
+          className="bg-[#1e0a2b] px-4 py-2.5 text-center border-t border-petal-400/30"
         >
-          <p className="text-xs font-semibold text-petal-300 flex items-center justify-center gap-1">
+          <p className="text-xs font-serif font-semibold text-petal-300 flex items-center justify-center gap-1">
             <Heart className="h-3.5 w-3.5 fill-petal-400 text-petal-400" />
-            ¡Regalo al descubierto!
+            <span>¡Regalo al descubierto!</span>
           </p>
         </motion.div>
       )}

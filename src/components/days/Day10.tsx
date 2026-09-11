@@ -24,9 +24,9 @@ export function Day10({ config, isUnlocked, onUnlock }: DayComponentProps) {
         animate={{ opacity: 1, scale: 1 }}
         className="space-y-3 text-center"
       >
-        <h3 className="text-lg font-semibold text-white">{config.rewardTitle}</h3>
+        <h3 className="text-lg font-serif font-bold text-[#4a1d2e]">{config.rewardTitle}</h3>
         {config.physicalHint && (
-          <p className="rounded-xl border border-dashed border-white/30 bg-white/5 p-4 text-white/90">
+          <p className="rounded-xl border border-dashed border-petal-300/60 bg-[#faf0f4] p-4 text-sm text-[#4a1d2e] leading-relaxed">
             {config.physicalHint}
           </p>
         )}
@@ -45,7 +45,7 @@ export function Day10({ config, isUnlocked, onUnlock }: DayComponentProps) {
 
   return (
     <div className="space-y-4">
-      <p className="text-white/85">{config.riddle}</p>
+      <p className="font-serif text-sm sm:text-base text-[#4a1d2e] leading-relaxed">{config.riddle}</p>
       <div className="grid grid-cols-4 gap-2">
         {Array.from({ length: GRID_SIZE }).map((_, index) => (
           <motion.button
@@ -53,14 +53,14 @@ export function Day10({ config, isUnlocked, onUnlock }: DayComponentProps) {
             type="button"
             whileTap={{ scale: 0.9 }}
             onClick={() => handleClick(index)}
-            className="flex aspect-square items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl transition active:bg-white/15 sm:hover:bg-white/15"
+            className="flex aspect-square items-center justify-center rounded-xl border border-petal-200 bg-white text-xl shadow-xs transition hover:bg-[#faf0f4] active:scale-95"
           >
             {index === heartIndex ? "💖" : "✨"}
           </motion.button>
         ))}
       </div>
       {misses > 0 && (
-        <p className="text-center text-xs text-white/50">Intentos fallidos: {misses}</p>
+        <p className="text-center text-xs font-mono text-[#9d5272]">Intentos fallidos: {misses}</p>
       )}
     </div>
   );

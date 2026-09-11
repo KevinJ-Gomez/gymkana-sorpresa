@@ -250,27 +250,27 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
       </div>
 
       {/* ADVERTENCIA Y FRASE COMPROMETIDA */}
-      <div className="rounded-3xl border border-amber-500/30 bg-amber-500/10 p-5 text-left backdrop-blur-md space-y-3">
-        <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs uppercase tracking-wider">
+      <div className="rounded-3xl border border-amber-400/40 bg-amber-50/70 p-5 text-left shadow-xs space-y-3">
+        <div className="flex items-center gap-2 text-amber-800 font-semibold text-xs uppercase tracking-wider">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>Instrucciones de la Misión</span>
         </div>
-        <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#4a1d2e] leading-relaxed">
           Para abrir cada cerradura, lee atentamente el acertijo de cada cómplice. Si crees saber quién es esa persona, <strong>arriésgate a enviarle exactamente esta frase por WhatsApp</strong> para que te haga su pregunta secreta:
         </p>
-        <p className="text-[11px] text-amber-200/80 italic">
+        <p className="text-[11px] text-amber-900/85 italic">
           (Cuidado: si te equivocas de persona, habrás hecho el ridículo más absoluto enviándole este mensaje sin sentido 🦩👑).
         </p>
 
         {/* Caja para copiar la frase clave */}
-        <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/20 bg-black/40 p-3.5 text-xs text-amber-200">
-          <p className="font-mono italic select-all leading-relaxed text-[11px] sm:text-xs">
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-amber-400/40 bg-[#1e0a2b] p-3.5 text-xs text-amber-100 shadow-md">
+          <p className="font-mono italic select-all leading-relaxed text-[11px] sm:text-xs text-amber-100">
             “{EMBARRASSING_PHRASE}”
           </p>
           <button
             type="button"
             onClick={handleCopyPhrase}
-            className="flex shrink-0 items-center gap-1 rounded-xl bg-amber-400/20 px-3 py-2 text-xs font-semibold text-amber-300 transition hover:bg-amber-400/30 active:scale-95"
+            className="flex shrink-0 items-center gap-1 rounded-xl bg-amber-500/25 px-3 py-2 text-xs font-semibold text-amber-200 transition hover:bg-amber-500/40 active:scale-95"
           >
             {copiedPhrase ? (
               <>
@@ -295,26 +295,26 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked1
-              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
-              : "border-white/15 bg-white/5"
+              ? "border-petal-400/50 bg-[#fce7f3]/50 shadow-sm"
+              : "border-petal-300/40 bg-[#faf0f4]/80 shadow-xs"
           }`}
         >
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-petal-500/20 text-xs font-bold text-petal-300 font-mono">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#fce7f3] border border-petal-300/50 text-xs font-bold text-[#be185d] font-mono">
                 1
               </span>
-              <h4 className="font-serif font-bold text-sm sm:text-base text-white">
+              <h4 className="font-serif font-bold text-sm sm:text-base text-[#4a1d2e]">
                 1ª Cerradura · El Primer Cómplice
               </h4>
             </div>
             {unlocked1 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
+              <span className="flex items-center gap-1 text-xs font-semibold text-[#be185d]">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Abierta</span>
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-xs text-white/50">
+              <span className="flex items-center gap-1 text-xs text-[#9d5272]">
                 <Lock className="h-4 w-4" />
                 <span>Bloqueada</span>
               </span>
@@ -324,11 +324,11 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           {!unlocked1 ? (
             <div className="space-y-3">
               {/* Acertijo para deducir quién es */}
-              <div className="rounded-2xl border border-petal-500/20 bg-petal-500/10 p-3.5 text-xs text-petal-100/90 leading-relaxed font-serif italic">
+              <div className="rounded-2xl border border-petal-300/50 bg-[#fff8fa] p-3.5 text-xs text-[#831843] leading-relaxed font-serif italic shadow-xs">
                 “Cocina con amor insuperable, crió al chico de tus ojos y hoy te cuida y te quiere como a una hija más. En esta familia su palabra es ley... ¿Quién tiene tu primera clave?”
               </div>
 
-              <p className="text-[11px] text-white/70 leading-relaxed">
+              <p className="text-[11px] text-[#9f496e] leading-relaxed">
                 Si crees saber quién es, mándale la frase por WhatsApp. Te responderá con una pregunta secreta cuya respuesta abre esta cerradura:
               </p>
 
@@ -343,18 +343,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleVerify1()}
                     placeholder="Introduce la respuesta a su pregunta..."
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-petal-400 focus:outline-none"
+                    className="w-full rounded-xl border border-petal-300/60 bg-white px-4 py-2.5 text-xs sm:text-sm text-[#4a1d2e] placeholder-[#a8587c]/70 focus:border-petal-500 focus:outline-none shadow-xs"
                   />
                   <button
                     type="button"
                     onClick={handleVerify1}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-500 to-petal-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-600 to-petal-700 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                   >
                     Probar
                   </button>
                 </div>
                 {error1 && (
-                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
+                  <p className="text-[11px] text-[#be185d] flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Revisa bien lo que te ha preguntado o si le has escrito a la persona correcta.</span>
                   </p>
@@ -362,7 +362,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-petal-300 font-medium">
+            <p className="text-xs text-petal-800 font-semibold">
               ✨ ¡1ª Cerradura superada con éxito!
             </p>
           )}
@@ -374,26 +374,26 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked2
-              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
-              : "border-white/15 bg-white/5"
+              ? "border-petal-400/50 bg-[#fce7f3]/50 shadow-sm"
+              : "border-petal-300/40 bg-[#faf0f4]/80 shadow-xs"
           }`}
         >
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-petal-500/20 text-xs font-bold text-petal-300 font-mono">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#fce7f3] border border-petal-300/50 text-xs font-bold text-[#be185d] font-mono">
                 2
               </span>
-              <h4 className="font-serif font-bold text-sm sm:text-base text-white">
+              <h4 className="font-serif font-bold text-sm sm:text-base text-[#4a1d2e]">
                 2ª Cerradura · El Segundo Cómplice
               </h4>
             </div>
             {unlocked2 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
+              <span className="flex items-center gap-1 text-xs font-semibold text-[#be185d]">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Abierta</span>
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-xs text-white/50">
+              <span className="flex items-center gap-1 text-xs text-[#9d5272]">
                 <Lock className="h-4 w-4" />
                 <span>Bloqueada</span>
               </span>
@@ -403,11 +403,11 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           {!unlocked2 ? (
             <div className="space-y-3">
               {/* Acertijo para deducir quién es */}
-              <div className="rounded-2xl border border-petal-500/20 bg-petal-500/10 p-3.5 text-xs text-petal-100/90 leading-relaxed font-serif italic">
+              <div className="rounded-2xl border border-petal-300/50 bg-[#fff8fa] p-3.5 text-xs text-[#831843] leading-relaxed font-serif italic shadow-xs">
                 “No comparto tu sangre, pero comparto la infancia y los secretos del hombre que amas. Su madre es mi madre, su casa fue mi casa y hoy somos cómplices... ¿Quién soy?”
               </div>
 
-              <p className="text-[11px] text-white/70 leading-relaxed">
+              <p className="text-[11px] text-[#9f496e] leading-relaxed">
                 Si crees saber quién es, mándale la frase por WhatsApp y supera su pregunta secreta:
               </p>
 
@@ -422,18 +422,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleVerify2()}
                     placeholder="Introduce la respuesta a su pregunta..."
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-petal-400 focus:outline-none"
+                    className="w-full rounded-xl border border-petal-300/60 bg-white px-4 py-2.5 text-xs sm:text-sm text-[#4a1d2e] placeholder-[#a8587c]/70 focus:border-petal-500 focus:outline-none shadow-xs"
                   />
                   <button
                     type="button"
                     onClick={handleVerify2}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-500 to-indigo-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-petal-600 to-petal-700 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                   >
                     Probar
                   </button>
                 </div>
                 {error2 && (
-                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
+                  <p className="text-[11px] text-[#be185d] flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Pídele que te repita la pregunta o revisa la fecha/mes.</span>
                   </p>
@@ -441,7 +441,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-petal-300 font-medium">
+            <p className="text-xs text-petal-800 font-semibold">
               ✨ ¡2ª Cerradura superada con éxito!
             </p>
           )}
@@ -453,26 +453,26 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
         <motion.div
           className={`rounded-3xl border p-5 text-left transition-all ${
             unlocked3
-              ? "border-petal-400/50 bg-petal-950/30 shadow-[0_0_20px_rgba(244,114,182,0.2)]"
-              : "border-white/15 bg-white/5"
+              ? "border-amber-400/50 bg-[#fffbeb]/60 shadow-sm"
+              : "border-amber-300/40 bg-[#faf0f4]/80 shadow-xs"
           }`}
         >
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-300 font-mono">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-100 border border-amber-300/60 text-xs font-bold text-amber-800 font-mono">
                 3
               </span>
-              <h4 className="font-serif font-bold text-sm sm:text-base text-white">
+              <h4 className="font-serif font-bold text-sm sm:text-base text-[#4a1d2e]">
                 3ª Cerradura · El Tercer Cómplice
               </h4>
             </div>
             {unlocked3 ? (
-              <span className="flex items-center gap-1 text-xs font-semibold text-petal-300">
-                <CheckCircle2 className="h-4 w-4" />
+              <span className="flex items-center gap-1 text-xs font-semibold text-amber-800">
+                <CheckCircle2 className="h-4 w-4 text-[#be185d]" />
                 <span>Abierta</span>
               </span>
             ) : (
-              <span className="flex items-center gap-1 text-xs text-white/50">
+              <span className="flex items-center gap-1 text-xs text-[#9d5272]">
                 <Lock className="h-4 w-4" />
                 <span>Bloqueada</span>
               </span>
@@ -482,11 +482,11 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
           {!unlocked3 ? (
             <div className="space-y-3">
               {/* Acertijo para deducir quién es */}
-              <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3.5 text-xs text-amber-100/90 leading-relaxed font-serif italic">
+              <div className="rounded-2xl border border-amber-300/50 bg-[#fff8fa] p-3.5 text-xs text-amber-950 leading-relaxed font-serif italic shadow-xs">
                 “Comparto tu almohada, tus viajes y tus risas. Fui tu compañero antes de ser tu compañero de vida, y hoy soy quien más te ama en este universo... ¿Quién tiene tu última llave?”
               </div>
 
-              <p className="text-[11px] text-white/70 leading-relaxed">
+              <p className="text-[11px] text-[#9f496e] leading-relaxed">
                 Si crees saber quién es, mándale la frase por WhatsApp y acierta su película favorita:
               </p>
 
@@ -501,18 +501,18 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleVerify3()}
                     placeholder="Introduce la respuesta a su pregunta..."
-                    className="w-full rounded-xl border border-white/20 bg-black/40 px-4 py-2.5 text-xs sm:text-sm text-white placeholder-white/40 focus:border-amber-400 focus:outline-none"
+                    className="w-full rounded-xl border border-petal-300/60 bg-white px-4 py-2.5 text-xs sm:text-sm text-[#4a1d2e] placeholder-[#a8587c]/70 focus:border-amber-500 focus:outline-none shadow-xs"
                   />
                   <button
                     type="button"
                     onClick={handleVerify3}
-                    className="shrink-0 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 px-4 py-2.5 text-xs font-semibold text-white shadow-md active:scale-95 transition"
                   >
                     Probar
                   </button>
                 </div>
                 {error3 && (
-                  <p className="text-[11px] text-petal-400 flex items-center gap-1">
+                  <p className="text-[11px] text-[#be185d] flex items-center gap-1">
                     <AlertCircle className="h-3 w-3" />
                     <span>Respuesta incorrecta. Piensa bien en sus sagas y películas de cabecera.</span>
                   </p>
@@ -520,7 +520,7 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
               </div>
             </div>
           ) : (
-            <p className="text-xs text-petal-300 font-medium">
+            <p className="text-xs text-amber-900 font-semibold">
               ✨ ¡3ª Cerradura superada con éxito!
             </p>
           )}

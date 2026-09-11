@@ -61,9 +61,9 @@ export function Day11({ config, isUnlocked, onUnlock }: DayComponentProps) {
       className="space-y-6 text-center"
     >
       <div>
-        <h3 className="text-xl font-semibold text-white">{config.rewardTitle}</h3>
+        <h3 className="text-xl font-serif font-bold text-[#4a1d2e]">{config.rewardTitle}</h3>
         {config.rewardDescription && (
-          <p className="mx-auto mt-2 max-w-md text-white/80">{config.rewardDescription}</p>
+          <p className="mx-auto mt-2 max-w-md text-sm text-[#4a1d2e]/85 leading-relaxed">{config.rewardDescription}</p>
         )}
       </div>
 
@@ -92,17 +92,17 @@ function FriendVideoCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay }}
-      className="overflow-hidden rounded-xl border border-white/15 bg-white/5"
+      className="overflow-hidden rounded-xl border border-petal-300/40 bg-white shadow-xs"
     >
       {!failed && videoSrc ? (
         <video controls src={videoSrc} onError={() => setFailed(true)} className="aspect-video w-full" />
       ) : (
-        <div className="flex aspect-video flex-col items-center justify-center gap-1 text-white/60">
+        <div className="flex aspect-video flex-col items-center justify-center gap-1 bg-[#faf0f4] text-[#9d5272]">
           <Video className="h-6 w-6" />
-          <span className="text-xs">Vídeo pendiente</span>
+          <span className="text-xs font-serif italic">Vídeo pendiente</span>
         </div>
       )}
-      <p className="border-t border-white/10 py-1.5 text-xs font-medium text-white/85">{name}</p>
+      <p className="border-t border-petal-200 py-1.5 text-xs font-medium text-[#4a1d2e]">{name}</p>
     </motion.div>
   );
 }
