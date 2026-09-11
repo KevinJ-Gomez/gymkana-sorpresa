@@ -31,9 +31,9 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
       animate={{ opacity: 1 }}
       // Sale deprisa: en cuanto arranca el salto, el protagonista es el 3D.
       exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      className="fixed inset-0 z-30 flex flex-col justify-center overflow-y-auto overscroll-contain bg-[#15061c]/85 backdrop-blur-md px-4 sm:px-6 py-[max(1.5rem,env(safe-area-inset-top))]"
+      className="fixed inset-0 z-30 overflow-y-auto overscroll-contain bg-[#15061c]/85 backdrop-blur-md px-3.5 py-4 sm:py-8 flex flex-col"
     >
-      <div className="invitation-paper relative my-auto w-full max-w-md mx-auto rounded-2xl p-6 sm:p-8">
+      <div className="invitation-paper relative my-auto w-full max-w-md mx-auto rounded-2xl p-5 sm:p-7 shrink-0 shadow-[inset_0_0_0_6px_#faf0f4,inset_0_0_0_7px_rgba(244,114,182,0.25),0_20px_50px_rgba(0,0,0,0.55)]">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}

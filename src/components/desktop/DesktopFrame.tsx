@@ -36,12 +36,10 @@ export function DesktopFrame() {
     // la cuenta no cuadraba y en ventanas bajas los controles se montaban
     // encima del móvil y el pie se salía de pantalla sin poder llegar a él.
     <div
-      className="desktop-studio fixed inset-0 flex flex-col items-center gap-4 overflow-hidden p-6
+      className="desktop-studio fixed inset-0 flex flex-col items-center gap-2 overflow-hidden p-2 sm:p-4
         bg-[radial-gradient(ellipse_at_top,#1e1040,#141919_60%)]"
     >
-      {/* Cabecera deliberadamente mínima: cada píxel que gasta el marco se lo
-          quita al móvil simulado, y un móvil más bajo que uno real enseñaría
-          problemas de layout que en un teléfono de verdad no existen. */}
+      {/* Cabecera deliberadamente mínima */}
       <header className="shrink-0 text-center">
         <p className="flex items-center justify-center gap-1.5 text-xs text-white/50">
           <Smartphone className="h-3.5 w-3.5" />
@@ -50,27 +48,24 @@ export function DesktopFrame() {
       </header>
 
       {/* Móvil simulado */}
-      <div className="flex min-h-0 flex-1 items-center justify-center">
+      <div className="flex min-h-0 flex-1 items-center justify-center w-full">
         <div
-          className="device-frame relative rounded-[2.75rem] border border-white/15 bg-black p-3
+          className="device-frame relative rounded-[2.5rem] border border-white/20 bg-black p-2.5 sm:p-3
             shadow-[0_25px_80px_rgba(139,92,246,0.25)]"
-          // +24px = el padding del marco, para que el hueco interior tope
-          // exactamente en la altura real del dispositivo elegido.
+          // Espacio interior maximizado según altura real del dispositivo
           style={{ height: "100%", maxHeight: device.height + 24 }}
         >
-          {/* Muesca decorativa. `pointer-events-none` es importante: cae justo
-              sobre el título de la app, que es el botón del gesto secreto de
-              5 toques del Modo Testing, y si no lo bloquearía. */}
+          {/* Pequeña ranura de altavoz sutil que no tapa el contenido ni los botones */}
           <div
-            className="pointer-events-none absolute left-1/2 top-3 z-10 h-6 w-32
-              -translate-x-1/2 rounded-b-2xl bg-black"
+            className="pointer-events-none absolute left-1/2 top-1.5 z-10 h-1 w-12
+              -translate-x-1/2 rounded-full bg-white/20"
           />
           <iframe
             key={`${device.name}-${reloadKey}`}
             src="/?embed=1"
             title="Gymkana (vista móvil)"
             allow="autoplay; fullscreen"
-            className="block h-full rounded-[2rem] border-0 bg-[#141919]"
+            className="block h-full rounded-[2rem] border-0 bg-[#15061c]"
             style={{ width: device.width }}
           />
         </div>

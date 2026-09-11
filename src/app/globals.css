@@ -106,9 +106,9 @@ button:disabled { cursor: not-allowed; }
 .journey-intro { background: linear-gradient(180deg, #160620f5, #0f031adb 50%, #160620f5); overflow-y: auto; touch-action: pan-y; gap: 28px; padding-inline: 30px; }
 .intro-number { font: italic 48px/1 var(--font-serif); color: #f472b6; }
 .intro-narrative { max-width: 480px; margin-inline: auto; }
-.intro-narrative > p { text-align: left; font-size: 15px; line-height: 1.75; text-wrap: pretty; color: #fdf2f8; }
-.intro-narrative > p:last-child { font: 32px/1.15 var(--font-serif); padding-top: 20px; border-top: 1px solid #f472b640; }
-.intro-narrative > p:last-child span { font: 14px/1.6 var(--font-sans); margin-top: 14px; }
+.intro-narrative > p { text-align: left; font-size: 15px; line-height: 1.7; text-wrap: pretty; color: #4a1d2e !important; font-family: var(--font-serif); }
+.intro-narrative > p:last-child { font: 24px/1.2 var(--font-serif); padding-top: 14px; border-top: 1px solid rgba(244, 114, 182, 0.4); color: #9d174d !important; }
+.intro-narrative > p:last-child span { font: 13px/1.5 var(--font-serif); font-style: italic; margin-top: 6px; color: #9f496e !important; }
 .primary-action { background: linear-gradient(135deg, #db2777, #be185d); background-image: linear-gradient(135deg, #db2777, #be185d); border: 1px solid #f472b666; border-radius: 9999px; box-shadow: 0 4px 20px rgba(219, 39, 119, 0.35); font-size: 14px; font-weight: 600; letter-spacing: .035em; color: white; }
 .primary-action:hover { background: linear-gradient(135deg, #ec4899, #db2777); }
 .journey-header > button { font: 32px/1.15 var(--font-serif); filter: none; color: #fcf4f7; }
