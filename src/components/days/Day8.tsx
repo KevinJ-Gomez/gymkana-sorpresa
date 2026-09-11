@@ -177,31 +177,31 @@ export function Day8({ config, isUnlocked, onUnlock }: DayComponentProps) {
 
         <div className="space-y-1.5">
           <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white drop-shadow">
-            {config.rewardTitle}
+            ¡Tu regalo adelantado! 👜
           </h3>
-          <p className="text-xs sm:text-sm text-petal-200/90 font-mono tracking-wide">
-            SEGUNDO REGALO DE LA FAMILIA
+          <p className="text-xs text-petal-200/90 font-mono tracking-wider">
+            REGALO YA ENTREGADO
           </p>
         </div>
 
         {/* TARJETA INTERACTIVA DE RASCAR PARA DESVELAR EL BOLSO */}
         <ScratchPhotoCard
-          imageSrc={config.imageSrc || "/images/day8-bolso.jpg"}
-          altText="Tu nuevo bolso te espera"
+          imageSrc={config.imageSrc || "/images/spoiler-original.jpg"}
+          altText="El bolso que ya tienes contigo"
         />
 
-        <div className="rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 text-left backdrop-blur-md space-y-2.5">
-          <p className="text-xs sm:text-sm leading-relaxed text-white/95 font-serif italic">
-            “Has descifrado a los 3 cómplices y has abierto las 3 cerraduras secretas.”
+        <div className="rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 text-center backdrop-blur-md space-y-2">
+          <p className="text-sm sm:text-base font-serif font-medium text-white leading-relaxed">
+            Hoy no hay sorpresa nueva porque este regalo ya te lo dimos por adelantado 👜❤️
           </p>
-          <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
-            Tu suegra, tu cuñada y tu novio han elegido con todo su cariño un <strong>bolso espectacular</strong> para ti. ¡Pregúntales ahora mismo la pista definitiva de dónde lo tienen guardado! ✨
+          <p className="text-xs text-white/80 leading-relaxed font-sans">
+            Tu suegra, tu cuñada y yo lo elegimos con todo el cariño para ti. ¡Ya lo tienes contigo y aquí está la prueba del modelo! 😂✨
           </p>
         </div>
 
         <div className="flex items-center justify-center gap-2 text-petal-300 text-xs font-serif italic">
           <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
-          <span>Con todo el amor de tu familia política y tu novio</span>
+          <span>Elegido con mucho amor por tu familia política y tu novio</span>
           <Heart className="h-4 w-4 fill-petal-400 text-petal-400" />
         </div>
       </motion.div>

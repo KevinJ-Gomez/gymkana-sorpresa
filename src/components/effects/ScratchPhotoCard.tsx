@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart } from "lucide-react";
+import confetti from "canvas-confetti";
 import { hapticScratch, hapticSuccess } from "@/lib/haptics";
 
 interface ScratchPhotoCardProps {
@@ -104,6 +105,12 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
       if (ratio > 0.42) {
         setIsFullyRevealed(true);
         hapticSuccess();
+        confetti({
+          particleCount: 65,
+          spread: 60,
+          origin: { y: 0.6 },
+          colors: ["#fb7185", "#fbbf24", "#ffffff"],
+        });
         if (onRevealed) onRevealed();
       }
     } catch {
@@ -126,9 +133,9 @@ export function ScratchPhotoCard({ imageSrc, altText, onRevealed }: ScratchPhoto
   }
 
   return (
-    <div className="relative mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-petal-400/30 bg-black/40 shadow-2xl">
+    <div className="relative mx-auto w-full max-w-[280px] overflow-hidden rounded-2xl border border-petal-400/30 bg-black/40 shadow-2xl">
       {/* 1. Foto real del regalo */}
-      <div className="relative aspect-square w-full">
+      <div className="relative aspect-[3/4] w-full">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
