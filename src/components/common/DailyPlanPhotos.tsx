@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ImageOff } from "lucide-react";
+import { ImageOff, Download } from "lucide-react";
 
 interface DailyPlanPhotosProps {
   photos?: string[];
@@ -9,8 +9,25 @@ interface DailyPlanPhotosProps {
   altPrefix?: string;
 }
 
-function PhotoItem({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+function isPhotoDownloadable(src: string): boolean {
+  if (!src) return false;
+  const filename = src.split("/").pop()?.toLowerCase() ?? "";
+  return filename.startsWith("entrada") || filename.startsWith("entradas");
+}
+
+function PhotoItem({
+  src,
+  alt,
+  className = "",
+  downloadable,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  downloadable?: boolean;
+}) {
   const [failed, setFailed] = useState(false);
+  const canDownload = downloadable ?? isPhotoDownloadable(src);
 
   if (failed || !src) {
     return (
@@ -24,13 +41,31 @@ function PhotoItem({ src, alt, className = "" }: { src: string; alt: string; cla
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt={alt}
-      onError={() => setFailed(true)}
-      className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${className}`}
-    />
+    <div className={`group relative h-full w-full overflow-hidden ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        onError={() => setFailed(true)}
+        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+
+      {/* Botón e icono de descarga cuando el nombre empieza por 'entrada' */}
+      {canDownload && (
+        <a
+          href={src}
+          download
+          onClick={(e) => e.stopPropagation()}
+          className="absolute top-2 right-2 z-20 flex h-7 w-7 items-center justify-center rounded-full
+            bg-[#be185d] text-white border border-[#fce7f3]/80 shadow-[0_2px_8px_rgba(190,24,93,0.4)]
+            transition-all duration-200 hover:scale-110 hover:bg-[#9d174d] active:scale-95 cursor-pointer"
+          title="Descargar entrada"
+          aria-label="Descargar entrada"
+        >
+          <Download className="h-3.5 w-3.5 stroke-[2.5]" />
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -59,13 +94,13 @@ export function DailyPlanPhotos({
 
       {/* Caso: 2 FOTOS DIVIDIDAS EN DIAGONAL */}
       {activeLayout === "diagonal" && (
-        <div className="relative h-44 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)] bg-[#faf0f4]">
+        <div className="relative h-48 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)] bg-[#faf0f4]">
           {/* Foto 1: Mitad superior/izquierda diagonal */}
           <div
             className="absolute inset-0 overflow-hidden"
             style={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
           >
-            <PhotoItem src={photos[0]} alt={`${altPrefix} 1`} />
+            <PhotoItem src={photos[0]} alt={`${altPrefix} 1`} downloadable={isPhotoDownloadable(photos[0])} />
           </div>
 
           {/* Foto 2: Mitad inferior/derecha diagonal */}
@@ -73,7 +108,7 @@ export function DailyPlanPhotos({
             className="absolute inset-0 overflow-hidden"
             style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
           >
-            <PhotoItem src={photos[1]} alt={`${altPrefix} 2`} />
+            <PhotoItem src={photos[1]} alt={`${altPrefix} 2`} downloadable={isPhotoDownloadable(photos[1])} />
           </div>
 
           {/* Línea divisoria diagonal con tinte lacre suave */}
@@ -88,10 +123,10 @@ export function DailyPlanPhotos({
 
       {/* Caso: 3 o 4 FOTOS EN CUADRÍCULA O MITADES */}
       {activeLayout === "grid" && (
-        <div className="grid grid-cols-2 gap-1.5 h-44 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 p-1 bg-[#faf0f4] shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)]">
+        <div className="grid grid-cols-2 gap-2 h-60 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 p-1 bg-[#faf0f4] shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)]">
           {photos.slice(0, 4).map((p, idx) => (
-            <div key={idx} className="relative h-full w-full overflow-hidden rounded-lg border border-[#f472b6]/20">
-              <PhotoItem src={p} alt={`${altPrefix} ${idx + 1}`} />
+            <div key={idx} className="relative h-full w-full overflow-hidden rounded-lg border border-[#f472b6]/25">
+              <PhotoItem src={p} alt={`${altPrefix} ${idx + 1}`} downloadable={isPhotoDownloadable(p)} />
             </div>
           ))}
         </div>
@@ -99,8 +134,8 @@ export function DailyPlanPhotos({
 
       {/* Caso: 1 FOTO COMPACTA */}
       {activeLayout === "single" && (
-        <div className="relative h-44 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)] bg-[#faf0f4]">
-          <PhotoItem src={photos[0]} alt={`${altPrefix} 1`} />
+        <div className="relative h-48 w-full overflow-hidden rounded-xl border border-[#f472b6]/35 shadow-[inset_0_0_0_2px_#faf0f4,0_4px_12px_rgba(74,29,46,0.08)] bg-[#faf0f4]">
+          <PhotoItem src={photos[0]} alt={`${altPrefix} 1`} downloadable={isPhotoDownloadable(photos[0])} />
         </div>
       )}
     </div>

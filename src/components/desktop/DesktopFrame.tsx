@@ -1,21 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Maximize2, RefreshCw, Smartphone } from "lucide-react";
 
 /**
  * Vista de ESCRITORIO. Solo sirve para poder probar la gymkana desde el
  * ordenador: la app es y sigue siendo una experiencia de móvil en vertical.
  *
- * En vez de reimplementar (o "adaptar") nada, monta la app real dentro de un
- * iframe con el tamaño exacto de un móvil. Así lo que se ve en el ordenador es
- * literalmente la versión móvil, píxel por píxel, sin una sola rama de código
- * distinta: el viewport dentro del iframe mide 390x844 de verdad, así que las
- * media queries, `100dvh`, los safe-area insets y el 3D se comportan igual que
- * en un teléfono.
- *
- * El iframe carga `/?embed=1`; ese parámetro es lo que evita que la app vuelva
- * a detectar "escritorio" dentro del propio iframe y se anide infinitamente.
+ * Monta la app dentro de un iframe con las dimensiones nativas exactas del
+ * dispositivo seleccionado (ej. iPhone 14 = 390x844).
+ * Si la ventana del navegador en PC tiene menos altura disponible, el marco
+ * se escala de forma suave y proporcional mediante CSS scale para preservar
+ * siempre la esbeltez, longitud y aspecto vertical real de un teléfono móvil,
+ * sin achatarse jamás ni comprimir los textos.
  */
 
 const DEVICES = [
@@ -26,48 +23,94 @@ const DEVICES = [
 
 export function DesktopFrame() {
   const [deviceIndex, setDeviceIndex] = useState(1);
-  // Cambiar la key remonta el iframe = recargar la app desde cero.
   const [reloadKey, setReloadKey] = useState(0);
   const device = DEVICES[deviceIndex];
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    function updateScale() {
+      if (!containerRef.current) return;
+      const { clientWidth, clientHeight } = containerRef.current;
+      const frameW = device.width + 24; // 12px padding por lado
+      const frameH = device.height + 24; // 12px padding por lado
+      const availableW = Math.max(100, clientWidth - 20);
+      const availableH = Math.max(100, clientHeight - 20);
+      const fitScale = Math.min(1, Math.min(availableW / frameW, availableH / frameH));
+      setScale(Math.max(0.35, Number(fitScale.toFixed(3))));
+    }
+
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    if (containerRef.current) observer.observe(containerRef.current);
+    window.addEventListener("resize", updateScale);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateScale);
+    };
+  }, [device]);
+
+  const frameWidth = device.width + 24;
+  const frameHeight = device.height + 24;
+
   return (
-    // El móvil ocupa el hueco que sobra (`flex-1` + `min-h-0`) en vez de tener
-    // una altura calculada a ojo restando la cabecera. Con una constante fija
-    // la cuenta no cuadraba y en ventanas bajas los controles se montaban
-    // encima del móvil y el pie se salía de pantalla sin poder llegar a él.
     <div
-      className="desktop-studio fixed inset-0 flex flex-col items-center gap-2 overflow-hidden p-2 sm:p-4
-        bg-[radial-gradient(ellipse_at_top,#1e1040,#141919_60%)]"
+      className="desktop-studio fixed inset-0 flex flex-col items-center gap-2 overflow-hidden p-2 sm:p-3
+        bg-[radial-gradient(ellipse_at_top,#1e1040,#141919_60%)] select-none"
     >
-      {/* Cabecera deliberadamente mínima */}
+      {/* Cabecera sutil */}
       <header className="shrink-0 text-center">
-        <p className="flex items-center justify-center gap-1.5 text-xs text-white/50">
-          <Smartphone className="h-3.5 w-3.5" />
-          Vista previa de escritorio · arrastra con el ratón como si fuera el dedo
+        <p className="flex items-center justify-center gap-1.5 text-xs text-white/60">
+          <Smartphone className="h-3.5 w-3.5 text-petal-300" />
+          Vista previa móvil de escritorio · proporción real {device.width}×{device.height}
+          {scale < 1 && (
+            <span className="ml-1 rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-petal-200">
+              {Math.round(scale * 100)}%
+            </span>
+          )}
         </p>
       </header>
 
-      {/* Móvil simulado */}
-      <div className="flex min-h-0 flex-1 items-center justify-center w-full">
+      {/* Móvil simulado con escalado proporcional que preserva esbeltez y altura real */}
+      <div
+        ref={containerRef}
+        className="flex min-h-0 flex-1 items-center justify-center w-full overflow-hidden"
+      >
         <div
-          className="device-frame relative rounded-[2.5rem] border border-white/20 bg-black p-2.5 sm:p-3
-            shadow-[0_25px_80px_rgba(139,92,246,0.25)]"
-          // Espacio interior maximizado según altura real del dispositivo
-          style={{ height: "100%", maxHeight: device.height + 24 }}
+          style={{
+            width: frameWidth * scale,
+            height: frameHeight * scale,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          {/* Pequeña ranura de altavoz sutil que no tapa el contenido ni los botones */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1.5 z-10 h-1 w-12
-              -translate-x-1/2 rounded-full bg-white/20"
-          />
-          <iframe
-            key={`${device.name}-${reloadKey}`}
-            src="/?embed=1"
-            title="Gymkana (vista móvil)"
-            allow="autoplay; fullscreen"
-            className="block h-full rounded-[2rem] border-0 bg-[#15061c]"
-            style={{ width: device.width }}
-          />
+            className="device-frame relative rounded-[2.75rem] border border-white/20 bg-black p-3
+              shadow-[0_25px_80px_rgba(139,92,246,0.25)]"
+            style={{
+              width: frameWidth,
+              height: frameHeight,
+              transform: `scale(${scale})`,
+              transformOrigin: "center center",
+              transition: "transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out",
+            }}
+          >
+            {/* Ranura sutil de altavoz en el marco */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-1.5 z-10 h-1 w-12
+                -translate-x-1/2 rounded-full bg-white/20"
+            />
+            <iframe
+              key={`${device.name}-${reloadKey}`}
+              src="/?embed=1"
+              title="Gymkana (vista móvil)"
+              allow="autoplay; fullscreen"
+              className="block rounded-[2.25rem] border-0 bg-[#15061c]"
+              style={{ width: device.width, height: device.height }}
+            />
+          </div>
         </div>
       </div>
 
@@ -78,9 +121,9 @@ export function DesktopFrame() {
             key={d.name}
             type="button"
             onClick={() => setDeviceIndex(i)}
-            className={`rounded-full px-4 py-2 text-xs font-medium transition ${
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
               i === deviceIndex
-                ? "bg-white/20 text-white"
+                ? "bg-petal-600 text-white shadow-sm"
                 : "bg-white/5 text-white/60 hover:bg-white/10"
             }`}
           >
@@ -91,19 +134,17 @@ export function DesktopFrame() {
         <button
           type="button"
           onClick={() => setReloadKey((k) => k + 1)}
-          className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-4 py-2
+          className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3.5 py-1.5
             text-xs font-medium text-white/60 transition hover:bg-white/10"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           Reiniciar
         </button>
 
-        {/* Pestaña nueva a propósito: hace falta una carga completa para que el
-            shell relea `?embed=1`, y así el marco se queda abierto detrás. */}
         <button
           type="button"
           onClick={() => window.open("/?embed=1", "_blank", "noopener")}
-          className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-4 py-2
+          className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3.5 py-1.5
             text-xs font-medium text-white/60 transition hover:bg-white/10"
         >
           <Maximize2 className="h-3.5 w-3.5" />
