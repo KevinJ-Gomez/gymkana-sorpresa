@@ -170,7 +170,7 @@ export function GymkanaApp() {
   }
 
   return (
-    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#101616]">
+    <main className="relative h-[100dvh] w-full overflow-hidden bg-[#15061c]">
       {/* Estela mágica táctil de chispas en pantalla */}
       <TouchParticleTrail />
 
@@ -200,19 +200,21 @@ export function GymkanaApp() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45 }}
-            className="pointer-events-none fixed inset-0 z-10 flex flex-col justify-between
-              pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+            className={`pointer-events-none fixed inset-0 z-10 flex flex-col justify-between
+              pt-[max(1.5rem,env(safe-area-inset-top))] ${
+                showPlanDrawer ? "pb-[max(4.5rem,env(safe-area-inset-bottom))]" : "pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+              }`}
           >
             {/* Cabecera */}
             <header className="journey-header px-6 text-center">
               <button
                 onClick={handleSecretTap}
-                className="pointer-events-auto rounded-lg px-3 py-1 text-2xl font-bold text-white
-                  drop-shadow-[0_2px_18px_rgba(236,72,153,0.5)] active:scale-[0.98]"
+                className="pointer-events-auto rounded-lg px-3 py-1 font-serif text-2xl sm:text-3xl font-normal text-[#fcf4f7]
+                  drop-shadow-[0_2px_18px_rgba(244,114,182,0.4)] active:scale-[0.98]"
               >
                 {GYMKANA_TITLE}
               </button>
-              <p className="mt-0.5 text-xs sm:text-sm text-white/60">{GYMKANA_SUBTITLE}</p>
+              <p className="mt-0.5 font-serif italic text-xs sm:text-sm text-petal-200/80">{GYMKANA_SUBTITLE}</p>
 
               {/* Reloj Cuenta Atrás Estelar para el 30 Cumpleaños */}
               <div className="mt-2.5 flex justify-center pointer-events-auto">
@@ -235,7 +237,7 @@ export function GymkanaApp() {
                         showToast("¡Todos los retos se han bloqueado!");
                       }}
                       className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                        bg-petal-500/20 border border-petal-500/40 px-3 py-1.5 text-xs font-medium text-petal-200 active:bg-petal-500/30 shadow-md"
+                        bg-[#fff8fa] border border-petal-400/50 px-3.5 py-1.5 text-xs font-serif text-[#9d174d] active:bg-[#fce7f3] shadow-md"
                     >
                       <Lock className="h-3 w-3" />
                       Bloquear todos los retos
@@ -243,7 +245,7 @@ export function GymkanaApp() {
                     <button
                       onClick={() => setIntroSeen(false)}
                       className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full
-                        bg-white/10 px-3 py-1.5 text-xs text-white/70 active:bg-white/20"
+                        bg-[#fff8fa]/80 border border-petal-300/40 px-3.5 py-1.5 text-xs font-serif text-[#9d5272] active:bg-[#fff8fa]"
                     >
                       <RotateCcw className="h-3 w-3" />
                       Ver intro otra vez
@@ -261,8 +263,8 @@ export function GymkanaApp() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="mx-auto w-fit rounded-full border border-white/15 bg-black/50
-                      px-4 py-2 text-center text-xs text-white/80 backdrop-blur-md"
+                    className="mx-auto w-fit rounded-full border border-petal-400/50 bg-[#fff8fa]/95
+                      px-4 py-2 text-center text-xs font-serif text-[#4a1d2e] shadow-[inset_0_0_0_2px_#faf0f4,0_6px_20px_rgba(0,0,0,0.3)] backdrop-blur-md"
                   >
                     {toast}
                   </motion.p>
@@ -285,33 +287,32 @@ export function GymkanaApp() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25 }}
-                className="journey-day-link pointer-events-auto mx-auto block w-full max-w-sm rounded-2xl
-                  border border-white/15 bg-white/[0.07] px-5 py-4 text-center backdrop-blur-md"
+                className="journey-day-link pointer-events-auto mx-auto block w-full max-w-sm px-5 py-4 text-center"
               >
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
+                <p className="text-xs font-serif uppercase tracking-[0.2em] text-[#9d5272]">
                   Día {centeredDay.id} · {formatUnlockDate(centeredDay.unlockDate)}
                 </p>
-                <p className="mt-1 text-lg font-semibold text-white">
+                <p className="mt-1 text-lg sm:text-xl font-serif font-bold text-[#4a1d2e]">
                   {centeredState === "locked" ? "Estrella apagada" : centeredDay.title}
                 </p>
-                <p className="mt-1.5 flex items-center justify-center gap-1.5 text-xs text-white/70">
+                <p className="mt-1.5 flex items-center justify-center gap-1.5 text-xs font-serif italic text-[#9f496e]">
                   {centeredState === "locked" ? (
                     <>
-                      <Lock className="h-3 w-3" /> Aún no disponible
+                      <Lock className="h-3 w-3 text-[#9d5272]" /> Aún no disponible
                     </>
                   ) : centeredState === "solved" ? (
                     <>
-                      <Heart className="h-3 w-3 fill-petal-400 text-petal-400" /> Estrella encendida · ¡Completado!
+                      <Heart className="h-3 w-3 fill-[#be185d] text-[#be185d]" /> Estrella encendida · ¡Completado!
                     </>
                   ) : (
                     <>
-                      <Heart className="h-3 w-3 fill-petal-400/40 text-petal-400" /> Estrella apagada · Toca para abrir
+                      <Heart className="h-3 w-3 fill-[#be185d]/30 text-[#be185d]" /> Estrella disponible · Toca para abrir
                     </>
                   )}
                 </p>
               </motion.button>
 
-              <p className="text-center text-[11px] text-white/35">
+              <p className="text-center text-[11px] font-serif italic text-petal-200/60">
                 {mapView
                   ? "Toca una estrella para abrir su día"
                   : "Desliza para recorrer · pellizca para ver el corazón"}
@@ -333,9 +334,10 @@ export function GymkanaApp() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             aria-label={mapView ? "Acercar a la constelación" : "Ver el corazón entero"}
-            className="fixed right-5 z-20 flex h-12 w-12 items-center justify-center
-              rounded-full border border-white/20 bg-black/40 text-white/90 shadow-xl backdrop-blur-lg transition-all hover:bg-black/60 active:scale-95
-              bottom-[13.5rem] sm:bottom-[13rem]"
+            className={`fixed right-5 z-20 flex h-12 w-12 items-center justify-center
+              rounded-full border border-petal-300/40 bg-[#fff8fa]/90 text-[#be185d] shadow-[inset_0_0_0_2px_#faf0f4,0_4px_14px_rgba(0,0,0,0.25)] backdrop-blur-md transition-all hover:bg-white active:scale-95 ${
+                showPlanDrawer ? "bottom-[16.5rem] sm:bottom-[15.5rem]" : "bottom-[13.5rem] sm:bottom-[13rem]"
+              }`}
           >
             {mapView ? <ZoomIn className="h-5 w-5" /> : <ZoomOut className="h-5 w-5" />}
           </motion.button>

@@ -31,67 +31,70 @@ export function IntroSequence({ onStart }: { onStart: () => void }) {
       animate={{ opacity: 1 }}
       // Sale deprisa: en cuanto arranca el salto, el protagonista es el 3D.
       exit={{ opacity: 0, transition: { duration: 0.35 } }}
-      className="journey-intro fixed inset-0 z-30 flex flex-col justify-between
-        bg-[radial-gradient(ellipse_at_center,rgba(7,3,26,0.35),rgba(7,3,26,0.88))]
-        px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(2.5rem,env(safe-area-inset-bottom))]"
+      className="journey-intro fixed inset-0 z-30 flex flex-col justify-between overflow-y-auto overscroll-contain
+        bg-[radial-gradient(ellipse_at_center,rgba(21,6,28,0.85),rgba(15,3,26,0.98))]
+        px-6 pt-[max(2.5rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]"
     >
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="text-center"
+        className="text-center shrink-0"
       >
-        <div className="intro-number" aria-hidden="true">XI</div>
-        <p className="mt-3 text-xs font-medium uppercase tracking-[0.3em] text-petal-200/70">
+        <div className="intro-number text-4xl sm:text-5xl font-serif italic text-petal-300" aria-hidden="true">
+          XI
+        </div>
+        <p className="mt-2 text-xs font-serif uppercase tracking-[0.3em] text-petal-200/80">
           2 — 12 de octubre
         </p>
       </motion.div>
 
-      <div className="intro-narrative space-y-5">
+      <div className="intro-narrative my-auto py-4 space-y-4 max-w-md mx-auto text-center">
         {NARRATIVE.map((line, index) => (
           <motion.p
             key={line}
-            initial={{ opacity: 0, y: 18, filter: "blur(6px)" }}
+            initial={{ opacity: 0, y: 16, filter: "blur(5px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 1, delay: FIRST_LINE_AT + index * LINE_DELAY, ease: "easeOut" }}
-            className="text-balance text-center text-lg leading-relaxed text-white/80"
+            transition={{ duration: 0.9, delay: FIRST_LINE_AT + index * LINE_DELAY, ease: "easeOut" }}
+            className="text-balance font-serif text-base sm:text-lg leading-relaxed text-[#fcf4f7]"
           >
             {line}
           </motion.p>
         ))}
 
-        <motion.p
-          initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+        <motion.div
+          initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.1, delay: CLOSER_AT, ease: "easeOut" }}
-          className="text-balance text-center text-2xl font-semibold leading-snug text-white"
+          transition={{ duration: 1, delay: CLOSER_AT, ease: "easeOut" }}
+          className="pt-3 border-t border-petal-400/30"
         >
-          {CLOSER}
-          <span className="mt-1.5 block text-base font-normal text-petal-200/80">
+          <p className="font-serif text-2xl sm:text-3xl font-semibold leading-snug text-white">
+            {CLOSER}
+          </p>
+          <span className="mt-1.5 block font-serif italic text-sm sm:text-base text-petal-200/90">
             {CLOSER_SUB}
           </span>
-        </motion.p>
+        </motion.div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: BUTTON_AT, ease: "easeOut" }}
-        className="space-y-4"
+        className="space-y-3 shrink-0 max-w-md mx-auto w-full"
       >
         <motion.button
           type="button"
           onClick={onStart}
           whileTap={{ scale: 0.96 }}
-          className="primary-action flex w-full items-center justify-center gap-2.5 rounded-2xl
-            bg-gradient-to-r from-petal-400 via-petal-500 to-petal-500
-            px-6 py-5 text-lg font-semibold text-white"
+          className="primary-action flex w-full items-center justify-center gap-2.5 rounded-full
+            bg-gradient-to-r from-petal-500 via-petal-600 to-petal-700
+            px-6 py-4 sm:py-5 text-base sm:text-lg font-serif font-bold text-white shadow-xl"
         >
-
-          Comenzar Viaje
+          Comenzar Viaje 💌
         </motion.button>
 
-        <p className="text-center text-xs text-white/40">
+        <p className="text-center text-xs font-serif italic text-white/50">
           Prepárate para el salto
         </p>
       </motion.div>

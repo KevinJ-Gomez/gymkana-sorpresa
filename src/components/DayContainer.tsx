@@ -73,15 +73,11 @@ export function DayContainer({
       // Cristal OSCURO, no blanco translúcido: detrás está la esfera a la que
       // acaba de volar la cámara, y su resplandor lavaba el panel dejando el
       // texto casi ilegible. Este tinte garantiza contraste pase lo que pase.
-      className="day-sheet fixed inset-x-0 bottom-0 z-20 flex h-[92dvh] flex-col
-        rounded-t-[2rem] border-t border-white/25
-        bg-[#1b2221] shadow-[0_-8px_60px_rgba(0,0,0,0.8)]
-        before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-px
-        before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent"
+      className="day-sheet fixed inset-x-0 bottom-0 z-20 flex h-[92dvh] flex-col select-none"
     >
       {/* Asa de arrastre */}
       <div className="flex shrink-0 justify-center pt-3 pb-1">
-        <div className="h-1.5 w-12 rounded-full bg-white/30" />
+        <div className="h-1.5 w-12 rounded-full bg-petal-300/40" />
       </div>
 
       {/* Cabecera */}
@@ -90,23 +86,23 @@ export function DayContainer({
           <span className="chapter-number" aria-hidden="true">{String(config.id).padStart(2, "0")}</span>
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-petal-200/70">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#9d5272]">
                 Día {config.id}
               </p>
               <span
                 className={`inline-flex items-center gap-1 text-[11px] font-medium ${
-                  isUnlocked ? "text-petal-300" : "text-white/40"
+                  isUnlocked ? "text-petal-700" : "text-[#9f496e]/60"
                 }`}
               >
                 · {isUnlocked ? "Estrella encendida ✨" : "Estrella apagada"}
               </span>
             </div>
-            <h2 className="mt-1 text-2xl font-semibold leading-tight text-white">{config.title}</h2>
+            <h2 className="mt-1 text-2xl font-serif font-semibold leading-tight text-[#4a1d2e]">{config.title}</h2>
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {config.giftLabel && (
-            <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white/90">
+            <span className="rounded-full border border-petal-300/40 bg-[#fce7f3] px-3 py-1 text-xs font-serif font-semibold text-[#be185d]">
               {config.giftLabel}
             </span>
           )}
@@ -114,7 +110,7 @@ export function DayContainer({
             <button
               onClick={onRelock}
               title="Volver a probar reto (Bloquear)"
-              className="rounded-full bg-amber-400/20 border border-amber-400/30 px-2.5 py-1 text-xs font-medium text-amber-200 active:scale-95 transition hover:bg-amber-400/30"
+              className="rounded-full bg-amber-100 border border-amber-300/60 px-2.5 py-1 text-xs font-medium text-amber-900 active:scale-95 transition hover:bg-amber-200"
             >
               Probar reto
             </button>
@@ -127,8 +123,8 @@ export function DayContainer({
             transition={{ duration: 0.4 }}
             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition ${
               isUnlocked
-                ? "bg-amber-400/20 text-amber-300 hover:bg-amber-400/30 cursor-pointer"
-                : "bg-white/10 text-white/60"
+                ? "border border-amber-400/50 bg-amber-100 text-amber-800 hover:bg-amber-200 cursor-pointer shadow-xs"
+                : "border border-petal-200 bg-[#faf0f4] text-[#9d5272]"
             }`}
           >
             {isUnlocked ? <LockOpen className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
@@ -165,9 +161,9 @@ export function DayContainer({
             transition={{ duration: 0.45 }}
             className="space-y-5"
           >
-            <p className="text-lg leading-relaxed text-white/90">{config.riddle}</p>
+            <p className="font-serif text-lg leading-relaxed text-[#4a1d2e]">{config.riddle}</p>
             {config.hintExtra && (
-              <p className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm italic leading-relaxed text-white/65">
+              <p className="rounded-2xl border border-petal-400/30 bg-[#faf0f4] p-4 text-sm italic leading-relaxed text-[#9f496e]">
                 {config.hintExtra}
               </p>
             )}
@@ -192,15 +188,15 @@ export function DayContainer({
                 autoCorrect="off"
                 // 16px exactos: por debajo, iOS Safari hace zoom al enfocar.
                 style={{ fontSize: 16 }}
-                className="w-full rounded-2xl border border-white/20 bg-white/10 px-5 py-4 text-white
-                  placeholder-white/40 outline-none transition focus:border-petal-300/60 focus:bg-white/15"
+                className="w-full rounded-2xl border border-petal-400/40 bg-white px-5 py-4 text-[#4a1d2e]
+                  placeholder-[#a8587c]/70 outline-none transition focus:border-petal-500 focus:ring-2 focus:ring-petal-300/30"
               />
               <motion.button
                 type="submit"
                 whileTap={checking || passwordInput.length === 0 ? undefined : { scale: 0.97 }}
                 disabled={checking || passwordInput.length === 0}
-                className="primary-action w-full rounded-2xl bg-gradient-to-r from-petal-400 via-petal-500 to-petal-500
-                  px-5 py-4 text-base font-semibold text-white shadow-lg
+                className="primary-action w-full rounded-2xl bg-gradient-to-r from-petal-600 via-petal-700 to-petal-800
+                  px-5 py-4 text-base font-semibold text-white shadow-md
                   disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {checking ? "Comprobando..." : "Desbloquear"}
@@ -213,7 +209,7 @@ export function DayContainer({
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="text-center text-sm font-medium text-petal-300"
+                  className="text-center text-sm font-medium text-petal-700"
                 >
                   Clave incorrecta. ¡Inténtalo de nuevo!
                 </motion.p>
@@ -224,13 +220,13 @@ export function DayContainer({
       </div>
 
       {/* Volver a la nebulosa */}
-      <div className="shrink-0 border-t border-white/10 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <div className="shrink-0 border-t border-petal-200/60 px-6 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] bg-[#fff8fa]">
         <motion.button
           type="button"
           onClick={onClose}
           whileTap={{ scale: 0.97 }}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/15
-            bg-white/5 px-5 py-4 text-sm font-medium text-white/80"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-petal-300/40
+            bg-[#fce7f3]/50 px-5 py-3.5 text-sm font-medium text-[#831843] hover:bg-[#fce7f3] transition"
         >
           <ChevronDown className="h-4 w-4" />
           Volver a la nebulosa
