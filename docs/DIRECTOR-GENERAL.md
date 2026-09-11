@@ -1,4 +1,4 @@
-﻿# Dirección General del Proyecto & Gobernanza de Agentes
+# Dirección General del Proyecto & Gobernanza de Agentes
 
 **Rol:** Director General del Proyecto (Lead Orchestrator & Reviewer)  
 **Proyecto:** Gymkana Sorpresa (`gymkana-sorpresa`)  
@@ -64,3 +64,14 @@ Cuando un subagente termina su trabajo:
 5. **Aprobación o Rechazo:**
    - Si cumple: El Director General valida, consolida y emite el informe al Owner.
    - Si no cumple: Se devuelven correcciones puntuales al worker antes de integrar.
+
+---
+
+## 5. Evidencia Reproducible y Aprendizajes Asimilados (PR #18)
+
+Conforme a `docs/AGENT-LEARNING-PROTOCOL.md`:
+1. **`LOCAL_TOOL_SUCCESS != PORTABLE_REPRODUCIBILITY`:** Una prueba local que dependa de rutas fijas de una máquina o herramientas no documentadas no constituye un gate portable.
+2. **`GENERATED_EVIDENCE != SOURCE_ASSET`:** No saturar Git con capturas temporales o dumps; los entregables regenerables pesados se conservan como artifacts fuera del árbol de Git.
+3. **`CLAIM_SCOPE <= VERIFIED_SCOPE`:** Solo se afirman compatibilidades, viewports y estados de timers que hayan sido empíricamente probados.
+4. **`CURRENT_OBSERVED_STATES != CONTRACT_STATE_SPACE`:** El espacio de estados contractual de la gymkana no se reduce accidentalmente por auditorías parciales.
+5. **Fallos de Harness vs. Producto:** Las caídas de red, procesos headless bloqueados o fallos de tooling de CI se catalogan como incidencias de infraestructura, manteniendo el estado `FAIL / NOT_EXECUTED` hasta obtener evidencia concluyente sin rebajar la exigencia de producto.
