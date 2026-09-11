@@ -35,10 +35,21 @@ export interface FriendVideo {
   videoSrc?: string;
 }
 
+export interface DailyPlanItem {
+  time?: string;
+  activity: string;
+}
+
 export interface DailyPlan {
-  /** Texto o nota con el plan del día */
+  /** Texto o nota general con el plan del día (opcional) */
   note?: string;
   summary?: string;
+  /** Lista cronológica de actividades o hitos del día */
+  items?: (string | DailyPlanItem)[];
+  /** Fotos asociadas al plan (hasta 4 fotos, con soporte de corte diagonal o cuadrícula) */
+  photos?: string[];
+  /** Modo de visualización de fotos: auto (detecta según cantidad: 1 single, 2 diagonal, 4 grid) o forzado */
+  photoLayout?: "single" | "diagonal" | "grid";
 }
 
 /**

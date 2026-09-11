@@ -47,6 +47,15 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "Tu primera estrella",
     rewardDescription:
       "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",
+    dailyPlan: {
+      items: [
+        "- Comer y paseo",
+        "- Visitar las Setas",
+        "- Cena en restaurante Río Grande",
+      ],
+      photoLayout: "diagonal",
+      photos: ["/images/plans/day1-1.jpg", "/images/plans/day1-2.jpg"],
+    },
   },
   {
     id: 2,
@@ -65,6 +74,14 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "El comienzo",
     rewardDescription:
       "¡Correcto! Ahí en El Tuno empezó todo. Como sorpresa por acertar hoy, te he preparado algo muy especial: nuestra pequeña historia resumida en todas esas fotos que he ido guardando con muchísimo cariño durante todo este tiempo.",
+    dailyPlan: {
+      items: [
+        "Por la mañana, visita y paseo por Plaza España / Parque María Luisa",
+        "Tarde de Piscina / Barbacoa",
+      ],
+      photoLayout: "diagonal",
+      photos: ["/images/plans/day2-1.jpg", "/images/plans/day2-2.jpg"],
+    },
   },
   {
     id: 3,
@@ -88,6 +105,21 @@ export const gymkanaConfig: DayConfig[] = [
     rewardDescription:
       "Ve preparando el estómago, porque tu premio de hoy es una cena romántica en un sitio muy especial... (Pronto te daré las coordenadas exactas).",
     songFile: "/audio/piedra.mp3",
+    dailyPlan: {
+      items: [
+        { time: "11:30h", activity: "Visita al Alcázar" },
+        { time: "14:30h", activity: "Reserva restaurante Arabesca" },
+        { time: "16:15h", activity: "Visita a la Catedral y Giralda" },
+        { time: "21:15h", activity: "Cena en Voltereta" },
+      ],
+      photoLayout: "grid",
+      photos: [
+        "/images/plans/day3-1.jpg",
+        "/images/plans/day3-2.jpg",
+        "/images/plans/day3-3.jpg",
+        "/images/plans/day3-4.jpg",
+      ],
+    },
   },
   {
     id: 4,
@@ -104,6 +136,14 @@ export const gymkanaConfig: DayConfig[] = [
     imageSrc: "/images/day4-complices.jpg",
     imageCaption: "¡Ellas tienen la ubicación de tu regalo!, preguntales por él.",
     puzzlePieces: 9,
+    dailyPlan: {
+      items: [
+        "Playa 🏖️",
+      ],
+      note: "Plan sujeto a confirmación / puede variar.",
+      photoLayout: "single",
+      photos: ["/images/plans/day4-playa.jpg"],
+    },
   },
   {
     id: 5,
@@ -120,6 +160,14 @@ export const gymkanaConfig: DayConfig[] = [
       "Has superado el quiz con un 5/5 impecable. Aquí tienes tu vale oficial para canjear cuando tú elijas.",
     voucherText:
       "1 Comida o Cena a tu elección, pagada y organizada al 100% por mí, cuando tú quieras y sin mirar el precio 🍽️💖",
+    dailyPlan: {
+      items: [
+        "Salida del apartamento",
+        "Tomar algo con amigos",
+      ],
+      photoLayout: "diagonal",
+      photos: ["/images/plans/day5-1.jpg", "/images/plans/day5-2.jpg"],
+    },
     quizQuestions: [
       {
         question: "¿Qué día de la semana fue la primera vez que quedamos fuera del trabajo?",
@@ -173,6 +221,13 @@ export const gymkanaConfig: DayConfig[] = [
     rewardDescription: "Este maquillaje ya tiene dueña.",
     imageSrc: "/images/makeup-funny.jpg",
     imageCaption: "Sí, este es tu regalo. Ya casi lo tienes en las manos.",
+    dailyPlan: {
+      items: [
+        "Día de relax 💆‍♀️✨",
+      ],
+      photoLayout: "single",
+      photos: ["/images/plans/day6-relax.jpg"],
+    },
   },
   {
     id: 7,
@@ -197,6 +252,13 @@ export const gymkanaConfig: DayConfig[] = [
     rewardTitle: "Lo que más amo de ti",
     rewardDescription:
       "Hoy no hay premio físico, pero te he preparado un ramo con las cosas que más me gustan de ti 💐 Toca cada flor para abrir sus pétalos y descubrir cada mensaje:",
+    dailyPlan: {
+      items: [
+        "Volver a casa 🥺🏠",
+      ],
+      photoLayout: "single",
+      photos: ["/images/plans/day7-vuelta.jpg"],
+    },
   },
   {
     id: 8,

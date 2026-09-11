@@ -9,3 +9,14 @@ export function formatUnlockDate(unlockDate: string): string {
   const target = new Date(`${unlockDate}T00:00:00`);
   return target.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
 }
+
+/** Formatea "YYYY-MM-DD" con el día de la semana, ej. "Viernes, 2 de octubre". */
+export function formatWeekdayAndDate(unlockDate: string): string {
+  const target = new Date(`${unlockDate}T00:00:00`);
+  const formatted = target.toLocaleDateString("es-ES", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}

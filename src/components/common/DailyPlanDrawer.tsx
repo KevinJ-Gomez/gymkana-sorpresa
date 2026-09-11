@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import type { DayConfig } from "@/types/gymkana";
-import { formatUnlockDate } from "@/lib/dates";
+import type { DayConfig, DailyPlanItem } from "@/types/gymkana";
+import { formatUnlockDate, formatWeekdayAndDate } from "@/lib/dates";
 import { hapticTap } from "@/lib/haptics";
+import { DailyPlanPhotos } from "./DailyPlanPhotos";
 
 interface DailyPlanDrawerProps {
   isOpen: boolean;
@@ -75,11 +76,17 @@ export function DailyPlanDrawer({
   // Comprobar si el día seleccionado ha sido resuelto
   const isSelectedDayUnlocked = unlockedDays.includes(selectedDay.id);
 
-  // Nota del plan para el día seleccionado
+  // Datos del plan diario
+  const planData = selectedDay.dailyPlan;
+  const planItems = planData?.items;
+  const planPhotos = planData?.photos;
+  const photoLayout = planData?.photoLayout;
+
+  // Nota de texto libre (fallback o complementaria)
   const dayNote =
     selectedDay.dailyPlanNote ||
-    selectedDay.dailyPlan?.note ||
-    selectedDay.dailyPlan?.summary ||
+    planData?.note ||
+    planData?.summary ||
     "";
 
   const handleSelectGymkanaDay = (gymkanaId?: number) => {
@@ -255,7 +262,7 @@ export function DailyPlanDrawer({
             <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block">
-                  {selectedDay.id === activeDayId ? "Día de hoy" : `Día ${selectedDay.id}`} · {formatUnlockDate(selectedDay.unlockDate)}
+                  {selectedDay.id === activeDayId ? "Día de hoy" : `Día ${selectedDay.id}`} · {formatWeekdayAndDate(selectedDay.unlockDate)}
                 </span>
                 <h4 className="font-serif text-base sm:text-lg font-bold text-white">
                   {selectedDay.title}
@@ -270,19 +277,56 @@ export function DailyPlanDrawer({
             </div>
 
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block mb-1.5">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-white/50 block mb-2">
                 Plan previsto
               </span>
 
-              {dayNote ? (
-                <p className="font-serif text-sm sm:text-base text-white/95 leading-relaxed whitespace-pre-line">
+              {/* Lista cronológica de actividades o hitos */}
+              {planItems && planItems.length > 0 ? (
+                <ul className="space-y-2.5 mb-3">
+                  {planItems.map((item, idx) => {
+                    const isObj = typeof item === "object" && item !== null;
+                    const time = isObj ? item.time : undefined;
+                    const text = isObj ? item.activity : item;
+
+                    return (
+                      <li key={idx} className="flex items-start gap-2.5 text-sm sm:text-base text-white/90">
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-petal-400 shrink-0 shadow-[0_0_8px_rgba(251,113,133,0.8)]" />
+                        <div className="flex-1 leading-snug">
+                          {time && (
+                            <span className="inline-block font-mono text-xs font-semibold text-petal-300 bg-petal-950/50 border border-petal-500/30 rounded px-1.5 py-0.5 mr-2">
+                              {time}
+                            </span>
+                          )}
+                          <span className="font-serif text-white/95">{text}</span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : dayNote ? (
+                <p className="font-serif text-sm sm:text-base text-white/95 leading-relaxed whitespace-pre-line mb-3">
                   {dayNote}
                 </p>
               ) : (
-                <p className="text-xs sm:text-sm italic text-white/40 leading-relaxed">
+                <p className="text-xs sm:text-sm italic text-white/40 leading-relaxed mb-3">
                   No hay ningún plan anotado todavía para este día.
                 </p>
               )}
+
+              {/* Nota o comentario adicional si convive con los items */}
+              {planItems && planItems.length > 0 && dayNote && (
+                <p className="font-serif text-xs sm:text-sm italic text-white/70 border-l-2 border-petal-400/40 pl-2.5 py-0.5 mt-2 mb-3">
+                  {dayNote}
+                </p>
+              )}
+
+              {/* Espacio compacto para fotos del día (1 foto, 2 en diagonal, o hasta 4) */}
+              <DailyPlanPhotos
+                photos={planPhotos}
+                layout={photoLayout}
+                altPrefix={`Foto Día ${selectedDay.id}`}
+              />
             </div>
           </div>
         ) : (
