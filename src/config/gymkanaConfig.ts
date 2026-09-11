@@ -296,14 +296,15 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 10,
     unlockDate: "2026-10-11",
-    title: "Encuentra el corazón",
-    icon: "🎮",
+    title: "El Cuadro",
+    icon: "🖼️",
+    lucideIcon: "gift",
+    giftLabel: "Cuadro para casa",
     requiresPassword: false,
-    riddle: "Entre tantas estrellas se esconde un corazón. Encuéntralo antes de que se mueva.",
-    rewardTitle: "Pista física desbloqueada",
-    rewardDescription: "Hay algo escondido esperándote en el viaje.",
-    physicalHint:
-      "Revisa el bolsillo delantero de la maleta pequeña. No, el de verdad, no el de broma.",
+    riddle: "Recompón las piezas del rompecabezas para descubrir qué recuerdo hemos inmortalizado.",
+    rewardTitle: "Nuestros mejores recuerdos merecen estar en la pared",
+    rewardDescription: "Tendrás que ir a recogerlo 🖼️",
+    imageSrc: "/images/cuadro.jpg",
   },
   {
     id: 11,
