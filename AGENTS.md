@@ -98,3 +98,16 @@ A future ChatGPT/Codex/Antigravity/other-AI session must reconstruct task from G
 ## Blender / 3D
 - Prefer reproducible, versioned Blender `bpy` scripts and background exports before introducing Blender MCP.
 - Do not add a powerful MCP only because it exists; first demonstrate scripted workflow is insufficient and review permissions.
+
+## Learning assimilation — lightweight but mandatory for material work
+Read `docs/AGENT-LEARNING-PROTOCOL.md` before substantive material work/review.
+
+- `LEARNING_STORED != LEARNING_APPLIED`.
+- Select only applicable learnings as `RULE → PAST_FAILURE → MISSION_IMPLICATION → EVIDENCE`; do not recite the whole history.
+- Before another correction of a known defect run `REPEAT_FAILURE_GUARD`.
+- After two material failures on the same surface/pipeline, stop point-fixing and diagnose/root-cause before another write.
+- A shared timer/reveal/route/media/3D pipeline failure is a sentinel for its affected family/states, not only the reported example.
+- At material closeout the independent reviewer reports `LEARNING_COMPLIANCE_PASS / FAIL / NOT_APPLICABLE`.
+- Repeating a known failed strategy without new diagnosis is `KNOWN_FAILURE_REPETITION` and blocks READY.
+
+Keep this proportional: trivial microfixes do not need a ceremonial ledger recital.
