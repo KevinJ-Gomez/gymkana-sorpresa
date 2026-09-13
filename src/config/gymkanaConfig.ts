@@ -32,21 +32,27 @@ export const gymkanaConfig: DayConfig[] = [
   {
     id: 1,
     unlockDate: "2026-10-02",
-    title: "El Aliado Perfecto",
-    icon: "📱",
-    lucideIcon: "camera",
+    title: "Energía Inagotable",
+    icon: "🔋",
+    lucideIcon: "sparkles",
     requiresPassword: true,
-    // Respuestas válidas: "movil" e "iphone".
+    // Respuestas válidas: "bateria", "bateria portatil", "powerbank", "bateria magsafe", "cargador", "bateria externa".
     passwordHashes: [
-      "8dd3d0f12d706756295575bfc283da9e4ef2658cbb8531aa7261b8aed27518e5",
-      "241c1e30ed886aa4a8f4248024be2ca1a221fe9773b52e2dca7891ff5771f399",
+      "8337a9eef67c272d823ace549d21144d22edffd3b02dd5996314b8a7acf89ffd",
+      "dad6f3ac77e60871d6bb73bc82028654d7e7a098e28fd1cd537c690451cd58fc",
+      "0f96ab497f96ec0e690dbaf869b66a54320d3e3589a56f13ac29955cb82f02ee",
+      "75607845e75b25447fc5d8d2628814965ad0d9df1736fc8dec268fff2aacbacc",
+      "7b9b1961c3f7a42bc808369446a27c34846cbe2bc465f4558d98660b593163b7",
+      "d48c91025bcd1e1070b639d7238db2582f54657f8199fc42a9ea5da98f9ab03e",
     ],
     passwordPlaceholder: "¿Qué es?",
     riddle:
-      "Para capturar la magia de este viaje y que no se nos olvide nunca, vas a necesitar un buen aliado. Tiene memoria pero no cerebro, y tiene lentes pero no gafas. ¿Qué es?(Pista: necesitas cambiarlo ya)",
-    rewardTitle: "Tu primera estrella",
+      "En el enchufe como, en tu bolso duermo, y cuando a tu móvil le da un bajón, le paso mi fuerza sin compasión. ¿Qué soy?",
+    hintExtra:
+      "Pista: Es algo que tu móvil necesitará mucho por Sevilla para no quedarte sin batería a las 2h.",
+    rewardTitle: "¡Nunca nos quedaremos al 0%!",
     rewardDescription:
-      "¡Exacto! Y para hacer las fotos que te mereces, vas a necesitar estrenar equipo. Tu primera estrella es física.\n\nPista: Está descansando a oscuras en el bolsillo pequeño de mi mochila negra. ¡Ve a buscarla!",
+      "¡Exacto! Para que este viaje nunca se quede sin energía, tu primera sorpresa es una batería portátil con MagSafe.\n\nComo tu funda de móvil actual no tiene MagSafe, también te incluye una funda compatible para que puedas usarla desde hoy mismo.\n\nPista: Ve a buscar el paquete al bolsillo trasero de mi mochila negra.",
     dailyPlan: {
       items: [
         "- Comer y paseo",

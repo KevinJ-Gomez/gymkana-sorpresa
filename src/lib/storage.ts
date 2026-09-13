@@ -5,6 +5,7 @@ import { useCallback, useSyncExternalStore } from "react";
 const UNLOCKED_DAYS_KEY = "gymkana:unlocked-days";
 const TESTING_MODE_KEY = "gymkana:testing-mode";
 const INTRO_SEEN_KEY = "gymkana:intro-seen";
+const DAY1_PHOTO_KEY = "gymkana:day1-photo";
 
 // Pequeño store externo (patrón useSyncExternalStore) en vez de leer
 // localStorage dentro de un useEffect + setState: evita el render en
@@ -122,4 +123,32 @@ export function useIntroSeen() {
   }, []);
 
   return { introSeen, setIntroSeen };
+}
+
+function readDay1Photo(): string | null {
+  try {
+    return window.localStorage.getItem(DAY1_PHOTO_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/** Guarda la foto subida en el Día 1 para persistirla en el dispositivo. */
+export function useDay1Photo() {
+  const photo = useSyncExternalStore(
+    subscribe,
+    readDay1Photo,
+    () => null,
+  );
+
+  const setPhoto = useCallback((dataUrl: string | null) => {
+    if (dataUrl) {
+      window.localStorage.setItem(DAY1_PHOTO_KEY, dataUrl);
+    } else {
+      window.localStorage.removeItem(DAY1_PHOTO_KEY);
+    }
+    emitChange();
+  }, []);
+
+  return { photo, setPhoto };
 }

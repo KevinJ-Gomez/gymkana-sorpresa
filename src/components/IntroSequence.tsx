@@ -9,9 +9,9 @@ import { motion } from "framer-motion";
  */
 
 const NARRATIVE = [
-  "Hoy comienza nuestro viaje juntos, además de empezar una cuentra atrás para tus 30 cumpleaños.",
-  "Durante los próximos 11 días, cada reto que completes te acercará a una sorpresa, cada una de ellas elegidas por mi y otras personas que te quieren mucho (no tanto como yo), con mucho amor y cariño especialmente para ti.",
-  "Como no teníamos espacio en las maletas, alguno de las sorpresas se han quedado en Zaragoza esperándote.",
+  "Hoy comienza nuestro viaje a Sevilla juntos, además de empezar una cuentra atrás para tus 30 cumpleaños.",
+  "Durante los próximos 11 días, tendrás que superar un pequeño desafío cada día, por cada vez que los superes, desbloquearás la sorpresa de ese día además del plan de ese día.",
+  "Como no teníamos espacio en las maletas, alguna de las sorpresas se han quedado en Zaragoza esperándote.",
   "Pero hay una pequeña excepción... algo que vas a necesitar para esta aventura.",
 ];
 
