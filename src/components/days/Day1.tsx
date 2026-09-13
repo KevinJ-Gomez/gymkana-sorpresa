@@ -10,13 +10,10 @@ import { hapticTap, hapticSuccess } from "@/lib/haptics";
 /**
  * Día 1: El engaño de la Batería MagSafe + Funda y la Revelación del Accesorio / iPhone
  *
- * Flujo narrativo:
- * 1. Al desbloquear el día mediante la clave de la batería, se muestra el regalo
- *    inicial (Batería portátil con MagSafe + Funda especial).
- * 2. Se le pide subir una foto del regalo con la excusa de verificar el reto y ver el plan de hoy.
- * 3. Al subir la foto, se muestra en formato polaroid y se devela la segunda pista:
- *    "Te falta todavía un accesorio importante para complementar bien los 2 que acabas de recibir:
- *     ¡Busca en la caja de zapatos que tienes encima del armario!"
+ * Diseño sin scroll: La tarjeta transiciona limpiamente de un paso a otro:
+ * - Paso 1: Muestra el premio de la batería + funda y el botón para subir la foto.
+ * - Paso 2: Transiciona y reemplaza el contenido por la foto polaroid y la pista final
+ *   de la caja de zapatos.
  */
 export function Day1({ config, isUnlocked }: DayComponentProps) {
   const { photo, setPhoto } = useDay1Photo();
@@ -36,8 +33,8 @@ export function Day1({ config, isUnlocked }: DayComponentProps) {
     reader.onload = (event) => {
       const img = new Image();
       img.onload = () => {
-        // Redimensionar para evitar exceder los límites de localStorage
-        const maxDim = 1000;
+        // Redimensionar para optimizar peso y memoria
+        const maxDim = 800;
         let width = img.width;
         let height = img.height;
 
@@ -71,24 +68,8 @@ export function Day1({ config, isUnlocked }: DayComponentProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="space-y-6 text-center"
-    >
-      {/* 1. Descripción del regalo inicial (Batería + Funda) */}
-      <div className="space-y-3">
-        <h3 className="text-xl font-serif font-bold text-[#4a1d2e] flex items-center justify-center gap-2">
-          <Sparkles className="h-5 w-5 text-petal-600" />
-          {config.rewardTitle}
-        </h3>
-        <p className="mx-auto max-w-md whitespace-pre-line text-left font-serif leading-relaxed text-[#4a1d2e]">
-          {config.rewardDescription}
-        </p>
-      </div>
-
-      {/* Input de archivo oculto con soporte de cámara directa en móvil */}
+    <div className="w-full text-center">
+      {/* Input oculto para cámara o fototeca */}
       <input
         ref={fileInputRef}
         type="file"
@@ -100,53 +81,75 @@ export function Day1({ config, isUnlocked }: DayComponentProps) {
 
       <AnimatePresence mode="wait">
         {!photo ? (
-          /* 2. Fase de subida de foto con la excusa del plan */
+          /* ========================================================= */
+          /* PASO 1: PREMIO BATERÍA + FUNDA Y RETO DE SUBIR FOTO       */
+          /* ========================================================= */
           <motion.div
-            key="upload-prompt"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
+            key="step-battery"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.35 }}
-            className="mx-auto max-w-md rounded-2xl border border-petal-300/60 bg-[#fff8fa] p-5 shadow-sm space-y-4"
+            className="space-y-4"
           >
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-petal-100 text-petal-700">
-              <Camera className="h-6 w-6" />
-            </div>
-
-            <div className="space-y-1">
-              <p className="font-serif font-semibold text-base text-[#4a1d2e]">
-                ¿Ya tienes el paquete contigo?
-              </p>
-              <p className="font-serif italic text-xs sm:text-sm text-[#9f496e]">
-                Sube una foto de tu nueva batería y funda para verificar el reto y desbloquear el plan de hoy.
+            <div className="space-y-1.5">
+              <h3 className="text-xl font-serif font-bold text-[#4a1d2e] flex items-center justify-center gap-2">
+                <Sparkles className="h-5 w-5 text-petal-600 shrink-0" />
+                {config.rewardTitle}
+              </h3>
+              <p className="font-serif text-sm leading-relaxed text-[#4a1d2e]">
+                ¡Tu primera sorpresa es una <strong className="text-[#831843]">batería portátil con MagSafe</strong>!
               </p>
             </div>
 
-            <motion.button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              whileTap={{ scale: 0.97 }}
-              disabled={compressing}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-petal-600 via-petal-700 to-petal-800
-                px-5 py-3 text-sm font-semibold text-white shadow-md transition active:scale-95 disabled:opacity-50"
-            >
-              <Camera className="h-4 w-4" />
-              {compressing ? "Procesando foto..." : "Hacer foto / Subir foto"}
-            </motion.button>
+            <div className="rounded-2xl border border-petal-300/60 bg-[#fff5f8] p-4 text-left space-y-2">
+              <p className="font-serif text-xs sm:text-sm text-[#4a1d2e] leading-relaxed">
+                Como tu funda actual no tiene agarre magnético, te incluye también una funda compatible para usarla desde hoy mismo.
+              </p>
+              <p className="font-serif font-semibold text-xs text-[#831843] bg-white/70 rounded-xl p-2.5 border border-petal-200">
+                📍 Pista: Ve a buscar el paquete al bolsillo trasero de mi mochila negra.
+              </p>
+            </div>
+
+            {/* Acción de verificación */}
+            <div className="rounded-2xl border border-dashed border-petal-400/60 bg-[#fff8fa] p-4 space-y-3">
+              <div className="space-y-0.5">
+                <p className="font-serif font-semibold text-sm text-[#4a1d2e]">
+                  ¿Ya la tienes contigo?
+                </p>
+                <p className="font-serif italic text-xs text-[#9f496e]">
+                  Sube una foto de tu nueva batería y funda para desbloquear el plan de hoy.
+                </p>
+              </div>
+
+              <motion.button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                whileTap={{ scale: 0.97 }}
+                disabled={compressing}
+                className="primary-action inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-petal-600 via-petal-700 to-petal-800
+                  px-4 py-3 text-sm font-semibold text-white shadow-md transition active:scale-95 disabled:opacity-50"
+              >
+                <Camera className="h-4 w-4" />
+                {compressing ? "Procesando foto..." : "Hacer o subir foto"}
+              </motion.button>
+            </div>
           </motion.div>
         ) : (
-          /* 3. Fase de revelación tras subir la foto (Polaroid + Pista de la caja de zapatos) */
+          /* ========================================================= */
+          /* PASO 2: TRANSICIÓN COMPLETA A POLAROID + CAJA DE ZAPATOS  */
+          /* ========================================================= */
           <motion.div
-            key="revealed-secret"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.45 }}
-            className="space-y-5"
+            key="step-revelation"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.4 }}
+            className="space-y-4"
           >
-            {/* Foto enmarcada estilo Polaroid */}
-            <div className="mx-auto max-w-xs rotate-[-1deg] rounded-2xl bg-white p-3 shadow-lg border border-petal-200/80 transition-transform">
-              <div className="relative aspect-4/3 overflow-hidden rounded-xl bg-petal-50">
+            {/* Foto Polaroid compacta para no requerir scroll */}
+            <div className="mx-auto w-44 rotate-[-1deg] rounded-xl bg-white p-2.5 shadow-md border border-petal-200">
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-petal-50">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={photo}
@@ -154,46 +157,41 @@ export function Day1({ config, isUnlocked }: DayComponentProps) {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] font-serif italic text-[#9f496e]">
-                <span>Sevilla · 2 de Octubre</span>
+              <div className="mt-1.5 flex items-center justify-between px-0.5 text-[10px] font-serif italic text-[#9f496e]">
+                <span>Sevilla · 2 Oct</span>
                 <button
                   type="button"
                   onClick={handleRetake}
-                  className="inline-flex items-center gap-1 text-petal-700 hover:text-petal-900 active:scale-95"
+                  className="inline-flex items-center gap-0.5 text-petal-700 hover:text-petal-900 active:scale-95"
                   title="Cambiar foto"
                 >
-                  <RefreshCw className="h-3 w-3" />
+                  <RefreshCw className="h-2.5 w-2.5" />
                   Cambiar
                 </button>
               </div>
             </div>
 
-            {/* Mensaje de la segunda pista */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              className="mx-auto max-w-md rounded-2xl border-2 border-petal-400/50 bg-[#fff5f8] p-5 shadow-sm space-y-3 text-left"
-            >
-              <div className="flex items-center gap-2 text-[#be185d]">
-                <Box className="h-5 w-5 shrink-0" />
-                <p className="font-serif font-bold text-base text-[#4a1d2e]">
+            {/* Mensaje de la segunda pista de la caja de zapatos */}
+            <div className="rounded-2xl border-2 border-petal-400/50 bg-[#fff5f8] p-4 text-left space-y-2.5 shadow-xs">
+              <div className="flex items-center gap-1.5 text-[#be185d]">
+                <Box className="h-4 w-4 shrink-0" />
+                <p className="font-serif font-bold text-sm text-[#4a1d2e]">
                   Un momento...
                 </p>
               </div>
 
-              <p className="font-serif text-base leading-relaxed text-[#4a1d2e]">
+              <p className="font-serif text-sm leading-relaxed text-[#4a1d2e]">
                 Te falta todavía un accesorio importante para complementar bien los 2 que acabas de recibir:
               </p>
 
-              <p className="rounded-xl border border-petal-300 bg-[#fce7f3]/60 p-3.5 font-serif font-semibold text-base text-[#831843]">
+              <p className="rounded-xl border border-petal-300 bg-[#fce7f3]/70 p-3 font-serif font-semibold text-sm text-[#831843] text-center">
                 ¡Busca en la caja de zapatos que tienes encima del armario!
               </p>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 

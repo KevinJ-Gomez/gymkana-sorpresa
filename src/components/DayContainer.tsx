@@ -2,9 +2,10 @@
 
 import { useState, type SubmitEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Lock, LockOpen } from "lucide-react";
+import { ChevronDown, HelpCircle, Lock, LockOpen } from "lucide-react";
 import type { DayConfig } from "@/types/gymkana";
 import { verifyPassword } from "@/lib/hash";
+import { hapticTap } from "@/lib/haptics";
 import { dayComponents } from "@/components/days";
 
 /**
@@ -36,6 +37,7 @@ export function DayContainer({
   const [showError, setShowError] = useState(false);
   const [checking, setChecking] = useState(false);
   const [shakeKey, setShakeKey] = useState(0);
+  const [showHint, setShowHint] = useState(false);
 
   const DaySpecificComponent = dayComponents[config.id];
   const showPasswordGate = config.requiresPassword && !isUnlocked;
@@ -163,9 +165,37 @@ export function DayContainer({
           >
             <p className="font-serif text-lg leading-relaxed text-[#4a1d2e]">{config.riddle}</p>
             {config.hintExtra && (
-              <p className="rounded-2xl border border-petal-400/30 bg-[#faf0f4] p-4 text-sm italic leading-relaxed text-[#9f496e]">
-                {config.hintExtra}
-              </p>
+              <div className="space-y-2">
+                {!showHint ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      hapticTap();
+                      setShowHint(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-petal-300/60 bg-[#fff5f8] px-3.5 py-1.5 text-xs font-serif italic text-petal-700 hover:bg-[#fce7f3] transition active:scale-95"
+                  >
+                    <HelpCircle className="h-3.5 w-3.5" />
+                    ¿Necesitas una pista? Toca para verla
+                  </button>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="rounded-2xl border border-petal-400/30 bg-[#faf0f4] p-4 text-sm italic leading-relaxed text-[#9f496e] space-y-2 text-left"
+                  >
+                    <p>{config.hintExtra}</p>
+                    <button
+                      type="button"
+                      onClick={() => setShowHint(false)}
+                      className="text-[11px] font-sans font-medium text-petal-700/80 hover:underline block"
+                    >
+                      Ocultar pista
+                    </button>
+                  </motion.div>
+                )}
+              </div>
             )}
             {config.audioHintSrc && (
               <audio controls className="w-full" src={config.audioHintSrc}>
